@@ -2,9 +2,15 @@ import {configureStore} from '@reduxjs/toolkit'
 import {combineReducers} from "redux";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import alertsReducer from "../ducks/alerts";
+import vendorsReducer from "../ducks/vendors";
+import issueReducer from "../ducks/issue";
+import vendorsTotalsReducer from "../ducks/vendor-totals";
 
 const rootReducer = combineReducers({
     alerts: alertsReducer,
+    issue: issueReducer,
+    vendors: vendorsReducer,
+    vendorTotals: vendorsTotalsReducer,
 });
 
 const store = configureStore({
