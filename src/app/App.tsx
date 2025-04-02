@@ -1,40 +1,33 @@
-import React, {useEffect, useState} from 'react';
-import AlertList from "../ducks/alerts/AlertList";
-import {useAppDispatch} from "./configureStore";
-import {loadVendors} from "../ducks/vendors/actions";
-import {Tab, TabList} from "chums-components";
+import React from 'react';
 import EntryContent from "./EntryContent";
 import HistoryContent from "./HistoryContent";
 import VendorsContent from "./VendorsContent";
-import styled from "@emotion/styled";
+import './app.css';
+import {HashRouter, Route, Routes} from "react-router-dom";
+import Layout from "./Layout";
+import Home from "./Home";
+import CurrentIssueList from "@/components/issue-list/CurrentIssueList";
+import CLIssueContent from "@/components/CLIssueContent";
+import NoVendorContent from "./NoVendorContent";
 
-const AppContent = styled.div`
-    margin-top: 0.5rem;
-`
 
-const tabs:Tab[] = [
-    {id: 'entry', title: 'Issue/Receive'},
-    {id: 'history', title: 'History'},
-    {id: 'vendors', title: 'Vendors'}
-]
 function App() {
-    const dispatch = useAppDispatch();
-    const [tabId, setTabId] = useState('entry');
-    useEffect(() => {
-        dispatch(loadVendors());
-    }, []);
 
     return (
-        <div>
-            <TabList tabs={tabs} currentTabId={tabId} onSelectTab={(t) => setTabId(t.id)}/>
-            <AlertList/>
-            <AppContent>
-                {tabId === 'entry' && <EntryContent />}
-                {tabId === 'history' && <HistoryContent />}
-                {tabId === 'vendors' && <VendorsContent />}
-            </AppContent>
-        </div>
-    );
+        <HashRouter>
+            <Routes>
+                <Route path="/" element={<Layout/>}>
+                    <Route index element={<Home />} />
+                    <Route path="entry" element={<EntryContent/>}>
+                        <Route index element={<CLIssueContent />} />
+                        <Route path=":vendor" element={<CLIssueContent />} />
+                    </Route>
+                    <Route path="search" element={<HistoryContent/>}/>
+                    <Route path="vendors" element={<VendorsContent/>}/>
+                </Route>
+            </Routes>
+        </HashRouter>
+    )
 }
 
 export default App;

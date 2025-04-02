@@ -3,14 +3,15 @@ import {useAppDispatch, useAppSelector} from "../../app/configureStore";
 import {selectCurrentVendor} from "./selectors";
 import {Vendor} from "../../types";
 import {createNewVendor, saveVendor, updateVendor} from "./actions";
-import {emptyVendor} from "./utils";
-import {Alert, FormCheck, FormColumn} from "chums-components";
+import Alert from "react-bootstrap/Alert";
+import {Form, FormGroup} from "react-bootstrap";
+import FormCheck from "react-bootstrap/FormCheck";
 
 const VendorEditor = () => {
     const dispatch = useAppDispatch();
     const current = useAppSelector(selectCurrentVendor);
 
-    const changeHandler = (field:keyof Vendor) => (ev:ChangeEvent<HTMLInputElement>) => {
+    const changeHandler = (field: keyof Vendor) => (ev: ChangeEvent<HTMLInputElement>) => {
         switch (field) {
             case 'VendorNo':
                 dispatch(updateVendor({[field]: ev.target.value.toUpperCase()}));
@@ -25,13 +26,13 @@ const VendorEditor = () => {
     }
 
     const newVendorHandler = () => {
-        if (current?.changed ) {
+        if (current?.changed) {
 
         }
         dispatch(createNewVendor());
     }
 
-    const submitHandler = (ev:FormEvent) => {
+    const submitHandler = (ev: FormEvent) => {
         ev.preventDefault();
         if (!current) {
             return;
@@ -48,22 +49,28 @@ const VendorEditor = () => {
     }
 
     return (
-        <form onSubmit={submitHandler}>
-            <FormColumn label="Sage Vendor No" width={8}>
+        <Form onSubmit={submitHandler}>
+            <Form.Group>
+                <Form.Label>Sage Vendor No</Form.Label>
                 <div className="input-group">
                     <input type="text" value={current.VendorNo ?? ''} className="form-control"
                            onChange={changeHandler('VendorNo')}/>
                     <div className="input-group-text">ID: {current.id || 'NEW'}</div>
                 </div>
-            </FormColumn>
-            <FormColumn label="Vendor Name" width={8}>
-                <input type="text" value={current.VendorNameOverride ?? ''} className="form-control" onChange={changeHandler('VendorNameOverride')} />
+            </Form.Group>
+            <Form.Group>
+                <Form.Label>Vendor Name</Form.Label>
+                <input type="text" value={current.VendorNameOverride ?? ''} className="form-control"
+                       onChange={changeHandler('VendorNameOverride')}/>
                 <small className="text-muted">Used to override the vendor name from Sage</small>
-            </FormColumn>
-            <FormColumn label="Active" width={8}>
-                <FormCheck type="checkbox" checked={current.active} label="Active" onChange={changeHandler('active')} disabled={current.VendorStatus === 'I'} />
-            </FormColumn>
-            <FormColumn label="Vendor Info" width={8}>
+            </Form.Group>
+            <Form.Group>
+                <Form.Label>Active</Form.Label>
+                <FormCheck type="checkbox" checked={current.active} label="Active" onChange={changeHandler('active')}
+                           disabled={current.VendorStatus === 'I'}/>
+            </Form.Group>
+            <Form.Group>
+                <Form.Label>Vendor Info</Form.Label>
                 <div>{current.VendorName}</div>
                 <address>
                     <div>{current.AddressLine1}</div>
@@ -71,9 +78,11 @@ const VendorEditor = () => {
                     <div>{current.AddressLine3}</div>
                     <div>{current.City}, {current.State} {current.ZipCode}</div>
                 </address>
-                {!!current.EmailAddress && <a href={`mailto: ${current.EmailAddress}`} target="_blank">{current.EmailAddress}</a>}
-            </FormColumn>
-            <FormColumn label="" width={8}>
+                {!!current.EmailAddress &&
+                    <a href={`mailto: ${current.EmailAddress}`} target="_blank">{current.EmailAddress}</a>}
+            </Form.Group>
+            <Form.Group>
+                <Form.Label></Form.Label>
                 <div className="row g-3">
                     <div className="col-auto">
                         <button type="submit" className="btn btn-primary">Save</button>
@@ -85,9 +94,9 @@ const VendorEditor = () => {
                         </button>
                     </div>
                 </div>
-            </FormColumn>
-            {current.changed && <Alert color="warning">Don't forget to save your changes</Alert>}
-        </form>
+            </Form.Group>
+            {current.changed && <Alert variant="warning">Don't forget to save your changes</Alert>}
+        </Form>
     )
 }
 

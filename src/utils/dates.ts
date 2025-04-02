@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, {Dayjs} from "dayjs";
 
 export function friendlyDate(date:string|Date|null):string|null {
     if (!date) {
@@ -13,4 +13,15 @@ export function friendlyDate(date:string|Date|null):string|null {
         return d.format('MM/DD');
     }
     return d.format('MM/DD/YYYY');
+}
+
+export function toLocalizedDate(date:dayjs.Dayjs|Date|string|null|undefined):Dayjs|null {
+    if (!date) {
+        return null;
+    }
+    const _date = dayjs(date);
+    if (!_date.isValid()) {
+        return null;
+    }
+    return _date.add(new Date().getTimezoneOffset(), 'minute').startOf('day');
 }

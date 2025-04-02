@@ -1,5 +1,5 @@
 import {Vendor} from "../../types";
-import {SortProps} from "chums-components";
+import {Editable, SortProps} from "chums-types";
 import {createReducer} from "@reduxjs/toolkit";
 import {
     createNewVendor,
@@ -11,7 +11,6 @@ import {
     updateVendor
 } from "./actions";
 import {defaultVendorSort, emptyVendor, sortVendors} from "./utils";
-import {Editable} from "chums-types/src/generics";
 
 export interface VendorsState {
     list: Vendor[];
@@ -19,7 +18,7 @@ export interface VendorsState {
     saving: boolean;
     showInactive: boolean;
     sort: SortProps<Vendor>
-    current: (Vendor & Editable)|null;
+    current: (Vendor & Editable) | null;
 }
 
 const initialState: VendorsState = {
@@ -71,7 +70,7 @@ const vendorsReducer = createReducer(initialState, builder => {
         .addCase(setCurrentVendor, (state, action) => {
             state.current = action.payload ?? null;
         })
-        .addCase(updateVendor, (state, action)=> {
+        .addCase(updateVendor, (state, action) => {
             if (state.current) {
                 state.current = {...state.current, ...action.payload, changed: true};
             }

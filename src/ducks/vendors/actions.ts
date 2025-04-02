@@ -3,7 +3,7 @@ import {Vendor} from "../../types";
 import {fetchVendors, postVendor} from "./api";
 import {RootState} from "../../app/configureStore";
 import {selectVendorsLoading, selectVendorsSaving} from "./selectors";
-import {SortProps} from "chums-components";
+import {SortProps} from "@chumsinc/sortable-tables";
 
 export const toggleShowInactive = createAction<boolean | undefined>('vendors/toggleShowInactive');
 export const setVendorsSort = createAction<SortProps<Vendor>>('vendors/setSort');

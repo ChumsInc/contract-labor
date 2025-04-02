@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../../app/configureStore";
 import {selectShowInactive, selectSortedVendorList, selectVendorsLoading, selectVendorSort} from "./selectors";
-import {FormCheck, SortableTable, SortableTableField, SortProps, TablePagination} from "chums-components";
+import {SortableTable, SortableTableField, SortProps, TablePagination} from "@chumsinc/sortable-tables";
 import {Vendor} from "../../types";
 import {loadVendors, setCurrentVendor, setVendorsSort} from "./actions";
 import ShowInactiveVendors from "./ShowInactiveVendors";
 import classNames from "classnames";
 import {LinearProgress} from "@mui/material";
+import FormCheck from "react-bootstrap/FormCheck";
 
 const fields: SortableTableField<Vendor>[] = [
     {field: 'VendorNo', title: 'Vendor No', sortable: true},
@@ -40,7 +41,9 @@ const VendorList = () => {
 
     const sortChangeHandler = (sort: SortProps<Vendor>) => dispatch(setVendorsSort(sort));
     const reloadHandler = () => dispatch(loadVendors());
-    const selectHandler = (vendor:Vendor) => dispatch(setCurrentVendor(vendor));
+    const selectHandler = (vendor:Vendor) => {
+        dispatch(setCurrentVendor(vendor));
+    }
 
     return (
         <div>
@@ -53,7 +56,7 @@ const VendorList = () => {
                 </div>
             </div>
             {loading && <LinearProgress variant="indeterminate"/>}
-            <SortableTable currentSort={sort} onChangeSort={sortChangeHandler} fields={fields}
+            <SortableTable<Vendor> currentSort={sort} onChangeSort={sortChangeHandler} fields={fields}
                            rowClassName={row => classNames({'table-warning': !row.active || row.VendorStatus === 'I'})}
                            onSelectRow={selectHandler}
                            data={vendors.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)} keyField="id"/>

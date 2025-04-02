@@ -2,28 +2,31 @@ export interface Vendor {
     id: number;
     Company: string;
     VendorNo: string;
-    VendorName: string|null;
+    VendorName: string | null;
     VendorNameOverride: string;
     active: boolean;
-    VendorStatus: 'A'|'I'|'T'|null;
-    AddressLine1: string|null;
-    AddressLine2: string|null;
-    AddressLine3: string|null;
-    City: string|null;
-    State: string|null;
-    ZipCode: string|null;
-    CountryCode: string|null;
-    EmailAddress: string|null;
+    VendorStatus: 'A' | 'I' | 'T' | null;
+    AddressLine1: string | null;
+    AddressLine2: string | null;
+    AddressLine3: string | null;
+    City: string | null;
+    State: string | null;
+    ZipCode: string | null;
+    CountryCode: string | null;
+    EmailAddress: string | null;
 }
 
 export interface VendorWeekTotal extends Vendor {
     QuantityIssued: string | number;
-    CostIssued: string | number;
     QuantityIssuedWeek: string | number;
+    QuantityDueToday: number|string;
+    QuantityDueThisWeek: number|string;
+    QuantityDueFuture: number|string;
+    CostIssued: string | number;
     CostIssuedWeek: string | number;
-    QuantityDueToday: string|number;
-    QuantityDueThisWeek: string|number;
-    QuantityDueFuture: string|number;
+    CostDueToday: number | string;
+    CostDueThisWeek: number | string;
+    CostDueFuture: number | string;
 }
 
 export interface CLIssue {
@@ -32,6 +35,7 @@ export interface CLIssue {
     VendorName: string;
     WarehouseCode: string;
     ItemCode: string;
+    ItemCodeDesc?: string|null;
     WorkTicketNo: string;
     WorkTicketKey: string | null;
     TemplateNo: string | null;
@@ -55,8 +59,8 @@ export interface CLIssue {
 }
 
 export interface CLIssueDetail {
-    id?: number;
-    CLIssueID?: number;
+    id: number;
+    CLIssueID: number;
     TemplateNo: string | null;
     RevisionNo: string | null;
     StepNo: string | null;
@@ -65,14 +69,13 @@ export interface CLIssueDetail {
     StepDescription: string | null;
     QuantityIssued: number | string;
     ActivityRate?: number | string | null;                 // wts.RevisedBudgetLaborCost / wts.RevisedBudgetHours / wts.ScalingLaborFactor, wts = PM_WorkTicketStep table
-    PlannedPieceCostDivisor: number | string;
     ScalingMethod: WorkTicketScalingMethod;
-    ScalingFactor: number | string | null
+    ScalingFactor: number | string | null; // a divisor for labor scaling, for example making a bag of 6 will occur qty/6 times.
     QuantityReceived: number | string | null;
     QuantityAdjusted: number | string | null;
 }
 
-export type WorkTicketStatus = 'O' | 'Q' | 'R'; // Open, Estimate/Quote, Released
+export type WorkTicketStatus = 'O' | 'Q' | 'R' | 'C' | 'X'; // Open, Estimate/Quote, Released, Closed, Deleted
 export type WorkTicketType = 'I' | 'S' | 'A'; // Inventory, Sales Order, Assembly (Work Ticket)
 
 export interface WorkTicketHeader {
@@ -81,6 +84,8 @@ export interface WorkTicketHeader {
     WorkTicketDate: string;
     WorkTicketStatus: WorkTicketStatus;
     WorkTicketType: WorkTicketType;
+    MakeForSalesOrderNo: string | null;
+    MakeForWorkTicketNo: string | null;
     ParentItemCode: string;
     ParentItemCodeDesc: string;
     ParentWarehouseCode: string;
@@ -112,18 +117,95 @@ export interface WorkTicketStep {
     RevisedBudgetHours: string | number;
     RevisedBudgetLaborCost: string | number;
     ScalingFactorLabor: string | number;
+    ScalingFactorMaterials: string | number;
 }
 
-export interface CLIssueEntry extends Pick<CLIssue, 'id' | 'VendorNo' | 'WorkTicketNo' | 'WarehouseCode' | 'ItemCode' | 'QuantityIssued' | 'DateIssued' | 'DateDue'> {
+export interface CLIssueEntry extends Pick<CLIssue, 'id' | 'VendorNo' | 'WorkTicketNo' | 'TemplateNo'
+    | 'WarehouseCode' | 'ItemCode' | 'ItemCodeDesc' | 'QuantityIssued' | 'CostIssued' | 'UnitCost'
+    | 'DateIssued' | 'DateDue'> {
     id: number | null;
     VendorNo: string | null;
-    WorkTicketNo: string | null;
     ItemCode: string | null;
     DateIssued: string | null;
     DateDue: string | null;
-    Notes: string|null;
+    Notes: string | null;
+    detail?: CLIssueEntryDetail[];
 }
 
-export interface CLIssueEntryDetail extends Pick<CLIssueDetail, 'id' | 'WorkCenter' | 'ActivityCode' | 'StepDescription' | 'QuantityIssued' | 'ActivityRate'|'ScalingMethod'|'ScalingFactor'> {
+export interface CLIssueEntryDetail extends Pick<CLIssueDetail, 'TemplateNo'|'RevisionNo'|'StepNo' | 'WorkCenter' | 'ActivityCode'
+    | 'StepDescription' | 'QuantityIssued' | 'ActivityRate' | 'ScalingMethod' | 'ScalingFactor'> {
+    id?: number;
     selected?: boolean;
+    ScalingFactorMaterials?: number|string|null;
+}
+
+export type CLIssueEntryDetailPost = Pick<CLIssueDetail, 'id'|'StepNo'|'QuantityIssued'>;
+
+export interface WorkTicketResponse {
+    header: WorkTicketHeader | null;
+    steps: WorkTicketStep[];
+    issues: CLIssue[];
+}
+
+export interface CLIssueResponse {
+    issue: CLIssue | null;
+    detail: CLIssueDetail[],
+}
+
+export type IssueDateType = 'I'|'R'|'D';
+
+export interface IssueSearchOptions {
+    dateType: IssueDateType;
+    minDate: string;
+    maxDate: string;
+    vendorNo?: string | null;
+    warehouseCode?: string | null;
+    itemCode?: string | null;
+    activityCode?: string|null;
+    templateNo?: string|null;
+}
+export interface IssueSearchWorkTicket {
+    workTicketNo: string;
+}
+export interface IssueSearchId {
+    id: number|string;
+}
+export type IssueSearchParams = IssueSearchOptions|IssueSearchWorkTicket|IssueSearchId;
+
+
+export type WorkTicketWorkStatusKey = 'comment'|'rush'|'cut'|'cl'|'mold'|'prd'|'card';
+export interface WorkTicketStatusEntry {
+    user: number;
+    style: number;
+    date: string;
+    text?: string;
+}
+
+export type WorkTicketStatusGroup = Record<WorkTicketWorkStatusKey, WorkTicketStatusEntry|undefined>
+
+export interface WorkTicketWorkStatusItem extends Pick<WorkTicketHeader,
+    'WorkTicketKey'|'WorkTicketNo'|'ParentItemCode'|'ParentWarehouseCode'|'ProductionDueDate'|
+    'QuantityOrdered'|'QuantityCompleted'|'ParentItemCodeDesc'|'MakeForWorkTicketNo'|'MakeForSalesOrderNo'
+> {
+    StatusJSON: WorkTicketStatusGroup;
+    WorkCenters: string[];
+}
+
+export interface WorkTicketWorkStatusGroup {
+    id: number;
+    name: string;
+}
+
+export interface SearchItem {
+    ItemCode: string;
+    ItemCodeDesc: string;
+    ProductType: string;
+    ProductLine: string;
+    Category1: string | null;
+    UDF_UPC: string | null;
+    UDF_UPC_BY_COLOR: string | null;
+    SuggestedRetailPrice: string | number;
+    filename: string | null;
+    b2bItem: string | null;
+    ProductStatus: string | null;
 }

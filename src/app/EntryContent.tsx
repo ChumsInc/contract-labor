@@ -1,22 +1,41 @@
 import React, {useState} from 'react';
-import VendorTotalsList from "../ducks/vendor-totals/VendorTotalsList";
-import CurrentIssueList from "../ducks/issue/CurrentIssueList";
-import {FormCheck} from "chums-components";
+import {Outlet} from "react-router-dom";
+import WorkTicketList from "@/components/work-ticket-list/WorkTicketList";
+import CurrentIssueList from "@/components/issue-list/CurrentIssueList";
+import {Accordion} from "react-bootstrap";
+import CLIssueTabs from "@/components/CLIssueTabs";
+import CLIssueForm from "@/components/issue-entry/CLIssueForm";
 
 const EntryContent = () => {
-    const [showCosts, setShowCosts] = useState(true);
+    const [activeKey, setActiveKey] = React.useState<string>('issue-list');
+    const [tab, setTab] = useState<string>('issue')
 
     return (
         <div>
-            <h2>Direct Labor Entry</h2>
             <div className="row g-3">
                 <div className="col-6">
-                    <VendorTotalsList />
-                    <FormCheck type="checkbox" checked={showCosts} onChange={(ev) => setShowCosts(ev.target.checked)} label="Show Costs" />
-                    <CurrentIssueList showCosts={showCosts} />
+                    <Accordion defaultActiveKey={activeKey}>
+                        <Accordion.Item eventKey="issue-list">
+                            <Accordion.Header>
+                                Issued Work Tickets
+                            </Accordion.Header>
+                            <Accordion.Body>
+                                <CurrentIssueList/>
+                            </Accordion.Body>
+                        </Accordion.Item>
+                        <Accordion.Item eventKey="work-ticket-list">
+                            <Accordion.Header>
+                                Open Work Tickets
+                            </Accordion.Header>
+                            <Accordion.Body>
+                                <WorkTicketList/>
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
                 </div>
                 <div className="col-6">
-
+                    <CLIssueTabs tab={tab} onChangeTab={setTab}/>
+                    {tab === 'issue' && (<CLIssueForm/>)}
                 </div>
             </div>
         </div>

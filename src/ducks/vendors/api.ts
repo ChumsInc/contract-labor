@@ -1,12 +1,12 @@
 import {Vendor, VendorWeekTotal} from "../../types";
-import {fetchJSON} from "chums-components";
 import dayjs from "dayjs";
+import {fetchJSON} from "@chumsinc/ui-utils";
 
 export async function fetchVendors():Promise<Vendor[]> {
     try {
-        const url = '/api/operations/production/contract-labor/vendors/chums';
-        const res = await fetchJSON<{result: Vendor[]}>(url, {cache: 'no-cache'});
-        return res?.result ?? [];
+        const url = '/api/operations/production/contract-labor/vendors.json';
+        const res = await fetchJSON<{vendors: Vendor[]}>(url, {cache: 'no-cache'});
+        return res?.vendors ?? [];
     } catch(err:unknown) {
         if (err instanceof Error) {
             console.debug("fetchVendors()", err.message);
@@ -19,9 +19,9 @@ export async function fetchVendors():Promise<Vendor[]> {
 
 export async function postVendor(arg:Vendor):Promise<Vendor[]> {
     try {
-        const url = '/api/operations/production/contract-labor/vendors/chums';
-        const res = await fetchJSON<{result: Vendor[]}>(url, {method: 'POST', body: JSON.stringify(arg)});
-        return res?.result ?? [];
+        const url = '/api/operations/production/contract-labor/vendors.json';
+        const res = await fetchJSON<{vendors: Vendor[]}>(url, {method: 'POST', body: JSON.stringify(arg)});
+        return res?.vendors ?? [];
     } catch(err:unknown) {
         if (err instanceof Error) {
             console.debug("postVendor()", err.message);

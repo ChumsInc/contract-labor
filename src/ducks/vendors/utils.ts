@@ -1,4 +1,4 @@
-import {SortProps} from "chums-components";
+import {SortProps} from "chums-types";
 import {Vendor, VendorWeekTotal} from "../../types";
 import Decimal from "decimal.js";
 
