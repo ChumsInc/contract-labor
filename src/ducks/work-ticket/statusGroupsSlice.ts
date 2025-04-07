@@ -1,6 +1,7 @@
 import {createEntityAdapter, createSlice} from "@reduxjs/toolkit";
 import {loadWorkTicketStatusGroups} from "@/ducks/work-ticket/actions";
-import {WorkTicketGroup} from "chums-types";
+import {WorkTicketStatusSet} from "chums-types";
+import {WorkTicketGroup} from "chums-types/src/production/work-ticket-status";
 
 const adapter = createEntityAdapter<WorkTicketGroup, number>({
     selectId: (arg) => arg.id,

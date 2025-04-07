@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {NavLink, Outlet} from "react-router-dom";
+import {NavLink, Outlet} from "react-router";
 import styled from "@emotion/styled";
 import AppTabs from "./AppTabs";
 import {useAppDispatch} from "./configureStore";

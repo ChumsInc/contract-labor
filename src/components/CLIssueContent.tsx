@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useAppDispatch} from "../app/configureStore";
-import CLIssueForm from "./issue-entry/CLIssueForm";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 // import {selectCurrentVendor} from "../ducks/issue-list/selectors";
-import CLIssueTabs from "./CLIssueTabs";
 
 export default function CLIssueContent() {
     const dispatch = useAppDispatch();

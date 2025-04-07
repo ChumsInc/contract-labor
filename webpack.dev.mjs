@@ -22,11 +22,6 @@ export default merge(common, {
         proxy: [
             {context: ['/api', '/images', '/intranet', '/pm-images'], ...localProxy}
         ],
-        historyApiFallback: {
-            rewrites: [
-                {from: /^apps\/image-store/, to: '/'}
-            ]
-        },
         watchFiles: ['src/**/*'],
     },
     devtool: 'eval-source-map',

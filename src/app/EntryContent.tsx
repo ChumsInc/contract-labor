@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {Outlet} from "react-router-dom";
 import WorkTicketList from "@/components/work-ticket-list/WorkTicketList";
 import CurrentIssueList from "@/components/issue-list/CurrentIssueList";
 import {Accordion} from "react-bootstrap";
@@ -37,7 +36,7 @@ const EntryContent = () => {
                 <div className="col-6">
                     <CLIssueTabs tab={tab} onChangeTab={setTab}/>
                     {tab === 'issue' && (<CLIssueForm/>)}
-                    {tab === 'receive' && (<CLReceiptForm />)}
+                    {tab === 'receive' && (<CLReceiptForm/>)}
                 </div>
             </div>
         </div>

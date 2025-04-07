@@ -1,6 +1,7 @@
 {
   "name": "contract-labor",
   "version": "2.0.0",
+  "type": "module",
   "dependencies": {
     "@chumsinc/alert-list": "^2.0.0",
     "@chumsinc/sortable-tables": "^2.0.8",
@@ -10,6 +11,7 @@
     "@mui/icons-material": "^6.4.8",
     "@mui/material": "^6.4.8",
     "@reduxjs/toolkit": "^2.0.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "chums-types": "github:ChumsInc/chums-types",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.10",
@@ -20,11 +22,13 @@
     "react-dom": "^19.0.0",
     "react-error-boundary": "^5.0.0",
     "react-redux": "^9.0.4",
-    "react-router-dom": "^7.3.0",
+    "react-router": "^7.5.0",
     "redux": "^5.0.0",
-    "usehooks-ts": "^3.1.1"
+    "usehooks-ts": "^3.1.1",
+    "vite": "^6.2.5"
   },
   "scripts": {
+    "dev": "vite",
     "start": "webpack serve --config webpack.dev.mjs --progress",
     "build": "webpack --config webpack.prod.mjs --progress",
     "version": "auto-changelog -p && git add CHANGELOG.md"

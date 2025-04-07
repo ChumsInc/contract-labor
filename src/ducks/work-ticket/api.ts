@@ -6,7 +6,7 @@ import {
 } from "../../types";
 import {fetchJSON} from "@chumsinc/ui-utils";
 import {WorkTicketGroup} from "chums-types";
-import {WorkTicketWorkStatusDetail} from "chums-types/src/production/work-ticket-status";
+import {WorkTicketStatusSet, WorkTicketWorkStatusDetail} from "chums-types/src/production/work-ticket-status";
 
 export async function fetchWorkTicket(arg:string):Promise<WorkTicketResponse|null> {
     try {
