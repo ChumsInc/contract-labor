@@ -1,17 +1,25 @@
 import React, {useEffect, useState} from 'react';
-import {useAppDispatch, useAppSelector} from "../../app/configureStore";
+import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectShowInactive, selectSortedVendorList, selectVendorsLoading, selectVendorSort} from "./selectors";
 import {SortableTable, SortableTableField, SortProps, TablePagination} from "@chumsinc/sortable-tables";
 import {Vendor} from "../../types";
 import {loadVendors, setCurrentVendor, setVendorsSort} from "./actions";
 import ShowInactiveVendors from "./ShowInactiveVendors";
 import classNames from "classnames";
-import {LinearProgress} from "@mui/material";
 import FormCheck from "react-bootstrap/FormCheck";
+import {Spinner} from "react-bootstrap";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 
 const fields: SortableTableField<Vendor>[] = [
     {field: 'VendorNo', title: 'Vendor No', sortable: true},
-    {field: 'VendorNameOverride', title: 'Name', sortable: true, render: (row) => row.VendorNameOverride ?? row.VendorName},
+    {
+        field: 'VendorNameOverride',
+        title: 'Name',
+        sortable: true,
+        render: (row) => row.VendorNameOverride ?? row.VendorName
+    },
     {
         field: 'active',
         title: 'Active',
@@ -41,25 +49,29 @@ const VendorList = () => {
 
     const sortChangeHandler = (sort: SortProps<Vendor>) => dispatch(setVendorsSort(sort));
     const reloadHandler = () => dispatch(loadVendors());
-    const selectHandler = (vendor:Vendor) => {
+    const selectHandler = (vendor: Vendor) => {
         dispatch(setCurrentVendor(vendor));
     }
 
     return (
         <div>
-            <div className="row g-3">
-                <div className="col-auto">
+            <Row className="g-3 align-items-baseline">
+                <Col xs="auto">
                     <ShowInactiveVendors/>
-                </div>
-                <div className="col-auto">
-                    <button className="btn btn-sm btn-outline-primary" onClick={reloadHandler}>Reload</button>
-                </div>
-            </div>
-            {loading && <LinearProgress variant="indeterminate"/>}
+                </Col>
+                <Col xs="auto">
+                    <Button size="sm" variant="outline-primary" onClick={reloadHandler}>Reload</Button>
+                </Col>
+                <Col xs="auto">
+                    {loading && (<Spinner size="sm" variant="primary"/>)}
+                </Col>
+            </Row>
+
             <SortableTable<Vendor> currentSort={sort} onChangeSort={sortChangeHandler} fields={fields}
-                           rowClassName={row => classNames({'table-warning': !row.active || row.VendorStatus === 'I'})}
-                           onSelectRow={selectHandler}
-                           data={vendors.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)} keyField="id"/>
+                                   rowClassName={row => classNames({'table-warning': !row.active || row.VendorStatus === 'I'})}
+                                   onSelectRow={selectHandler}
+                                   data={vendors.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)}
+                                   keyField="id"/>
             <TablePagination page={page} onChangePage={setPage} rowsPerPage={rowsPerPage} count={vendors.length}
                              showFirst={vendors.length > rowsPerPage} showLast={vendors.length > rowsPerPage}/>
         </div>

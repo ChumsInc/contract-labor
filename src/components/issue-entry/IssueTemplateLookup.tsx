@@ -2,18 +2,23 @@ import React, {HTMLAttributes, useEffect, useId, useState} from 'react';
 import {WorkTemplate} from "chums-types";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectCurrentTemplate, selectTemplatesList} from "@/ducks/templates/selectors";
-import {Autocomplete, createFilterOptions, TextField} from "@mui/material";
+import {Autocomplete, createFilterOptions} from "@mui/material";
 import {isStepsList} from "@/ducks/templates/utils";
 import {loadTemplate, setCurrentTemplate} from "@/ducks/templates/actions";
 
 export interface IssueTemplateLookupProps {
     templateNo: string | null;
     onChange: (templateNo: string) => void;
-    onSelectTemplate?: (template: WorkTemplate|null) => void;
+    onSelectTemplate?: (template: WorkTemplate | null) => void;
     inputProps?: Omit<HTMLAttributes<HTMLInputElement>, 'value' | 'onChange'>;
 }
 
-export default function IssueTemplateLookup({templateNo, onChange, onSelectTemplate, inputProps}: IssueTemplateLookupProps) {
+export default function IssueTemplateLookup({
+                                                templateNo,
+                                                onChange,
+                                                onSelectTemplate,
+                                                inputProps
+                                            }: IssueTemplateLookupProps) {
     const dispatch = useAppDispatch();
     const templates = useAppSelector(selectTemplatesList);
     const template = useAppSelector(selectCurrentTemplate);

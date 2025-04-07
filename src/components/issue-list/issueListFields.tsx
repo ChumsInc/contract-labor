@@ -13,7 +13,7 @@ export const fields: SortableTableField<CLIssue>[] = [
         field: 'ActivityCodes',
         title: 'Operations',
         sortable: true,
-        render: (row) => row.ActivityCodes.split(',').join(', ')
+        render: (row) => row.ActivityCodes?.split(',').join(', ') ?? 'N/A',
     },
     {
         field: 'DateIssued',

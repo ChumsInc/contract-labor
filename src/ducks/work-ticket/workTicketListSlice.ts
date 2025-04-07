@@ -2,7 +2,8 @@ import {createEntityAdapter, createSelector, createSlice, PayloadAction} from "@
 import {WorkTicketWorkStatusItem} from "../../types";
 import {WorkTicketSortProps, WorkTicketTableRow} from "@/ducks/work-ticket/types";
 import {wtStatusSorter} from "@/ducks/work-ticket/utils";
-import {loadWorkTicketStatusList} from "@/ducks/work-ticket/actions";
+import {loadWorkTicketStatusList, setWorkTicketStatus} from "@/ducks/work-ticket/actions";
+import {dismissAlert} from "@chumsinc/alert-list";
 
 const listAdapter = createEntityAdapter<WorkTicketWorkStatusItem, string>({
     selectId: (arg) => arg.WorkTicketKey,
@@ -12,7 +13,7 @@ const listAdapter = createEntityAdapter<WorkTicketWorkStatusItem, string>({
 const adapterSelectors = listAdapter.getSelectors();
 
 export interface WorkTicketsExtraState {
-    status: 'idle' | 'loading' | 'rejected';
+    status: 'idle' | 'loading' | 'saving' | 'rejected';
     search: string;
     sort: WorkTicketSortProps;
 }
@@ -45,6 +46,26 @@ const workTicketsListSlice = createSlice({
             })
             .addCase(loadWorkTicketStatusList.rejected, (state, action) => {
                 state.status = 'rejected';
+            })
+            .addCase(setWorkTicketStatus.pending, (state) => {
+                state.status = 'saving';
+            })
+            .addCase(setWorkTicketStatus.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if (action.payload) {
+                    listAdapter.setOne(state, action.payload);
+                }
+            })
+            .addCase(setWorkTicketStatus.rejected, (state) => {
+                state.status = 'rejected';
+            })
+            .addCase(dismissAlert, (state, action) => {
+                if ([
+                    loadWorkTicketStatusList.typePrefix,
+                    setWorkTicketStatus.typePrefix
+                ].includes(action.payload.context ?? '')) {
+                    state.status = 'idle';
+                }
             })
     },
     selectors: {

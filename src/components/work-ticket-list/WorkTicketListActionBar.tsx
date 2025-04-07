@@ -8,6 +8,8 @@ import Col from 'react-bootstrap/Col'
 import {useDebounceValue} from "usehooks-ts";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
+import Button from "react-bootstrap/Button";
+import {Spinner} from "react-bootstrap";
 
 
 export default function WorkTicketListActionBar() {
@@ -34,7 +36,7 @@ export default function WorkTicketListActionBar() {
     }
 
     return (
-        <Row className="row g-1 align-items-baseline">
+        <Row className="g-1 align-items-baseline">
             <Col xs="auto">
                 <InputGroup size="sm">
                     <InputGroup.Text as="label" htmlFor={id}>Search</InputGroup.Text>
@@ -43,12 +45,15 @@ export default function WorkTicketListActionBar() {
                 </InputGroup>
             </Col>
             <Col xs="auto">
-                <button type="button" className="btn btn-sm btn-outline-primary" onClick={loadWorkTicketsHandler}
+                <Button type="button" size="sm" variant="outline-primary" onClick={loadWorkTicketsHandler}
                         disabled={status !== 'idle'}>
                     Reload
-                </button>
+                </Button>
             </Col>
-            <Col className="col"></Col>
+            <Col xs="auto">
+                {status !== 'idle' && (<Spinner size="sm" variant="secondary" aria-label="loading" />)}
+            </Col>
+            <Col />
             <Col xs="auto">Legend:</Col>
             <Col xs="auto">
                 <WorkTicketStatusBadge text="In Process" status={{style: 1}}/>

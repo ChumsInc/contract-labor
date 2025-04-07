@@ -1,12 +1,13 @@
-import {createAction, createAsyncThunk} from "@reduxjs/toolkit";
-import {WorkTicketResponse, WorkTicketWorkStatusGroup, WorkTicketWorkStatusItem} from "../../types";
-import {fetchWorkTicket, fetchWorkTicketGroups, fetchWorkTickets} from "./api";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {PostWorkTicketStatusProps, WorkTicketResponse, WorkTicketWorkStatusItem} from "../../types";
+import {fetchWorkTicket, fetchWorkTicketGroups, fetchWorkTickets, postWorkTicketStatus} from "./api";
 
 import {RootState} from "../../app/configureStore";
-import {WorkTicketSortProps} from "./types";
 import {selectWorkTicketStatus} from "@/ducks/work-ticket/currentWorkTicketSlice";
 import {selectWTListStatus} from "@/ducks/work-ticket/workTicketListSlice";
 import {selectStatusGroupsLoading} from "@/ducks/work-ticket/statusGroupsSlice";
+import {WorkTicketGroup} from "chums-types";
+import {WorkTicketWorkStatusDetail} from "chums-types/src/production/work-ticket-status";
 
 export const setCurrentWorkTicket = createAsyncThunk<WorkTicketResponse | null, string>(
     'work-ticket/load',
@@ -34,7 +35,7 @@ export const loadWorkTicketStatusList = createAsyncThunk<WorkTicketWorkStatusIte
     }
 )
 
-export const loadWorkTicketStatusGroups = createAsyncThunk<WorkTicketWorkStatusGroup[]>(
+export const loadWorkTicketStatusGroups = createAsyncThunk<WorkTicketGroup[]>(
     'work-ticket/groups/load',
     async () => {
         return await fetchWorkTicketGroups();
@@ -43,6 +44,19 @@ export const loadWorkTicketStatusGroups = createAsyncThunk<WorkTicketWorkStatusG
         condition: (_arg, {getState}) => {
             const state = getState() as RootState;
             return selectStatusGroupsLoading(state) === 'idle';
+        }
+    }
+)
+
+export const setWorkTicketStatus = createAsyncThunk<WorkTicketWorkStatusItem|null, PostWorkTicketStatusProps, {state:RootState}>(
+    'work-ticket/save-status',
+    async (arg) => {
+        return await postWorkTicketStatus(arg);
+    },
+    {
+        condition: (arg, {getState}) => {
+            const state = getState() as RootState;
+            return selectWTListStatus(state) === 'idle';
         }
     }
 )

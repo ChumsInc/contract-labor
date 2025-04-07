@@ -5,6 +5,8 @@ import {loadCurrentIssueList} from "./actions";
 import {LocalStore} from "@chumsinc/ui-utils";
 import {localStorageKeys} from "@/app/settings";
 import {issueListSorter} from "@/ducks/issue-list/utils";
+import {removeCLIssueEntry, saveCLIssueEntry} from "@/ducks/issue-entry/actions";
+import {dismissAlert} from "@chumsinc/alert-list";
 
 const issueAdapter = createEntityAdapter<CLIssue, number>({
     selectId: (arg) => arg.id,
@@ -68,6 +70,20 @@ const issueListSlice = createSlice({
             })
             .addCase(loadCurrentIssueList.rejected, (state) => {
                 state.status = 'rejected';
+            })
+            .addCase(removeCLIssueEntry.fulfilled, (state, action) => {
+                state.status = 'idle';
+                issueAdapter.removeOne(state, action.meta.arg.id ?? 0);
+            })
+            .addCase(saveCLIssueEntry.fulfilled, (state, action) => {
+                if (action.payload?.issue) {
+                    issueAdapter.setOne(state, action.payload.issue);
+                }
+            })
+            .addCase(dismissAlert, (state, action) => {
+                if (action.payload.context === loadCurrentIssueList.typePrefix) {
+                    state.status = 'idle';
+                }
             })
     },
     selectors: {

@@ -17,10 +17,18 @@ export default function IssueDateDue({containerClassName, className, ...props}: 
     const current = useAppSelector(selectCurrentIssueHeader);
     const id = useId();
     const [value, setValue] = useState<string>(toLocalizedDate(current.DateDue)?.format('YYYY-MM-DD') ?? '');
+    const [minDate, setMinDate] = useState<string>(dayjs(current.DateIssued ?? new Date())?.format('YYYY-MM-DD') ?? '');
+    const [maxDate, setMaxDate] = useState<string>(dayjs(current.DateIssued ?? new Date()).add(5, 'days').format('YYYY-MM-DD') ?? '');
+    const [disabled, setDisabled] = useState<boolean>(false);
 
     useEffect(() => {
+        setMinDate(dayjs(current.DateIssued ?? new Date()).format('YYYY-MM-DD'));
+        setMaxDate(dayjs(current.DateIssued ?? new Date()).add(10, 'days').format('YYYY-MM-DD'));
         setValue(toLocalizedDate(current.DateDue)?.format('YYYY-MM-DD') ?? '');
-    }, [current]);
+        setDisabled(props.disabled
+            || (isCLIssue(current) && !!current.DateReceived)
+            || (!!current.id && dayjs(current.DateDue).isValid() && dayjs(current.DateDue).isBefore(dayjs().add(-5, 'days'))));
+    }, [current, props.disabled]);
 
     const changeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
         const dateDue = dayjs(ev.target.valueAsDate);
@@ -30,22 +38,14 @@ export default function IssueDateDue({containerClassName, className, ...props}: 
         dispatch(updateCurrentEntry({DateDue: dateDue.toISOString()}))
     }
 
-    const disabled = props.disabled
-        || (isCLIssue(current) && !!current.DateReceived)
-        || (!!current.id && dayjs(current.DateDue).isValid() && dayjs(current.DateDue).isBefore(dayjs().add(-5, 'days')));
-
     const readOnly = props.readOnly || disabled;
-
-    const min = readOnly
-        ? undefined
-        : toLocalizedDate(new Date())?.add(-5, 'days').format('YYYY-MM-DD') ?? undefined;
-    const max = readOnly ? undefined : dayjs().add(7, 'days').format('YYYY-MM-DD');
 
     return (
         <InputGroup size="sm">
             <InputGroup.Text as="label" htmlFor={id}>Date Due</InputGroup.Text>
             <FormControl type="date" value={value} onChange={changeHandler} {...props}
-                         disabled={disabled} readOnly={readOnly} min={min} max={max}/>
+                         disabled={disabled} readOnly={readOnly}
+                         min={readOnly ? undefined : minDate} max={readOnly ? undefined : maxDate}/>
         </InputGroup>
     )
 }

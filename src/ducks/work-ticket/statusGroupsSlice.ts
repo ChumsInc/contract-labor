@@ -1,8 +1,8 @@
 import {createEntityAdapter, createSlice} from "@reduxjs/toolkit";
-import {WorkTicketWorkStatusGroup} from "@/src/types";
 import {loadWorkTicketStatusGroups} from "@/ducks/work-ticket/actions";
+import {WorkTicketGroup} from "chums-types";
 
-const adapter = createEntityAdapter<WorkTicketWorkStatusGroup, number>({
+const adapter = createEntityAdapter<WorkTicketGroup, number>({
     selectId: (arg) => arg.id,
     sortComparer: (a, b) => a.id - b.id,
 });
@@ -11,7 +11,8 @@ const adapterSelectors = adapter.getSelectors();
 export interface WorkTicketStatusGroupExtraState {
     status: 'idle' | 'loading';
 }
-const extraState:WorkTicketStatusGroupExtraState = {
+
+const extraState: WorkTicketStatusGroupExtraState = {
     status: 'idle'
 }
 

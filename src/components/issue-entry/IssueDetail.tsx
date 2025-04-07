@@ -28,7 +28,7 @@ const IssueDetail = () => {
     }, [detail]);
 
 
-    const changeHandler = (field: keyof CLIssueEntryDetail, id?: number, stepNo?: string | null) => (ev: ChangeEvent<HTMLInputElement>) => {
+    const changeHandler = (field: keyof CLIssueEntryDetail, id: number, stepNo?: string | null) => (ev: ChangeEvent<HTMLInputElement>) => {
         switch (field) {
             case 'selected':
                 dispatch(toggleIssueDetailSelected({id, StepNo: stepNo ?? null, selected: ev.target.checked}));

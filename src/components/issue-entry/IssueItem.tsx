@@ -4,10 +4,13 @@ import {selectCurrentIssueHeader} from "@/ducks/issue-entry/issueEntrySlice";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
+import FormControl, {FormControlProps} from "react-bootstrap/FormControl";
 import {FormText} from "react-bootstrap";
 
-const IssueItem = () => {
+export interface IssueItemProps {
+    inputProps?: Omit<FormControlProps, 'value'|'onChange'>;
+}
+export default function IssueItem({inputProps}:IssueItemProps) {
     const current = useAppSelector(selectCurrentIssueHeader);
     const whseId = useId();
     const itemId = useId();
@@ -18,14 +21,16 @@ const IssueItem = () => {
                 <Col xs={12} md={6}>
                     <InputGroup size="sm">
                         <InputGroup.Text as="label" htmlFor={itemId}>Item</InputGroup.Text>
-                        <FormControl type="text" className="form-control form-control-sm" id={itemId}
+                        <FormControl type="text" size="sm" {...inputProps}
+                                     id={itemId}
                                      value={current.ItemCode ?? ''} readOnly/>
                     </InputGroup>
                 </Col>
                 <Col xs={12} md={6}>
                     <InputGroup size="sm">
                         <InputGroup.Text as="label" htmlFor={whseId}>Warehouse</InputGroup.Text>
-                        <FormControl type="text" id={whseId}
+                        <FormControl type="text"  size="sm" {...inputProps}
+                                     id={whseId}
                                      value={current.WarehouseCode ?? ''} readOnly/>
                     </InputGroup>
                 </Col>
@@ -35,4 +40,3 @@ const IssueItem = () => {
     )
 }
 
-export default IssueItem;

@@ -30,9 +30,11 @@ export async function postCLIssue(arg:CLIssueEntry):Promise<CLIssueResponse|null
     }
 }
 
-export async function deleteCLIssue(arg:CLIssueEntry):Promise<void> {
+export async function deleteCLIssue(arg:number):Promise<void> {
     try {
-        const
+        const url = '/api/operations/production/contract-labor/issue/:id.json'
+            .replace(':id', encodeURIComponent(arg));
+        await fetchJSON(url, {method: 'DELETE'});
     } catch(err:unknown) {
         if (err instanceof Error) {
             console.debug("deleteCLIssue()", err.message);

@@ -8,6 +8,7 @@ import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {loadCurrentIssueList} from "@/ducks/issue-list/actions";
 import IssueListFilterComplete from "@/components/issue-list/IssueListFilterComplete";
 import {selectStatus} from "@/ducks/issue-list/issueListSlice";
+import {Spinner} from "react-bootstrap";
 
 export default function IssueListFilters() {
     const dispatch = useAppDispatch();
@@ -18,7 +19,7 @@ export default function IssueListFilters() {
     }
 
     return (
-        <Row className="mb-1 g-3" >
+        <Row className="mb-1 g-3 align-items-baseline" >
             <Col xs="auto">
                 <IssueSearchInput />
             </Col>
@@ -29,6 +30,11 @@ export default function IssueListFilters() {
                 <IssueListFilterComplete />
             </Col>
             <Col/>
+            <Col xs="auto">
+                {status !== 'idle' && (
+                    <Spinner size="sm" variant="secondary" aria-label="loading" />
+                )}
+            </Col>
             <Col xs="auto">
                 <Button type="button" variant="primary" size="sm" onClick={reloadHandler}
                         disabled={status !== 'idle'}>

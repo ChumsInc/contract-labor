@@ -1,5 +1,12 @@
-import {WorkTicketResponse, WorkTicketWorkStatusGroup, WorkTicketWorkStatusItem} from "../../types";
+import {
+    PostWorkTicketStatusProps,
+    WorkTicketResponse,
+    WorkTicketWorkStatusGroup,
+    WorkTicketWorkStatusItem
+} from "../../types";
 import {fetchJSON} from "@chumsinc/ui-utils";
+import {WorkTicketGroup} from "chums-types";
+import {WorkTicketWorkStatusDetail} from "chums-types/src/production/work-ticket-status";
 
 export async function fetchWorkTicket(arg:string):Promise<WorkTicketResponse|null> {
     try {
@@ -32,10 +39,10 @@ export async function fetchWorkTickets():Promise<WorkTicketWorkStatusItem[]> {
     }
 }
 
-export async function fetchWorkTicketGroups():Promise<WorkTicketWorkStatusGroup[]> {
+export async function fetchWorkTicketGroups():Promise<WorkTicketGroup[]> {
     try {
         const url = '/api/operations/production/work-ticket/status/groups.json?loc=HUR';
-        const res = await fetchJSON<WorkTicketWorkStatusGroup[]>(url, {cache: 'no-cache'});
+        const res = await fetchJSON<WorkTicketGroup[]>(url, {cache: 'no-cache'});
         return res ?? [];
     } catch(err:unknown) {
         if (err instanceof Error) {
@@ -44,5 +51,23 @@ export async function fetchWorkTicketGroups():Promise<WorkTicketWorkStatusGroup[
         }
         console.debug("()", err);
         return Promise.reject(new Error('Error in ()'));
+    }
+}
+
+export async function postWorkTicketStatus(arg:PostWorkTicketStatusProps):Promise<WorkTicketWorkStatusItem|null> {
+    try {
+        const url = '/api/operations/production/work-ticket/status/:workTicketKey/:action.json'
+            .replace(':workTicketKey', encodeURIComponent(arg.WorkTicketKey))
+            .replace(':action', encodeURIComponent(arg.action));
+        const body = JSON.stringify(arg);
+        const res = await fetchJSON<{status: WorkTicketWorkStatusItem|null }>(url, {method: 'POST', body});
+        return res?.status ?? null;
+    } catch(err:unknown) {
+        if (err instanceof Error) {
+            console.debug("postWorkTicketStatus()", err.message);
+            return Promise.reject(err);
+        }
+        console.debug("postWorkTicketStatus()", err);
+        return Promise.reject(new Error('Error in postWorkTicketStatus()'));
     }
 }

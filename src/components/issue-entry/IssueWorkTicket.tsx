@@ -1,4 +1,4 @@
-import React, {ChangeEvent, InputHTMLAttributes, useEffect, useId} from 'react';
+import React, {ChangeEvent, useId} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import classNames from "classnames";
 import {selectCurrentIssueHeader, updateCurrentEntry} from "@/ducks/issue-entry/issueEntrySlice";
@@ -6,14 +6,13 @@ import {setCurrentWorkTicket} from "@/ducks/work-ticket/actions";
 import {selectWorkTicketHeader} from "@/ducks/work-ticket/currentWorkTicketSlice";
 import {friendlyDate} from "@/utils/dates";
 import {WorkTicketHeader} from "../../types";
-import {isFulfilled} from "@reduxjs/toolkit";
 import Alert from "react-bootstrap/Alert";
-import {useDebounceValue} from "usehooks-ts";
 import FormControl, {FormControlProps} from "react-bootstrap/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import {Collapse} from "react-bootstrap";
 
 
 const makeForText = (wt: WorkTicketHeader) => {
@@ -32,17 +31,18 @@ export interface IssueWorkTicketProps {
     inputProps?: FormControlProps;
     ref?: React.ForwardedRef<HTMLInputElement>;
     containerClassName?: string;
+    showDueDate?: boolean;
+    showMakeFor?: boolean;
 }
 
 
-export default function IssueWorkTicket({inputProps, ref, containerClassName}: IssueWorkTicketProps) {
+export default function IssueWorkTicket({inputProps, ref, containerClassName, showDueDate, showMakeFor}: IssueWorkTicketProps) {
     const dispatch = useAppDispatch();
     const current = useAppSelector(selectCurrentIssueHeader);
     const workTicket = useAppSelector(selectWorkTicketHeader);
     const id = useId();
     const dueId = useId();
     const makeForId = useId();
-
 
 
     const changeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -61,45 +61,50 @@ export default function IssueWorkTicket({inputProps, ref, containerClassName}: I
                 <InputGroup size="sm">
                     <InputGroup.Text as="label" htmlFor={id}>Work Ticket #</InputGroup.Text>
                     <FormControl size="sm" type="search" {...inputProps} id={id}
-                           defaultValue={current.WorkTicketNo ?? ''}
-                           onChange={changeHandler}/>
+                                 value={current.WorkTicketNo ?? ''}
+                                 onChange={changeHandler}/>
                     <Button type="button" size="sm" variant="secondary"
                             onClick={loadWorkTicketHandler}>
                         <span className="bi-search" aria-label="Load work ticket"/>
                     </Button>
                 </InputGroup>
             </div>
-            <div className={classNames('collapse', {show: show, 'mb-1': show})}>
-                <Row className="g-3">
-                    {show && workTicket?.WorkTicketStatus === 'C' && (
-                        <Col xs={12}>
-                            <Alert variant="danger">
-                                Closed Work Ticket
-                            </Alert>
-                        </Col>
+            <Collapse in={show}>
+                <div>
+                    {workTicket?.WorkTicketStatus === 'C' && (
+                        <Alert variant="danger">
+                            Closed Work Ticket
+                        </Alert>
                     )}
                     {show && workTicket?.WorkTicketStatus === 'X' && (
-                        <Col xs={12} className="text-danger">
+                        <Alert variant="danger">
                             <span className="bi-exclamation-triangle-fill me-3"/> Cancelled Work Ticket
-                        </Col>
+                        </Alert>
                     )}
+                </div>
+            </Collapse>
+            <Row className={classNames("g-3", {'mb-1': showDueDate || showMakeFor})}>
+                {showDueDate && (
                     <Col>
                         <InputGroup size="sm">
                             <InputGroup.Text as="label" htmlFor={dueId}>Prod. Due</InputGroup.Text>
                             <FormControl type="text" size="sm" id={dueId}
-                                   value={workTicket?.ProductionDueDate ? friendlyDate(workTicket.ProductionDueDate) ?? '' : ''}
-                                   readOnly disabled/>
+                                         value={workTicket?.ProductionDueDate ? friendlyDate(workTicket.ProductionDueDate) ?? '' : ''}
+                                         readOnly disabled/>
                         </InputGroup>
                     </Col>
+                )}
+                {showMakeFor && (
                     <Col>
                         <InputGroup className="input-group input-group-sm">
                             <InputGroup.Text as="label" htmlFor={makeForId}>Make For</InputGroup.Text>
                             <FormControl type="text" size="sm" id={makeForId}
-                                   value={workTicket ? makeForText(workTicket) : ''} readOnly disabled/>
+                                         value={workTicket ? makeForText(workTicket) : ''} readOnly disabled/>
                         </InputGroup>
                     </Col>
-                </Row>
-            </div>
+                )}
+                {!showDueDate && !showMakeFor && (<Col></Col>)}
+            </Row>
         </div>
     )
 }

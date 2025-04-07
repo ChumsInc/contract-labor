@@ -5,10 +5,10 @@ import dayjs from "dayjs";
 import {CLIssue, WorkTicketHeader} from "../../types";
 import Decimal from "decimal.js";
 import numeral from "numeral";
-import {Snackbar, SnackbarContent} from "@mui/material";
-import Alert from "@mui/material/Alert";
+import Alert from "react-bootstrap/Alert";
 import {selectOtherIssues} from "@/ducks/work-ticket/workTicketIssuesSlice";
 import {selectCurrentIssueHeader} from "@/ducks/issue-entry/issueEntrySlice";
+import {Toast, ToastContainer} from "react-bootstrap";
 
 const QuantityOrdered = ({wt}: { wt: WorkTicketHeader | null }) => {
     if (!wt) {
@@ -28,8 +28,7 @@ const WorkTicketMessage = ({issues, wt, handleClose}: {
         return null;
     }
     return (
-        <Alert severity="warning" onClose={handleClose}>
-            <strong>Work Ticket {wt?.WorkTicketNo?.replace(/^0+/, '')} already entered</strong>
+        <Alert variant="warning" dismissible onClose={handleClose}>
             <ul>
                 {issues.map(iss => (
                     <li key={iss.id}>{iss.id} {iss.VendorNo}; Qty: {numeral(iss.QuantityIssued).format('0,0')}
@@ -53,11 +52,22 @@ const WorkTicketAssignedAlert = () => {
     }, [issues]);
 
     return (
-        <Snackbar open={open} onClose={() => setOpen(false)}>
-            <SnackbarContent message={
-                <WorkTicketMessage issues={issues} wt={workTicket} handleClose={() => setOpen(false)}/>
-            }/>
-        </Snackbar>
+        <ToastContainer position="top-center">
+            <Toast show={open} onClose={() => setOpen(false)} bg="warning">
+                <Toast.Header>
+                    Work Ticket {workTicket?.WorkTicketNo?.replace(/^0+/, '')} already entered
+                </Toast.Header>
+                <Toast.Body>
+                    <ul>
+                        {issues.map(iss => (
+                            <li key={iss.id}>{iss.id} {iss.VendorNo}; Qty: {numeral(iss.QuantityIssued).format('0,0')}
+                                <QuantityOrdered wt={workTicket}/>; {dayjs(iss.DateIssued).format('MM/DD/YYYY')}
+                            </li>
+                        ))}
+                    </ul>
+                </Toast.Body>
+            </Toast>
+        </ToastContainer>
     )
 }
 export default WorkTicketAssignedAlert;

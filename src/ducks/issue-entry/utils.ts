@@ -26,6 +26,7 @@ export const issueDetailSorter = ({
 
 export const newIssueDetailRow = (row: WorkTicketStep, quantity: number | string, index?: number): CLIssueEntryDetail => {
     return ({
+        id: 0,
         TemplateNo: row.SourceTemplateNo,
         RevisionNo: row.SourceTemplateRevisionNo,
         StepNo: row.StepNo,

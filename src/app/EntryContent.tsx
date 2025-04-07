@@ -5,6 +5,7 @@ import CurrentIssueList from "@/components/issue-list/CurrentIssueList";
 import {Accordion} from "react-bootstrap";
 import CLIssueTabs from "@/components/CLIssueTabs";
 import CLIssueForm from "@/components/issue-entry/CLIssueForm";
+import CLReceiptForm from "@/components/receipt-entry/CLReceiptForm";
 
 const EntryContent = () => {
     const [activeKey, setActiveKey] = React.useState<string>('issue-list');
@@ -36,6 +37,7 @@ const EntryContent = () => {
                 <div className="col-6">
                     <CLIssueTabs tab={tab} onChangeTab={setTab}/>
                     {tab === 'issue' && (<CLIssueForm/>)}
+                    {tab === 'receive' && (<CLReceiptForm />)}
                 </div>
             </div>
         </div>

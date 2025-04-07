@@ -1,3 +1,5 @@
+import {WorkTicketStatusSet} from "chums-types";
+
 export interface Vendor {
     id: number;
     Company: string;
@@ -134,7 +136,7 @@ export interface CLIssueEntry extends Pick<CLIssue, 'id' | 'VendorNo' | 'WorkTic
 
 export interface CLIssueEntryDetail extends Pick<CLIssueDetail, 'TemplateNo'|'RevisionNo'|'StepNo' | 'WorkCenter' | 'ActivityCode'
     | 'StepDescription' | 'QuantityIssued' | 'ActivityRate' | 'ScalingMethod' | 'ScalingFactor'> {
-    id?: number;
+    id: number;
     selected?: boolean;
     ScalingFactorMaterials?: number|string|null;
 }
@@ -187,7 +189,7 @@ export interface WorkTicketWorkStatusItem extends Pick<WorkTicketHeader,
     'WorkTicketKey'|'WorkTicketNo'|'ParentItemCode'|'ParentWarehouseCode'|'ProductionDueDate'|
     'QuantityOrdered'|'QuantityCompleted'|'ParentItemCodeDesc'|'MakeForWorkTicketNo'|'MakeForSalesOrderNo'
 > {
-    StatusJSON: WorkTicketStatusGroup;
+    StatusJSON: WorkTicketStatusSet;
     WorkCenters: string[];
 }
 
@@ -208,4 +210,10 @@ export interface SearchItem {
     filename: string | null;
     b2bItem: string | null;
     ProductStatus: string | null;
+}
+
+export interface PostWorkTicketStatusProps {
+    WorkTicketKey: string;
+    action: string;
+    nextStatus: number;
 }

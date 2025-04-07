@@ -42,7 +42,6 @@ export default function WorkTicketList() {
         <div>
             <h3>Open Work Tickets</h3>
             <WorkTicketListActionBar/>
-            {status === 'loading' && <ProgressBar striped animated now={100}/>}
             <WorkTicketTable currentSort={sort} onChangeSort={sortChangeHandler} fields={fields} size="xs"
                              selected={(wt) => wt.WorkTicketNo === workTicketNo}
                              data={list.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)}

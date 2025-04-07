@@ -2,7 +2,7 @@ import {createAction, createAsyncThunk} from "@reduxjs/toolkit";
 import {CLIssueEntry, CLIssueResponse} from "../../types";
 import {RootState} from "../../app/configureStore";
 import {selectCurrentIssueStatus} from "./issueEntrySlice";
-import {fetchCLIssue, postCLIssue} from "./api";
+import {deleteCLIssue, fetchCLIssue, postCLIssue} from "./api";
 import dayjs from "dayjs";
 
 export const setIssueDate = createAction('issue-entry/setIssueDate', (date: Date | string | undefined) => {
@@ -41,4 +41,15 @@ export const saveCLIssueEntry = createAsyncThunk<CLIssueResponse|null, CLIssueEn
 )
 
 
-export const delete
+export const removeCLIssueEntry = createAsyncThunk<void, CLIssueEntry, {state:RootState}>(
+    'issue-entry/remove',
+    async (arg) => {
+        return await deleteCLIssue(arg.id!);
+    },
+    {
+        condition: (arg, {getState}) => {
+            const state = getState();
+            return !!arg.id && selectCurrentIssueStatus(state) === 'idle';
+        }
+    }
+)
