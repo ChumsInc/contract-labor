@@ -1,9 +1,13 @@
 import {createAction, createAsyncThunk} from "@reduxjs/toolkit";
-import {CLIssueEntry, CLIssueResponse} from "../../types";
+import {CLIssueDetail, CLIssueEntry, CLIssueResponse} from "../../types";
 import {RootState} from "../../app/configureStore";
-import {selectCurrentIssueStatus} from "./issueEntrySlice";
-import {deleteCLIssue, fetchCLIssue, postCLIssue} from "./api";
+import {selectCurrentIssueDetail, selectCurrentIssueHeader, selectCurrentIssueStatus} from "./issueEntrySlice";
+import {deleteCLIssue, deleteCLReceipt, fetchCLIssue, postCLIssue, postReceiveCLIssue} from "./api";
 import dayjs from "dayjs";
+import {CLIssue} from "chums-types";
+import {isCLIssue} from "@/utils/issue";
+import Decimal from "decimal.js";
+import {calcCostReceived} from "@/ducks/issue-entry/utils";
 
 export const setIssueDate = createAction('issue-entry/setIssueDate', (date: Date | string | undefined) => {
     const issueDate = date && dayjs(date).isValid()
@@ -27,7 +31,7 @@ export const loadCLIssueEntry = createAsyncThunk<CLIssueResponse | null, CLIssue
     }
 )
 
-export const saveCLIssueEntry = createAsyncThunk<CLIssueResponse|null, CLIssueEntry, {state:RootState}>(
+export const saveCLIssueEntry = createAsyncThunk<CLIssueResponse | null, CLIssueEntry, { state: RootState }>(
     'issue-entry/save',
     async (arg) => {
         return await postCLIssue(arg);
@@ -41,7 +45,7 @@ export const saveCLIssueEntry = createAsyncThunk<CLIssueResponse|null, CLIssueEn
 )
 
 
-export const removeCLIssueEntry = createAsyncThunk<void, CLIssueEntry, {state:RootState}>(
+export const removeCLIssueEntry = createAsyncThunk<void, CLIssueEntry, { state: RootState }>(
     'issue-entry/remove',
     async (arg) => {
         return await deleteCLIssue(arg.id!);
@@ -50,6 +54,56 @@ export const removeCLIssueEntry = createAsyncThunk<void, CLIssueEntry, {state:Ro
         condition: (arg, {getState}) => {
             const state = getState();
             return !!arg.id && selectCurrentIssueStatus(state) === 'idle';
+        }
+    }
+)
+
+export interface ReceiveCLIssueProps extends Pick<CLIssue, 'id' | 'DateReceived'
+    | 'QuantityReceived' | 'QuantityRepaired' | 'CostReceived'> {
+    detail: Pick<CLIssueDetail, 'id' | 'QuantityReceived'>[]
+}
+
+
+export const receiveCLIssue = createAsyncThunk<CLIssueResponse, string, { state: RootState }>(
+    'issue-entry/receive',
+    async (arg, {getState}) => {
+        const state = getState()
+        const header = selectCurrentIssueHeader(state) as CLIssue;
+        const detail = selectCurrentIssueDetail(state) as CLIssueDetail[];
+        const costReceived = calcCostReceived(detail, header.QuantityRepaired)
+        const props: ReceiveCLIssueProps = {
+            id: header.id!,
+            DateReceived: arg,
+            QuantityReceived: header.QuantityReceived,
+            QuantityRepaired: header.QuantityRepaired,
+            CostReceived: costReceived,
+            detail: detail.map(item => ({id: item.id, QuantityReceived: item.QuantityReceived}))
+        }
+        return await postReceiveCLIssue(props);
+    },
+    {
+        condition: (arg, {getState}) => {
+            const state = getState() as RootState;
+            const issue = selectCurrentIssueHeader(state);
+            if (!isCLIssue(issue)) {
+                return false;
+            }
+
+            return !!arg && selectCurrentIssueStatus(state) === 'idle'
+                && new Decimal(issue.QuantityReceived).gt(0);
+        }
+    }
+)
+
+export const removeCLReceipt = createAsyncThunk<CLIssueResponse, number|string, {state:RootState}>(
+    'issue-entry/removeReceipt',
+    async (arg) => {
+        return await deleteCLReceipt(arg);
+    },
+    {
+        condition: (arg, {getState}) => {
+            const state = getState() as RootState;
+            return !!arg && selectCurrentIssueStatus(state) === 'idle';
         }
     }
 )

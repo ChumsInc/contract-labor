@@ -28,7 +28,7 @@ export default function WorkTicketList() {
 
     useEffect(() => {
         setPage(0);
-    }, [list, rowsPerPage]);
+    }, [list.length, rowsPerPage]);
 
     const sortChangeHandler = (sort: WorkTicketSortProps) => {
         dispatch(setWTListSort(sort))

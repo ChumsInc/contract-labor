@@ -7,7 +7,7 @@ import {
 } from "@/ducks/issue-entry/issueEntrySlice";
 import VendorSelect from "./VendorSelect";
 import IssueId from "./IssueId";
-import {CLIssueEntry} from "../../types";
+import {CLIssueEntry, CLIssueEntryDetail} from "../../types";
 import IssueWorkTicket from "./IssueWorkTicket";
 import WorkTicketAssignedAlert from "@/ducks/work-ticket/WorkTicketAssignedAlert";
 import dayjs from "dayjs";
@@ -30,18 +30,20 @@ import {setWorkTicketStatus} from "@/ducks/work-ticket/actions";
 import {CLIssueResponse} from "chums-types";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {ProgressBar} from "react-bootstrap";
+import AdditionalCLSteps from "@/components/issue-entry/AdditionalCLSteps";
 
 dayjs.extend(utc);
 
 const CLIssueForm = () => {
     const dispatch = useAppDispatch();
     const current = useAppSelector(selectCurrentIssueHeader);
-    const detail = useAppSelector(selectCurrentIssueDetail);
+    const lines = useAppSelector(selectCurrentIssueDetail);
     const status = useAppSelector(selectCurrentIssueStatus);
 
 
     const submitHandler = async (ev: FormEvent) => {
         ev.preventDefault();
+        const detail = (lines as CLIssueEntryDetail[]).filter(line => line.selected);
         const res = await dispatch(saveCLIssueEntry({...current, detail}));
         const payload:CLIssueResponse|null = res.payload as CLIssueResponse ?? null
         if (!payload || !payload.issue?.WorkTicketKey) {
@@ -85,10 +87,10 @@ const CLIssueForm = () => {
             <Row className="g-3">
                 <Col xs={12} md={6}>
                     <Row className="g-3 mb-1">
-                        <Col xs={12} md={6}>
+                        <Col xs={12} md={4}>
                             <IssueId/>
                         </Col>
-                        <Col xs={12} md={6}>
+                        <Col xs={12} md={8}>
                             <VendorSelect required value={current.VendorNo ?? ''} onChange={changeHandler('VendorNo')}/>
                         </Col>
                     </Row>
@@ -106,6 +108,9 @@ const CLIssueForm = () => {
                     </Row>
                     <div className="mb-1">
                         <IssueDateDue required/>
+                    </div>
+                    <div className="mb-1">
+                        <AdditionalCLSteps />
                     </div>
                 </Col>
                 <Col xs={12} md={6}>

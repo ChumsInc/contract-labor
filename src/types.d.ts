@@ -138,7 +138,6 @@ export interface CLIssueEntryDetail extends Pick<CLIssueDetail, 'TemplateNo'|'Re
     | 'StepDescription' | 'QuantityIssued' | 'ActivityRate' | 'ScalingMethod' | 'ScalingFactor'> {
     id: number;
     selected?: boolean;
-    ScalingFactorMaterials?: number|string|null;
 }
 
 export type CLIssueEntryDetailPost = Pick<CLIssueDetail, 'id'|'StepNo'|'QuantityIssued'>;

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useAppSelector} from "@/app/configureStore";
-import {selectWorkTicketHeader, selectWorkTicketStatus} from "./currentWorkTicketSlice";
+import {selectWorkTicketHeader} from "./currentWorkTicketSlice";
 import dayjs from "dayjs";
 import {CLIssue, WorkTicketHeader} from "../../types";
 import Decimal from "decimal.js";
@@ -8,7 +8,7 @@ import numeral from "numeral";
 import Alert from "react-bootstrap/Alert";
 import {selectOtherIssues} from "@/ducks/work-ticket/workTicketIssuesSlice";
 import {selectCurrentIssueHeader} from "@/ducks/issue-entry/issueEntrySlice";
-import {Toast, ToastContainer} from "react-bootstrap";
+import {Offcanvas} from "react-bootstrap";
 
 const QuantityOrdered = ({wt}: { wt: WorkTicketHeader | null }) => {
     if (!wt) {
@@ -19,32 +19,11 @@ const QuantityOrdered = ({wt}: { wt: WorkTicketHeader | null }) => {
     )
 }
 
-const WorkTicketMessage = ({issues, wt, handleClose}: {
-    issues: CLIssue[],
-    wt: WorkTicketHeader | null,
-    handleClose: () => void
-}) => {
-    if (!wt || !issues.length) {
-        return null;
-    }
-    return (
-        <Alert variant="warning" dismissible onClose={handleClose}>
-            <ul>
-                {issues.map(iss => (
-                    <li key={iss.id}>{iss.id} {iss.VendorNo}; Qty: {numeral(iss.QuantityIssued).format('0,0')}
-                        <QuantityOrdered wt={wt}/>; {dayjs(iss.DateIssued).format('MM/DD/YYYY')}
-                    </li>
-                ))}
-            </ul>
-        </Alert>
-    )
-}
 
 const WorkTicketAssignedAlert = () => {
     const issue = useAppSelector(selectCurrentIssueHeader);
     const issues = useAppSelector(selectOtherIssues);
     const workTicket = useAppSelector(selectWorkTicketHeader);
-    const loading = useAppSelector(selectWorkTicketStatus);
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -52,22 +31,22 @@ const WorkTicketAssignedAlert = () => {
     }, [issues]);
 
     return (
-        <ToastContainer position="top-center">
-            <Toast show={open} onClose={() => setOpen(false)} bg="warning">
-                <Toast.Header>
-                    Work Ticket {workTicket?.WorkTicketNo?.replace(/^0+/, '')} already entered
-                </Toast.Header>
-                <Toast.Body>
-                    <ul>
-                        {issues.map(iss => (
-                            <li key={iss.id}>{iss.id} {iss.VendorNo}; Qty: {numeral(iss.QuantityIssued).format('0,0')}
-                                <QuantityOrdered wt={workTicket}/>; {dayjs(iss.DateIssued).format('MM/DD/YYYY')}
-                            </li>
-                        ))}
-                    </ul>
-                </Toast.Body>
-            </Toast>
-        </ToastContainer>
+        <Offcanvas placement="bottom" show={open}>
+            <Alert variant="warning" className="text-dark" dismissible onClose={() => setOpen(false)}>
+                <Alert.Heading>
+                    Work Ticket {workTicket?.WorkTicketNo?.replace(/^0+/, '')}
+                    {' '} is already entered.
+                </Alert.Heading>
+                <ul>
+                    {issues.map(iss => (
+                        <li key={iss.id}>
+                            {iss.id} {iss.VendorNo}; Qty: {numeral(iss.QuantityIssued).format('0,0')}
+                            <QuantityOrdered wt={workTicket}/>; {dayjs(iss.DateIssued).format('MM/DD/YYYY')}
+                        </li>
+                    ))}
+                </ul>
+            </Alert>
+        </Offcanvas>
     )
 }
 export default WorkTicketAssignedAlert;

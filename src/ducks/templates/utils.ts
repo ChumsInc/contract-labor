@@ -1,5 +1,7 @@
 import {WorkTemplate, WorkTemplateStep} from "chums-types";
 import Decimal from "decimal.js";
+import numeral from "numeral";
+import {CLIssueDetail} from "@/src/types";
 
 export const workTemplateSorter = (a:WorkTemplate, b:WorkTemplate) => a.TemplateNo > b.TemplateNo ? 1 : -1;
 
@@ -16,4 +18,8 @@ export const stepRate = (step:WorkTemplateStep):string|number => {
         default:
             return step.BudgetLaborCost
     }
+}
+
+export const stepQuantity = (factor:number|string, baseQty: number|string):number|string => {
+    return new Decimal(baseQty).div(factor).floor().toString();
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import IssueSearchInput from "@/components/issue-list/IssueSearchInput";
@@ -7,16 +7,23 @@ import Button from "react-bootstrap/Button";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {loadCurrentIssueList} from "@/ducks/issue-list/actions";
 import IssueListFilterComplete from "@/components/issue-list/IssueListFilterComplete";
-import {selectStatus} from "@/ducks/issue-list/issueListSlice";
+import {filterVendorNo, selectStatus} from "@/ducks/issue-list/issueListSlice";
 import {Spinner} from "react-bootstrap";
+import {useParams} from "react-router";
 
 export default function IssueListFilters() {
     const dispatch = useAppDispatch();
     const status = useAppSelector(selectStatus);
+    const params = useParams<'vendor'>()
+
+    useEffect(() => {
+        dispatch(filterVendorNo(params.vendor ?? ''));
+    }, [params.vendor]);
 
     const reloadHandler = () => {
         dispatch(loadCurrentIssueList())
     }
+
 
     return (
         <Row className="mb-1 g-3 align-items-baseline" >

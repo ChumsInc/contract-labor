@@ -2,14 +2,14 @@ import React, {ChangeEvent} from 'react';
 import FormControl, {FormControlProps} from "react-bootstrap/FormControl";
 
 export interface IssueQuantityInputProps extends FormControlProps{
-    quantityIssued: number | string;
+    quantity: number | string;
     onChange: (ev: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function IssueQuantityInput({quantityIssued, onChange, ...rest}: IssueQuantityInputProps) {
+export default function IssueQuantityInput({quantity, onChange, ...rest}: IssueQuantityInputProps) {
     return (
         <FormControl size="sm" type="number" aria-label="Quantity Issued"
-                     value={quantityIssued} onChange={onChange}
+                     value={quantity} onChange={onChange}
                      style={{maxWidth: '5rem'}} {...rest}/>
     )
 }

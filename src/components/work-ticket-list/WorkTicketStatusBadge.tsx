@@ -1,7 +1,7 @@
 import React from 'react';
 import {WorkTicketStatusEntry} from "../../types";
 import Badge from "react-bootstrap/Badge";
-import {Variant} from "react-bootstrap/types";
+import {Color, Variant} from "react-bootstrap/types";
 
 export interface WorkTicketStatusBadgeProps {
     text: string;
@@ -17,7 +17,15 @@ export default function WorkTicketStatusBadge({text, status}:WorkTicketStatusBad
         3: 'warning',
         4: 'danger'
     }
+
+    const badgeTextColor:Record<number, Color> = {
+        1: 'dark',
+        3: 'dark',
+    }
     return (
-        <Badge bg={badgeColors[status.style] ?? 'secondary'} pill>{text}</Badge>
+        <Badge bg={badgeColors[status.style] ?? 'secondary'} pill
+               text={badgeTextColor[status.style] ?? undefined}>
+            {text}
+        </Badge>
     )
 }

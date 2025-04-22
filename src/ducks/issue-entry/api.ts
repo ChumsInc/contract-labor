@@ -1,6 +1,7 @@
 import {CLIssueEntry, CLIssueResponse, SearchItem} from "../../types";
 import {fetchJSON} from "@chumsinc/ui-utils";
 import {} from 'chums-types';
+import {ReceiveCLIssueProps} from "@/ducks/issue-entry/actions";
 
 export async function fetchCLIssue(arg:number):Promise<CLIssueResponse|null> {
     try {
@@ -58,5 +59,49 @@ export async function fetchItemLookup(arg:string):Promise<SearchItem|null> {
         }
         console.debug("fetchItemLookup()", err);
         return Promise.reject(new Error('Error in fetchItemLookup()'));
+    }
+}
+
+export async function postReceiveCLIssue(arg:ReceiveCLIssueProps):Promise<CLIssueResponse> {
+    try {
+        const url = '/api/operations/production/contract-labor/issue/:id/receive.json'
+            .replace(':id', encodeURIComponent(arg.id.toString()));
+        const body = JSON.stringify(arg);
+        const res = await fetchJSON<CLIssueResponse>(url, {method: 'POST', body});
+        if (!res) {
+            return {
+                issue: null,
+                detail: [],
+            }
+        }
+        return res;
+    } catch(err:unknown) {
+        if (err instanceof Error) {
+            console.debug("postReceiveCLIssue()", err.message);
+            return Promise.reject(err);
+        }
+        console.debug("postReceiveCLIssue()", err);
+        return Promise.reject(new Error('Error in postReceiveCLIssue()'));
+    }
+}
+
+export async function deleteCLReceipt(arg:number|string):Promise<CLIssueResponse> {
+    try {
+        const url = '/api/operations/production/contract-labor/issue/:id/receive.json'
+            .replace(':id', encodeURIComponent(arg));
+        const res = await fetchJSON<CLIssueResponse>(url, {method: 'DELETE'});
+        if (!res) {
+            return {
+                issue: null,
+                detail: [],
+            }
+        }
+        return res;
+    } catch(err:unknown) {
+        if (err instanceof Error) {
+            console.debug("deleteCLReceipt()", err.message);
+            return Promise.reject(err);
+        }
+        return Promise.reject(new Error('Error in deleteCLReceipt()'));
     }
 }

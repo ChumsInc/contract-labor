@@ -9,7 +9,7 @@ export interface ContextAlertProps extends AlertProps {
     message?: string;
 }
 
-export default function ContextAlert({context, count, message, variant, ...props}: ContextAlertProps) {
+export default function ContextAlert({context, count, message, variant, children, ...props}: ContextAlertProps) {
     const dispatch = useAppDispatch();
 
     const onDismiss = () => {
@@ -21,7 +21,7 @@ export default function ContextAlert({context, count, message, variant, ...props
                 {context}
                 {(count ?? 0) > 1 && (<Badge bg={variant}>{count}</Badge>)}
             </Alert.Heading>}
-            {message}
+            {message ?? children}
         </Alert>
     )
 }

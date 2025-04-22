@@ -14,7 +14,7 @@ const AlertList = () => {
     return (
         <div>
             {list.map(alert => (
-                <ContextAlert key={alert.id} variant={alert.variant} dismissible
+                <ContextAlert key={alert.id} variant="warning" dismissible
                               onClose={() => dismissHandler(alert)}
                               context={alert.context} count={alert.count}>
                     {alert.message}

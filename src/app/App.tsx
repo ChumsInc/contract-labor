@@ -2,8 +2,7 @@ import React from 'react';
 import EntryContent from "./EntryContent";
 import HistoryContent from "./HistoryContent";
 import VendorsContent from "./VendorsContent";
-// import './app.css';
-import {BrowserRouter, HashRouter, Route, Routes} from "react-router";
+import {HashRouter, Route, Routes} from "react-router";
 import Layout from "./Layout";
 import Home from "./Home";
 import CLIssueContent from "@/components/CLIssueContent";
@@ -12,7 +11,7 @@ import CLIssueContent from "@/components/CLIssueContent";
 function App() {
 
     return (
-        <BrowserRouter>
+        <HashRouter>
             <Routes>
                 <Route path="/" element={<Layout/>}>
                     <Route index element={<Home/>}/>
@@ -24,7 +23,7 @@ function App() {
                     <Route path="vendors" element={<VendorsContent/>}/>
                 </Route>
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     )
 }
 

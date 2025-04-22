@@ -7,7 +7,6 @@ import {selectWorkTicketStatus} from "@/ducks/work-ticket/currentWorkTicketSlice
 import {selectWTListStatus} from "@/ducks/work-ticket/workTicketListSlice";
 import {selectStatusGroupsLoading} from "@/ducks/work-ticket/statusGroupsSlice";
 import {WorkTicketGroup} from "chums-types";
-import {WorkTicketStatusSet, WorkTicketWorkStatusDetail} from "chums-types/src/production/work-ticket-status";
 
 export const setCurrentWorkTicket = createAsyncThunk<WorkTicketResponse | null, string>(
     'work-ticket/load',
@@ -48,8 +47,10 @@ export const loadWorkTicketStatusGroups = createAsyncThunk<WorkTicketGroup[]>(
     }
 )
 
-export const setWorkTicketStatus = createAsyncThunk<WorkTicketWorkStatusItem|null, PostWorkTicketStatusProps, {state:RootState}>(
-    'work-ticket/save-status',
+export const setWorkTicketStatus = createAsyncThunk<WorkTicketWorkStatusItem | null, PostWorkTicketStatusProps, {
+    state: RootState
+}>(
+    'work-ticket/setWorkTicketStatus',
     async (arg) => {
         return await postWorkTicketStatus(arg);
     },

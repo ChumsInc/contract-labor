@@ -34,8 +34,7 @@ export const newIssueDetailRow = (row: WorkTicketStep, quantity: number | string
         ActivityCode: row.ActivityCode,
         QuantityIssued: new Decimal(quantity).div(row.ScalingFactorMaterials).floor().toString(),
         ActivityRate: activityRate(row),
-        ScalingFactor: 1,
-        ScalingFactorMaterials: row.ScalingFactorMaterials,
+        ScalingFactor: row.ScalingFactorMaterials,
         ScalingMethod: row.ScalingMethod,
         StepDescription: row.StepDesc,
         selected: true,
@@ -68,29 +67,46 @@ export const activityRate = (props: Pick<WorkTicketStep, 'ScalingFactorMaterials
         RevisedBudgetHours
     } = props;
     switch (ScalingMethod) {
-        case 'Y':
-            return new Decimal(RevisedBudgetLaborCost).div(RevisedBudgetHours).div(ScalingFactorLabor).times(ScalingFactorMaterials ?? 1).toDecimalPlaces(3).toString();
-        case 'M':
-            return new Decimal(ScalingFactorLabor).div(new Decimal(RevisedBudgetLaborCost).div(RevisedBudgetHours)).times(ScalingFactorMaterials ?? 1).toDecimalPlaces(3).toString();
+        case 'Y': // Number of parents per template
+            return new Decimal(RevisedBudgetLaborCost)
+                .div(RevisedBudgetHours)
+                .div(ScalingFactorLabor)
+                .times(ScalingFactorMaterials ?? 1)
+                .toDecimalPlaces(3).toString();
+        case 'M': // Number of templates per parent
+            return new Decimal(ScalingFactorLabor)
+                .div(new Decimal(RevisedBudgetLaborCost).div(RevisedBudgetHours))
+                .times(ScalingFactorMaterials ?? 1)
+                .toDecimalPlaces(3).toString();
         default:
             return RevisedBudgetLaborCost;
     }
 }
 
-export const calcCostIssued = (rows: CLIssueEntryDetail[]): string => {
-    return rows.filter(row => row.selected)
-        .reduce((pv, row) => new Decimal(row.QuantityIssued).div(row.ScalingFactor ?? 1).times(row.ActivityRate ?? 0).toDecimalPlaces(2).add(pv), new Decimal('0'))
-        .toString();
+export const activityIssueCost = (row: CLIssueEntryDetail | CLIssueDetail): string => {
+    return new Decimal(row.QuantityIssued).times(row.ActivityRate ?? 0).toDecimalPlaces(2).toString();
+}
+
+export const activityReceiptCost = (row: CLIssueDetail): string => {
+    return new Decimal(row.QuantityReceived ?? 0).times(row.ActivityRate ?? 0).toDecimalPlaces(2).toString();
 }
 
 
-export const issueDetailTotal = (detail: (CLIssueEntryDetail)[]): string | number => {
-    return detail
-        .filter(detail => detail.selected)
-        .reduce((pv, cv) => new Decimal(cv.ActivityRate ?? 0)
-                .times(cv.QuantityIssued)
-                .div(cv.ScalingFactor ?? 1)
-                .add(pv).toString(),
-            '0');
+export const calcCostIssued = (rows: CLIssueEntryDetail[]): string => {
+    return rows.filter(row => row.selected)
+        .reduce(
+            (pv, row) => new Decimal(activityIssueCost(row)).add(pv),
+            new Decimal('0')
+        )
+        .toString();
+}
 
+export const calcCostReceived = (rows: CLIssueDetail[], fixes:number|string): string => {
+    return rows
+        .reduce(
+            (pv, row) => new Decimal(activityReceiptCost(row)).add(pv),
+            new Decimal('0')
+        )
+        .add(new Decimal(fixes).times(0.02))
+        .toString();
 }

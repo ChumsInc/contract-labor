@@ -1,4 +1,4 @@
-import {CLIssue, CLIssueEntry, CLIssueEntryDetail} from "../../types";
+import {CLIssue, CLIssueDetail, CLIssueEntry, CLIssueEntryDetail} from "../../types";
 import {Editable} from "chums-types/src/generics";
 import {
     CaseReducer,
@@ -8,17 +8,26 @@ import {
     EntityState,
     PayloadAction
 } from "@reduxjs/toolkit";
-import {loadCLIssueEntry, removeCLIssueEntry, saveCLIssueEntry, setIssueDate} from "./actions";
+import {
+    loadCLIssueEntry,
+    receiveCLIssue,
+    removeCLIssueEntry,
+    removeCLReceipt,
+    saveCLIssueEntry,
+    setIssueDate
+} from "./actions";
 import {setCurrentWorkTicket} from "../work-ticket/actions";
 import Decimal from "decimal.js";
 import {calcCostIssued, detailRowsFromSteps, issueDetailKey, issueDetailSorter, newIssueDetailRow} from "./utils";
 import dayjs from "dayjs";
-import {SortProps, WorkTemplate} from "chums-types";
+import {DLStep, SortProps, WorkTemplate} from "chums-types";
 import {dismissAlert} from "@chumsinc/alert-list";
 import {filterVendorNo} from "@/ducks/issue-list/issueListSlice";
+import {isCLIssue} from "@/utils/issue";
+import {stepQuantity} from "@/ducks/templates/utils";
 
 
-const issueDetailAdapter = createEntityAdapter<CLIssueEntryDetail & Editable, string>({
+const issueDetailAdapter = createEntityAdapter<(CLIssueEntryDetail | CLIssueDetail) & Editable, string>({
     selectId: (arg) => issueDetailKey(arg),
     sortComparer: (a, b) => issueDetailKey(a).localeCompare(issueDetailKey(b))
 });
@@ -58,7 +67,7 @@ export const newCLEntry = (vendorNo?: string): CLIssueEntry => ({
     QuantityIssued: 0,
     CostIssued: 0,
     UnitCost: 0,
-    DateIssued: dayjs().toISOString(),
+    DateIssued: dayjs().format('YYYY-MM-DD'),
     DateDue: null,
     Notes: '',
 })
@@ -103,6 +112,10 @@ const issueEntrySlice = createSlice({
     name: "issueEntry",
     initialState: issueDetailAdapter.getInitialState(initialState()),
     reducers: {
+        addDLStep: (state, action:PayloadAction<CLIssueEntryDetail>) => {
+            issueDetailAdapter.addOne(state, action.payload);
+            updateHeaderCosts(state, action);
+        },
         setNewEntry: (state, action: PayloadAction<CLIssueEntry>) => {
             state.header = action.payload;
             issueDetailAdapter.removeAll(state);
@@ -133,22 +146,51 @@ const issueEntrySlice = createSlice({
             issueDetailAdapter.updateOne(state, {id: key, changes: {QuantityIssued: action.payload.QuantityIssued}});
             updateHeaderCosts(state, action);
         },
-        updateCurrentEntry: (state, action: PayloadAction<Partial<CLIssueEntry>>) => {
-            state.header = {...state.header, ...action.payload, changed: true};
+        setIssueDetailQuantityReceived: (state, action: PayloadAction<Pick<CLIssueDetail, 'id' | 'StepNo' | 'QuantityReceived'>>) => {
+            const key = issueDetailKey(action.payload);
+            const existing = issueDetailSelectors.selectById(state, key);
+            if (!existing) {
+                return;
+            }
+            issueDetailAdapter.updateOne(state, {id: key, changes: {QuantityReceived: action.payload.QuantityReceived}});
+            updateHeaderCosts(state, action);
         },
-        updateCurrentQuantity: (state, action: PayloadAction<number | string>) => {
+        updateCurrentEntry: (state, action: PayloadAction<Partial<CLIssueEntry|CLIssue>>) => {
+            state.header = {...state.header, ...action.payload, changed: true};
+            updateHeaderCosts(state, action);
+        },
+        updateQuantityIssued: (state, action: PayloadAction<number | string>) => {
             const quantityIssued = action.payload || 0;
             state.header.QuantityIssued = quantityIssued;
             const updates = issueDetailSelectors.selectAll(state).map(row => ({
                 id: issueDetailKey(row),
                 changes: {
-                    QuantityIssued: new Decimal(quantityIssued).div(row.ScalingFactor ?? 1).floor().toString(),
+                    QuantityIssued: new Decimal(quantityIssued)
+                        .div(row.ScalingFactor ?? 1).floor()
+                        .toString(),
                     changed: true,
                 },
             }))
             issueDetailAdapter.updateMany(state, updates);
             updateHeaderCosts(state, action);
-        }
+        },
+        updateQuantityReceived: (state, action:PayloadAction<number|string>) => {
+            const value = action.payload || 0;
+            if (isCLIssue(state.header)) {
+                state.header.QuantityReceived = value;
+                const updates = issueDetailSelectors.selectAll(state).map(row => ({
+                    id: issueDetailKey(row),
+                    changes: {
+                        QuantityReceived: new Decimal(action.payload)
+                            .div(row.ScalingFactor ?? 1).floor()
+                            .toString(),
+                        changed: true,
+                    },
+                }))
+                issueDetailAdapter.updateMany(state, updates);
+                updateHeaderCosts(state, action);
+            }
+        },
     },
     extraReducers: builder => {
         builder
@@ -194,7 +236,7 @@ const issueEntrySlice = createSlice({
                     const detail = action.payload.detail
                         .map(line => ({...line, selected: !!line.id}));
                     issueDetailAdapter.setAll(state, detail);
-                    updateHeaderCosts(state, action);
+                    // updateHeaderCosts(state, action);
                     return;
                 }
                 removeEntryCaseReducer(state, action);
@@ -215,7 +257,7 @@ const issueEntrySlice = createSlice({
                 const detail = action.payload.detail
                     .map(line => ({...line, selected: !!line.id}));
                 issueDetailAdapter.setAll(state, detail);
-                updateHeaderCosts(state, action);
+                // updateHeaderCosts(state, action);
             })
             .addCase(saveCLIssueEntry.rejected, (state) => {
                 state.status = 'rejected';
@@ -230,9 +272,36 @@ const issueEntrySlice = createSlice({
             .addCase(removeCLIssueEntry.rejected, (state) => {
                 state.status = 'rejected';
             })
+            .addCase(receiveCLIssue.pending, (state) => {
+                state.status = 'saving';
+            })
+            .addCase(receiveCLIssue.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if (action.payload?.issue) {
+                    state.header = action.payload.issue;
+                    issueDetailAdapter.setAll(state, action.payload.detail);
+                    // updateHeaderCosts(state, action);
+                }
+            })
+            .addCase(receiveCLIssue.rejected, (state) => {
+                state.status = 'rejected';
+            })
+            .addCase(removeCLReceipt.pending, (state) => {
+                state.status = 'deleting';
+            })
+            .addCase(removeCLReceipt.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if (action.payload.issue) {
+                    state.header = action.payload.issue;
+                    issueDetailAdapter.setAll(state, action.payload.detail);
+                }
+            })
+            .addCase(removeCLReceipt.rejected, (state) => {
+                state.status = 'rejected';
+            })
             .addCase(dismissAlert, (state, action) => {
                 if (action.payload.context
-                    && [saveCLIssueEntry.typePrefix, loadCLIssueEntry.typePrefix].includes(action.payload.context)) {
+                    && action.payload.context.startsWith('issueEntry')) {
                     state.status = 'idle';
                 }
             })
@@ -240,12 +309,16 @@ const issueEntrySlice = createSlice({
                 state.vendorNo = action.payload;
                 if (!state.header.id) {
                     state.header.VendorNo = action.payload;
+                } else if (state.header.id && state.header.VendorNo !== action.payload) {
+                    state.header = {...newCLEntry(action.payload)};
+                    issueDetailAdapter.removeAll(state);
                 }
             })
 
     },
     selectors: {
         selectCurrentIssueHeader: (state) => state.header,
+        selectIssueHeader: (state) => isCLIssue(state.header) ? state.header : null,
         selectCurrentIssueId: (state) => state.header?.id ?? 0,
         selectCurrentIssueDetail: (state) => issueDetailSelectors.selectAll(state),
         selectCurrentIssueStatus: (state) => state.status,
@@ -254,13 +327,16 @@ const issueEntrySlice = createSlice({
 });
 
 export const {
+    addDLStep,
     setEntryTemplate,
     setNewEntry,
     setEntryVendorNo,
     updateCurrentEntry,
-    updateCurrentQuantity,
+    updateQuantityIssued,
     toggleIssueDetailSelected,
-    setIssueDetailQuantityIssued
+    setIssueDetailQuantityIssued,
+    setIssueDetailQuantityReceived,
+    updateQuantityReceived
 } = issueEntrySlice.actions;
 export const {
     selectCurrentIssueHeader,
@@ -268,6 +344,7 @@ export const {
     selectCurrentIssueStatus,
     selectCurrentIssueId,
     selectEntryVendorNo,
+    selectIssueHeader
 } = issueEntrySlice.selectors;
 
 export const selectSortedDetail = createSelector(

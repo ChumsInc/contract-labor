@@ -11,6 +11,9 @@ import {fields} from "@/components/issue-list/issueListFields";
 import {selectFilteredIssueList, selectSort, selectStatus, setSort} from "@/ducks/issue-list/issueListSlice";
 import IssueListFilters from "@/components/issue-list/IssueListFilters";
 import {setCurrentWorkTicket} from "@/ducks/work-ticket/actions";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import CLIssueListPrintButton from "@/components/issue-entry/CLIssueListPrintButton";
 
 const WrappingTd = styled.td`
     word-break: break-word;
@@ -63,10 +66,17 @@ export default function CurrentIssueList() {
                                rowClassName={rowClassName} onSelectRow={rowSelectHandler}
                                keyField="id"/>
             </div>
-            <TablePagination size="sm" page={page} onChangePage={setPage}
-                             rowsPerPage={rowsPerPage} rowsPerPageProps={{onChange: rowsPerPageChangeHandler}}
-                             showFirst showLast
-                             count={list.length}/>
+            <Row>
+                <Col sm="auto">
+                    <CLIssueListPrintButton />
+                </Col>
+                <Col>
+                    <TablePagination size="sm" page={page} onChangePage={setPage}
+                                     rowsPerPage={rowsPerPage} rowsPerPageProps={{onChange: rowsPerPageChangeHandler}}
+                                     showFirst showLast
+                                     count={list.length}/>
+                </Col>
+            </Row>
         </div>
 
     )

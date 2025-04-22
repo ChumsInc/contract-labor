@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useAppSelector} from "@/app/configureStore";
-import {selectCurrentIssueHeader} from "@/ducks/issue-entry/issueEntrySlice";
+import {selectCurrentIssueDetail, selectCurrentIssueHeader} from "@/ducks/issue-entry/issueEntrySlice";
 import Button from "react-bootstrap/Button";
 import styled from "@emotion/styled";
 
@@ -14,6 +14,7 @@ const HiddenFrame = styled.iframe`
 `
 export default function CLIssuePrintButton() {
     const current = useAppSelector(selectCurrentIssueHeader);
+    const detail = useAppSelector(selectCurrentIssueDetail);
     const ref = useRef<HTMLIFrameElement>(null);
     const [url, setUrl] = useState<string | null>(null);
 
@@ -22,10 +23,12 @@ export default function CLIssuePrintButton() {
             setUrl(null);
             return;
         }
-        const url = '/api/operations/production/contract-labor/issue/:id.html'
+        const params = new URLSearchParams();
+        params.set('now', new Date().valueOf().toString(36));
+        const url = `/api/operations/production/contract-labor/issue/:id.pdf?${params.toString()}`
             .replace(':id', encodeURIComponent(current.id));
         setUrl(url);
-    }, [current.id]);
+    }, [current, detail]);
 
     const handleClick = () => {
         if (ref.current) {

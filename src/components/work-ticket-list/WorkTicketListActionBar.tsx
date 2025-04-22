@@ -45,7 +45,7 @@ export default function WorkTicketListActionBar() {
                 </InputGroup>
             </Col>
             <Col xs="auto">
-                <Button type="button" size="sm" variant="outline-primary" onClick={loadWorkTicketsHandler}
+                <Button type="button" size="sm" variant="primary" onClick={loadWorkTicketsHandler}
                         disabled={status !== 'idle'}>
                     Reload
                 </Button>
