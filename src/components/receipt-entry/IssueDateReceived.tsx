@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useId, useState} from 'react';
 import dayjs from "dayjs";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
-import {selectCurrentIssueHeader, selectIssueHeader, updateCurrentEntry} from "@/ducks/issue-entry/issueEntrySlice";
+import {selectIssueHeader, updateCurrentEntry} from "@/ducks/issue-entry/issueEntrySlice";
 import {toLocalizedDate} from "@/utils/dates";
 import {isCLIssue} from "@/utils/issue";
 import InputGroup from "react-bootstrap/InputGroup";

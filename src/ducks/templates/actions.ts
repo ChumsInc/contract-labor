@@ -1,7 +1,7 @@
 import {createAction, createAsyncThunk} from "@reduxjs/toolkit";
 import {fetchTemplate, fetchTemplates} from "./api";
 import {WorkTemplate} from "chums-types";
-import {RootState} from "../../app/configureStore";
+import {RootState} from "@/app/configureStore";
 import {selectTemplatesLoading} from "./selectors";
 
 export const setTemplatesSearch = createAction<string>('templates/setSearch');

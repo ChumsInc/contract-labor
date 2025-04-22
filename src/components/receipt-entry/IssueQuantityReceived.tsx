@@ -1,17 +1,11 @@
-import React, {ChangeEvent, useEffect, useId} from 'react';
+import React, {ChangeEvent, useId} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {
-    selectCurrentIssueHeader,
     selectIssueHeader,
-    updateQuantityIssued,
     updateQuantityReceived
 } from "@/ducks/issue-entry/issueEntrySlice";
-import dayjs from "dayjs";
-import {isCLIssue} from "@/utils/issue";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl, {FormControlProps} from "react-bootstrap/FormControl";
-import {useDebounceValue} from "usehooks-ts";
-import Decimal from "decimal.js";
 
 export interface IssueQuantityProps extends FormControlProps {
     containerClassName?: string;

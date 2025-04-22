@@ -27,7 +27,7 @@ export default function VendorSelect({
             <InputGroup.Text as="label" htmlFor={id ?? _id}>{label ?? 'Vendor'}</InputGroup.Text>
             <FormSelect id={id ?? _id} value={value} onChange={onChange} {...rest}>
                 {selectAll && (<option value="">All</option>)}
-                <option disabled={!rest.required}>-</option>
+                <option disabled={!rest.required} value="">-</option>
                 {vendors
                     .filter(v => v.active)
                     .sort(sortVendors({field: 'VendorNameOverride', ascending: true}))

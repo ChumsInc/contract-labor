@@ -11,7 +11,7 @@ import numeral from "numeral";
 import dayjs from "dayjs";
 import {CLIssueDetail} from "../../types";
 import IssueQuantityInput from "@/components/issue-entry/IssueQuantityInput";
-import {activityReceiptCost, calcCostIssued, calcCostReceived} from "@/ducks/issue-entry/utils";
+import {activityReceiptCost, calcCostReceived} from "@/ducks/issue-entry/utils";
 import {CLIssue} from "chums-types";
 import Decimal from "decimal.js";
 

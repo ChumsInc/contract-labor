@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useAppSelector} from "@/app/configureStore";
 import {selectWorkTicketHeader} from "./currentWorkTicketSlice";
 import dayjs from "dayjs";
-import {CLIssue, WorkTicketHeader} from "../../types";
+import {WorkTicketHeader} from "../../types";
 import Decimal from "decimal.js";
 import numeral from "numeral";
 import Alert from "react-bootstrap/Alert";
@@ -32,7 +32,7 @@ const WorkTicketAssignedAlert = () => {
 
     return (
         <Offcanvas placement="bottom" show={open}>
-            <Alert variant="warning" className="text-dark" dismissible onClose={() => setOpen(false)}>
+            <Alert variant="warning" dismissible onClose={() => setOpen(false)}>
                 <Alert.Heading>
                     Work Ticket {workTicket?.WorkTicketNo?.replace(/^0+/, '')}
                     {' '} is already entered.

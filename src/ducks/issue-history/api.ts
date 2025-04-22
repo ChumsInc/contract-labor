@@ -1,5 +1,5 @@
 import {CLIssue, IssueSearchParams} from "../../types";
-import {isSearchById, isSearchByWorkTicket} from "../../utils/issue";
+import {isSearchById, isSearchByWorkTicket} from "@/utils/issue";
 import {fetchJSON} from "@chumsinc/ui-utils";
 
 function parseSearchParams(arg: IssueSearchParams): URLSearchParams {

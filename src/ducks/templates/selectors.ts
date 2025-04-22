@@ -1,5 +1,4 @@
-import {RootState} from "../../app/configureStore";
-import {Root} from "react-dom/client";
+import {RootState} from "@/app/configureStore";
 import {createSelector} from "@reduxjs/toolkit";
 import {workTemplateSorter} from "./utils";
 

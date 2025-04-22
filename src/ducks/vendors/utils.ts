@@ -1,6 +1,5 @@
 import {SortProps} from "chums-types";
-import {Vendor, VendorWeekTotal} from "../../types";
-import Decimal from "decimal.js";
+import {Vendor} from "../../types";
 
 export const defaultVendorSort:SortProps<Vendor> = {field: 'VendorNo', ascending: true};
 

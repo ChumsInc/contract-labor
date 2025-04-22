@@ -24,13 +24,12 @@ import IssueTemplate from "./IssueTemplate";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {removeCLIssueEntry, saveCLIssueEntry} from "@/ducks/issue-entry/actions";
-import Button from "react-bootstrap/Button";
 import CLIssuePrintButton from "@/components/issue-entry/CLIssuePrintButton";
 import {setWorkTicketStatus} from "@/ducks/work-ticket/actions";
 import {CLIssueResponse} from "chums-types";
-import {PayloadAction} from "@reduxjs/toolkit";
 import {ProgressBar} from "react-bootstrap";
 import AdditionalCLSteps from "@/components/issue-entry/AdditionalCLSteps";
+import {selectWorkTicketStatus} from "@/ducks/work-ticket/currentWorkTicketSlice";
 
 dayjs.extend(utc);
 
@@ -39,6 +38,7 @@ const CLIssueForm = () => {
     const current = useAppSelector(selectCurrentIssueHeader);
     const lines = useAppSelector(selectCurrentIssueDetail);
     const status = useAppSelector(selectCurrentIssueStatus);
+    const [print, setPrint] = React.useState(false);
 
 
     const submitHandler = async (ev: FormEvent) => {
@@ -49,7 +49,8 @@ const CLIssueForm = () => {
         if (!payload || !payload.issue?.WorkTicketKey) {
             return;
         }
-        await dispatch(setWorkTicketStatus({WorkTicketKey: payload.issue.WorkTicketKey, action: 'cl', nextStatus: 1}))
+        await dispatch(setWorkTicketStatus({WorkTicketKey: payload.issue.WorkTicketKey, action: 'cl', nextStatus: 1}));
+        setPrint(true);
     }
 
     const deleteHandler = async () => {
@@ -94,7 +95,7 @@ const CLIssueForm = () => {
                             <VendorSelect required value={current.VendorNo ?? ''} onChange={changeHandler('VendorNo')}/>
                         </Col>
                     </Row>
-                    <IssueWorkTicket containerClassName="mb-1" showDueDate showMakeFor/>
+                    <IssueWorkTicket containerClassName="mb-1" showDueDate showMakeFor inputProps={{required: true}}/>
                     <WorkTicketAssignedAlert/>
                     <IssueTemplate/>
                     <IssueItem/>
@@ -121,8 +122,9 @@ const CLIssueForm = () => {
             <div className="mb-1">
                 <IssueNotes/>
             </div>
-            <Row className="row g-3 mb-1 justify-content-end">
-                <Col xs={12} lg="auto">
+
+            <Row className="row g-3 mb-1 justify-content-end align-items-center">
+                <Col xs={12} md>
                     {status !== 'idle' && <ProgressBar striped animated now={100}/>}
                 </Col>
                 <Col xs="auto">
@@ -136,11 +138,11 @@ const CLIssueForm = () => {
                     </button>
                 </Col>
                 <Col xs="auto">
-                    <CLIssuePrintButton />
+                    <CLIssuePrintButton show={print} onPrint={() => setPrint(false)} />
                 </Col>
                 <Col xs="auto">
                     <button type="submit" className="btn btn-sm btn-primary"
-                            disabled={!current.VendorNo || !current.QuantityIssued}>
+                            disabled={status !== 'idle'}>
                         Issue Work
                     </button>
                 </Col>

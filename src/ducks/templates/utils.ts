@@ -1,7 +1,5 @@
 import {WorkTemplate, WorkTemplateStep} from "chums-types";
 import Decimal from "decimal.js";
-import numeral from "numeral";
-import {CLIssueDetail} from "@/src/types";
 
 export const workTemplateSorter = (a:WorkTemplate, b:WorkTemplate) => a.TemplateNo > b.TemplateNo ? 1 : -1;
 

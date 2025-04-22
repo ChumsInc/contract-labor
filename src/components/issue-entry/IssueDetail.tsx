@@ -8,7 +8,6 @@ import {
 } from "@/ducks/issue-entry/issueEntrySlice";
 import {isCLIssue, issueDetailKey} from "@/utils/issue";
 import numeral from "numeral";
-import Decimal from "decimal.js";
 import dayjs from "dayjs";
 import {CLIssueEntryDetail} from "../../types";
 import IssueQuantityInput from "@/components/issue-entry/IssueQuantityInput";

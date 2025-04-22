@@ -1,6 +1,6 @@
 import {createAction, createAsyncThunk} from "@reduxjs/toolkit";
 import {CLIssueDetail, CLIssueEntry, CLIssueResponse} from "../../types";
-import {RootState} from "../../app/configureStore";
+import {RootState} from "@/app/configureStore";
 import {selectCurrentIssueDetail, selectCurrentIssueHeader, selectCurrentIssueStatus} from "./issueEntrySlice";
 import {deleteCLIssue, deleteCLReceipt, fetchCLIssue, postCLIssue, postReceiveCLIssue} from "./api";
 import dayjs from "dayjs";

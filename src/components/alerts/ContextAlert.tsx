@@ -1,7 +1,7 @@
 import React from 'react';
 import {AlertProps, Badge} from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
-import {useAppDispatch} from "../../app/configureStore";
+import {useAppDispatch} from "@/app/configureStore";
 
 export interface ContextAlertProps extends AlertProps {
     context?: string;

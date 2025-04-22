@@ -20,11 +20,10 @@ import {setCurrentWorkTicket} from "../work-ticket/actions";
 import Decimal from "decimal.js";
 import {calcCostIssued, detailRowsFromSteps, issueDetailKey, issueDetailSorter, newIssueDetailRow} from "./utils";
 import dayjs from "dayjs";
-import {DLStep, SortProps, WorkTemplate} from "chums-types";
+import {SortProps, WorkTemplate} from "chums-types";
 import {dismissAlert} from "@chumsinc/alert-list";
 import {filterVendorNo} from "@/ducks/issue-list/issueListSlice";
 import {isCLIssue} from "@/utils/issue";
-import {stepQuantity} from "@/ducks/templates/utils";
 
 
 const issueDetailAdapter = createEntityAdapter<(CLIssueEntryDetail | CLIssueDetail) & Editable, string>({

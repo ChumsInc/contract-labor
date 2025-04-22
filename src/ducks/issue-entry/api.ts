@@ -1,13 +1,12 @@
 import {CLIssueEntry, CLIssueResponse, SearchItem} from "../../types";
 import {fetchJSON} from "@chumsinc/ui-utils";
-import {} from 'chums-types';
 import {ReceiveCLIssueProps} from "@/ducks/issue-entry/actions";
 
-export async function fetchCLIssue(arg:number):Promise<CLIssueResponse|null> {
+export async function fetchCLIssue(arg: number): Promise<CLIssueResponse | null> {
     try {
         const url = `/api/operations/production/contract-labor/issue/${encodeURIComponent(arg)}.json`;
         return await fetchJSON<CLIssueResponse>(url, {cache: 'no-cache'});
-    } catch(err:unknown) {
+    } catch (err: unknown) {
         if (err instanceof Error) {
             console.debug("fetchCLIssue()", err.message);
             return Promise.reject(err);
@@ -17,11 +16,11 @@ export async function fetchCLIssue(arg:number):Promise<CLIssueResponse|null> {
     }
 }
 
-export async function postCLIssue(arg:CLIssueEntry):Promise<CLIssueResponse|null> {
+export async function postCLIssue(arg: CLIssueEntry): Promise<CLIssueResponse | null> {
     try {
         const url = `/api/operations/production/contract-labor/issue.json`;
         return await fetchJSON<CLIssueResponse>(url, {method: 'POST', body: JSON.stringify(arg)});
-    } catch(err:unknown) {
+    } catch (err: unknown) {
         if (err instanceof Error) {
             console.debug("()", err.message);
             return Promise.reject(err);
@@ -31,12 +30,12 @@ export async function postCLIssue(arg:CLIssueEntry):Promise<CLIssueResponse|null
     }
 }
 
-export async function deleteCLIssue(arg:number):Promise<void> {
+export async function deleteCLIssue(arg: number): Promise<void> {
     try {
         const url = '/api/operations/production/contract-labor/issue/:id.json'
             .replace(':id', encodeURIComponent(arg));
         await fetchJSON(url, {method: 'DELETE'});
-    } catch(err:unknown) {
+    } catch (err: unknown) {
         if (err instanceof Error) {
             console.debug("deleteCLIssue()", err.message);
             return Promise.reject(err);
@@ -46,13 +45,13 @@ export async function deleteCLIssue(arg:number):Promise<void> {
     }
 }
 
-export async function fetchItemLookup(arg:string):Promise<SearchItem|null> {
+export async function fetchItemLookup(arg: string): Promise<SearchItem | null> {
     try {
         const params = new URLSearchParams({exact: arg});
         const url = `/api/search/item.json?${params.toString()}`;
-        const res = await fetchJSON<{result: SearchItem[]}>(url, {cache: 'no-cache'});
+        const res = await fetchJSON<{ result: SearchItem[] }>(url, {cache: 'no-cache'});
         return res?.result[0] ?? null;
-    } catch(err:unknown) {
+    } catch (err: unknown) {
         if (err instanceof Error) {
             console.debug("fetchItemLookup()", err.message);
             return Promise.reject(err);
@@ -62,7 +61,7 @@ export async function fetchItemLookup(arg:string):Promise<SearchItem|null> {
     }
 }
 
-export async function postReceiveCLIssue(arg:ReceiveCLIssueProps):Promise<CLIssueResponse> {
+export async function postReceiveCLIssue(arg: ReceiveCLIssueProps): Promise<CLIssueResponse> {
     try {
         const url = '/api/operations/production/contract-labor/issue/:id/receive.json'
             .replace(':id', encodeURIComponent(arg.id.toString()));
@@ -75,7 +74,7 @@ export async function postReceiveCLIssue(arg:ReceiveCLIssueProps):Promise<CLIssu
             }
         }
         return res;
-    } catch(err:unknown) {
+    } catch (err: unknown) {
         if (err instanceof Error) {
             console.debug("postReceiveCLIssue()", err.message);
             return Promise.reject(err);
@@ -85,7 +84,7 @@ export async function postReceiveCLIssue(arg:ReceiveCLIssueProps):Promise<CLIssu
     }
 }
 
-export async function deleteCLReceipt(arg:number|string):Promise<CLIssueResponse> {
+export async function deleteCLReceipt(arg: number | string): Promise<CLIssueResponse> {
     try {
         const url = '/api/operations/production/contract-labor/issue/:id/receive.json'
             .replace(':id', encodeURIComponent(arg));
@@ -97,7 +96,7 @@ export async function deleteCLReceipt(arg:number|string):Promise<CLIssueResponse
             }
         }
         return res;
-    } catch(err:unknown) {
+    } catch (err: unknown) {
         if (err instanceof Error) {
             console.debug("deleteCLReceipt()", err.message);
             return Promise.reject(err);

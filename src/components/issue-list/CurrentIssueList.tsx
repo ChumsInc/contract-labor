@@ -6,19 +6,13 @@ import {loadCurrentIssueList} from "@/ducks/issue-list/actions";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import {loadCLIssueEntry} from "@/ducks/issue-entry/actions";
-import styled from "@emotion/styled";
 import {fields} from "@/components/issue-list/issueListFields";
-import {selectFilteredIssueList, selectSort, selectStatus, setSort} from "@/ducks/issue-list/issueListSlice";
+import {selectFilteredIssueList, selectSort, setSort} from "@/ducks/issue-list/issueListSlice";
 import IssueListFilters from "@/components/issue-list/IssueListFilters";
 import {setCurrentWorkTicket} from "@/ducks/work-ticket/actions";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CLIssueListPrintButton from "@/components/issue-entry/CLIssueListPrintButton";
-
-const WrappingTd = styled.td`
-    word-break: break-word;
-`
-
 
 const rowClassName = (row: CLIssue): string => {
     const today = new Date();
@@ -68,7 +62,7 @@ export default function CurrentIssueList() {
             </div>
             <Row>
                 <Col sm="auto">
-                    <CLIssueListPrintButton />
+                    <CLIssueListPrintButton/>
                 </Col>
                 <Col>
                     <TablePagination size="sm" page={page} onChangePage={setPage}

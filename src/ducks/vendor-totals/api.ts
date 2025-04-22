@@ -1,5 +1,4 @@
 import {VendorWeekTotal} from "../../types";
-import dayjs from "dayjs";
 import {fetchJSON} from "@chumsinc/ui-utils";
 
 export async function fetchVendorTotals(arg:string,):Promise<VendorWeekTotal[]> {

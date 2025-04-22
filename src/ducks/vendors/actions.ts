@@ -1,7 +1,7 @@
 import {createAction, createAsyncThunk} from "@reduxjs/toolkit";
 import {Vendor} from "../../types";
 import {fetchVendors, postVendor} from "./api";
-import {RootState} from "../../app/configureStore";
+import {RootState} from "@/app/configureStore";
 import {selectVendorsLoading, selectVendorsSaving} from "./selectors";
 import {SortProps} from "@chumsinc/sortable-tables";
 

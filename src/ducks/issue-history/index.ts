@@ -1,4 +1,4 @@
-import {CLIssue, CLIssueEntry} from "../../types";
+import {CLIssue} from "../../types";
 import {createReducer} from "@reduxjs/toolkit";
 
 export interface IssueHistoryState {

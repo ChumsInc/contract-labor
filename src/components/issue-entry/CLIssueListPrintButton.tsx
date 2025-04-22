@@ -3,13 +3,10 @@ import {useAppSelector} from "@/app/configureStore";
 import Button from "react-bootstrap/Button";
 import styled from "@emotion/styled";
 import {selectFilteredIssueList, selectFilterVendorNo} from "@/ducks/issue-list/issueListSlice";
-import {DataTable} from "@chumsinc/sortable-tables";
 import {fields as issueListFields} from '@/components/issue-list/issueListFields';
 import InputGroup from "react-bootstrap/InputGroup";
 import dayjs from "dayjs";
 import FormControl from "react-bootstrap/FormControl";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 const fields = issueListFields.filter(f => f.field !== 'CostIssued' && f.field !== 'CostReceived')
 

@@ -10,7 +10,6 @@ import {SortableTable, TablePagination} from "@chumsinc/sortable-tables";
 import {WorkTicketWorkStatusItem} from "../../types";
 import {setCurrentWorkTicket} from "@/ducks/work-ticket/actions";
 import {WorkTicketSortProps, WorkTicketTableRow} from "@/ducks/work-ticket/types";
-import {ProgressBar} from "react-bootstrap";
 import {fields} from "@/components/work-ticket-list/WorkTicketListFields";
 import WorkTicketListActionBar from "@/components/work-ticket-list/WorkTicketListActionBar";
 import {selectWorkTicketNo} from "@/ducks/work-ticket/currentWorkTicketSlice";

@@ -16,7 +16,7 @@ import {isCLIssue} from "@/utils/issue";
 import IssueDateReceived from "@/components/receipt-entry/IssueDateReceived";
 import IssueQuantityReceived from "@/components/receipt-entry/IssueQuantityReceived";
 import Button from "react-bootstrap/Button";
-import {receiveCLIssue, ReceiveCLIssueProps, removeCLReceipt} from "@/ducks/issue-entry/actions";
+import {receiveCLIssue, removeCLReceipt} from "@/ducks/issue-entry/actions";
 import dayjs from "dayjs";
 import {setWorkTicketStatus} from "@/ducks/work-ticket/actions";
 import {CLIssueResponse} from "chums-types";
@@ -63,10 +63,10 @@ export default function CLReceiptForm() {
             <Row className="g-3">
                 <Col xs={12} md={6}>
                     <Row className="g-3 mb-1">
-                        <Col xs={12} md={6}>
+                        <Col xs={12} md={4}>
                             <IssueId/>
                         </Col>
-                        <Col xs={12} md={6}>
+                        <Col xs={12} md={8}>
                             <VendorSelect value={current.VendorNo ?? ''} disabled/>
                         </Col>
                     </Row>
@@ -94,13 +94,17 @@ export default function CLReceiptForm() {
                     <ReceiptDetail />
                 </Col>
             </Row>
-            <Stack direction="horizontal" gap={2} className="justify-content-end">
-                <Button type="button" size="sm" variant="outline-danger"
-                        onClick={onClickDelete}
-                        disabled={!current.DateReceived}>Delete Receipt</Button>
-                <Button type="submit" size="sm" variant="primary">Receive Work</Button>
+            <Stack direction="horizontal" gap={2} className="justify-content-between">
+                <div>
+                    {status !== 'idle' && (<ProgressBar striped animated now={100}/>)}
+                </div>
+                <Stack direction="horizontal" gap={2} className="justify-content-end">
+                    <Button type="button" size="sm" variant="outline-danger"
+                            onClick={onClickDelete}
+                            disabled={!current.DateReceived}>Delete Receipt</Button>
+                    <Button type="submit" size="sm" variant="primary">Receive Work</Button>
+                </Stack>
             </Stack>
-            {status !== 'idle' && (<ProgressBar striped animated now={100}/>)}
         </Form>
     )
 }

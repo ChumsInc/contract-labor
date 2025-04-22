@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useAppDispatch} from "../app/configureStore";
+import {useAppDispatch} from "@/app/configureStore";
 import {useParams} from "react-router";
 // import {selectCurrentVendor} from "../ducks/issue-list/selectors";
 

@@ -1,6 +1,5 @@
 import {WorkTemplate} from "chums-types";
 import {fetchJSON} from "@chumsinc/ui-utils";
-import templates from "./index";
 
 export async function fetchTemplates():Promise<WorkTemplate[]> {
     try {

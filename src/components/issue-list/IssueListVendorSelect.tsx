@@ -1,6 +1,6 @@
 import React from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
-import {filterVendorNo, selectFilterVendorNo} from "@/ducks/issue-list/issueListSlice";
+import {selectFilterVendorNo} from "@/ducks/issue-list/issueListSlice";
 import VendorSelect from "@/components/issue-entry/VendorSelect";
 import {generatePath, useNavigate} from "react-router";
 

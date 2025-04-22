@@ -1,6 +1,5 @@
 import React, {useEffect, useId} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
-import {selectWTListSearch, setWTListSearch} from "@/ducks/work-ticket/workTicketListSlice";
 import {useDebounceValue} from "usehooks-ts";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";

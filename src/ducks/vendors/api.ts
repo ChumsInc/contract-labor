@@ -1,5 +1,4 @@
-import {Vendor, VendorWeekTotal} from "../../types";
-import dayjs from "dayjs";
+import {Vendor} from "../../types";
 import {fetchJSON} from "@chumsinc/ui-utils";
 
 export async function fetchVendors():Promise<Vendor[]> {
