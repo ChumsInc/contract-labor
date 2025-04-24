@@ -3,9 +3,8 @@ import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import InputGroup from "react-bootstrap/InputGroup";
 import DLSteps from "@/components/issue-entry/DLSteps";
 import Button from "react-bootstrap/Button";
-import {DLStep} from "chums-types";
+import {CLIssueEntryDetail, DLStep} from "chums-types";
 import {addDLStep, selectCurrentIssueDetail, selectCurrentIssueHeader} from "@/ducks/issue-entry/issueEntrySlice";
-import {CLIssueEntryDetail} from "@/src/types";
 import Decimal from "decimal.js";
 
 export default function AdditionalCLSteps() {

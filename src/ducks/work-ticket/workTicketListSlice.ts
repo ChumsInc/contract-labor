@@ -1,5 +1,5 @@
 import {createEntityAdapter, createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {WorkTicketWorkStatusItem} from "../../types";
+import {WorkTicketWorkStatusItem} from "chums-types";
 import {WorkTicketSortProps, WorkTicketTableRow} from "@/ducks/work-ticket/types";
 import {wtStatusSorter} from "@/ducks/work-ticket/utils";
 import {loadWorkTicketStatusList, setWorkTicketStatus} from "@/ducks/work-ticket/actions";
@@ -44,7 +44,7 @@ const workTicketsListSlice = createSlice({
                 listAdapter.setAll(state, action.payload);
                 state.status = 'idle';
             })
-            .addCase(loadWorkTicketStatusList.rejected, (state, action) => {
+            .addCase(loadWorkTicketStatusList.rejected, (state) => {
                 state.status = 'rejected';
             })
             .addCase(setWorkTicketStatus.pending, (state) => {

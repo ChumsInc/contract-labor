@@ -1,7 +1,6 @@
 import React, {FormEvent, useCallback, useEffect, useState} from 'react';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import {Form} from "react-bootstrap";
 import MinDateInput from "@/components/issue-history/MinDateInput";
 import MaxDateInput from "@/components/issue-history/MaxDateInput";
 import Button from "react-bootstrap/Button";
@@ -16,8 +15,7 @@ import {
     selectVendorNo,
     selectWarehouseCode
 } from "@/ducks/issue-history";
-import {IssueSearchOptions} from "@/src/types";
-import VendorSelect from "@/components/issue-entry/VendorSelect";
+import {CLIssueSearchOptions} from "chums-types";
 import IssueHistoryVendor from "@/components/issue-history/IssueHistoryVendor";
 import IssueHistoryItem from "@/components/issue-history/IssueHistoryItem";
 import DateTypeSelect from "@/components/issue-history/DateTypeSelect";
@@ -35,8 +33,8 @@ export default function IssueHistoryActionBar() {
     const warehouseCode = useAppSelector(selectWarehouseCode);
     const activityCode = useAppSelector(selectActivityCode);
 
-    const [search, setSearch] = useState<IssueSearchOptions|null>(null);
-    const submitHandler = useCallback((ev:FormEvent) => {
+    const [search, setSearch] = useState<CLIssueSearchOptions | null>(null);
+    const submitHandler = useCallback((ev: FormEvent) => {
         ev.preventDefault();
         console.log(search);
         if (!search) {
@@ -46,7 +44,7 @@ export default function IssueHistoryActionBar() {
     }, [search])
 
     useEffect(() => {
-        const options:IssueSearchOptions = {
+        const options: CLIssueSearchOptions = {
             dateType,
             minDate,
             maxDate,
@@ -61,30 +59,30 @@ export default function IssueHistoryActionBar() {
     return (
         <Row className="g-3 mb-3" as="form" onSubmit={submitHandler}>
             <Col xs="auto">
-                <DateTypeSelect />
+                <DateTypeSelect/>
             </Col>
             <Col xs="auto">
-                <MinDateInput required />
+                <MinDateInput required/>
             </Col>
             <Col xs="auto">
-                <MaxDateInput required />
+                <MaxDateInput required/>
             </Col>
             <Col xs="auto">
-                <IssueHistoryVendor />
+                <IssueHistoryVendor/>
             </Col>
             <Col xs="auto">
-                <IssueHistoryWhse />
+                <IssueHistoryWhse/>
             </Col>
             <Col xs="auto">
-                <IssueHistoryItem />
+                <IssueHistoryItem/>
             </Col>
             <Col xs="auto">
-                <IssueHistoryActivity />
+                <IssueHistoryActivity/>
             </Col>
             <Col xs="auto">
-                <IssueHistoryWorkTicket />
+                <IssueHistoryWorkTicket/>
             </Col>
-            <Col />
+            <Col/>
             <Col xs="auto">
                 <Button type="submit" variant="primary" size="sm">Load</Button>
             </Col>

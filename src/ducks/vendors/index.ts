@@ -1,5 +1,4 @@
-import {Vendor} from "../../types";
-import {Editable, SortProps} from "chums-types";
+import {CLVendor, Editable, SortProps} from "chums-types";
 import {createReducer} from "@reduxjs/toolkit";
 import {
     createNewVendor,
@@ -13,12 +12,12 @@ import {
 import {defaultVendorSort, emptyVendor, sortVendors} from "./utils";
 
 export interface VendorsState {
-    list: Vendor[];
+    list: CLVendor[];
     loading: boolean;
     saving: boolean;
     showInactive: boolean;
-    sort: SortProps<Vendor>
-    current: (Vendor & Editable) | null;
+    sort: SortProps<CLVendor>
+    current: (CLVendor & Editable) | null;
 }
 
 const initialState: VendorsState = {

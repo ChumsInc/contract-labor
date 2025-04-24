@@ -5,7 +5,7 @@ import {selectCurrentIssueHeader, updateCurrentEntry} from "@/ducks/issue-entry/
 import {setCurrentWorkTicket} from "@/ducks/work-ticket/actions";
 import {selectWorkTicketHeader} from "@/ducks/work-ticket/currentWorkTicketSlice";
 import {friendlyDate} from "@/utils/dates";
-import {WorkTicketHeader} from "../../types";
+import {WorkTicketHeader} from "chums-types";
 import Alert from "react-bootstrap/Alert";
 import FormControl, {FormControlProps} from "react-bootstrap/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -29,14 +29,12 @@ const makeForText = (wt: WorkTicketHeader) => {
 
 export interface IssueWorkTicketProps {
     inputProps?: FormControlProps;
-    ref?: React.ForwardedRef<HTMLInputElement>;
-    containerClassName?: string;
     showDueDate?: boolean;
     showMakeFor?: boolean;
 }
 
 
-export default function IssueWorkTicket({inputProps, ref, containerClassName, showDueDate, showMakeFor}: IssueWorkTicketProps) {
+export default function IssueWorkTicket({inputProps, showDueDate, showMakeFor}: IssueWorkTicketProps) {
     const dispatch = useAppDispatch();
     const current = useAppSelector(selectCurrentIssueHeader);
     const workTicket = useAppSelector(selectWorkTicketHeader);
@@ -55,7 +53,7 @@ export default function IssueWorkTicket({inputProps, ref, containerClassName, sh
     }
 
     const loadWorkTicketHandler = async () => {
-        dispatch(setCurrentWorkTicket(current.WorkTicketNo.trim().padStart(12, '0')));
+        dispatch(setCurrentWorkTicket(current.WorkTicketNo?.trim()?.padStart(12, '0') ?? ''));
     }
 
     return (

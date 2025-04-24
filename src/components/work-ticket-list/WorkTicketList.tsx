@@ -1,25 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
-import {
-    selectSortedWTList,
-    selectWTListSort,
-    selectWTListStatus,
-    setWTListSort
-} from "@/ducks/work-ticket/workTicketListSlice";
+import {selectSortedWTList, selectWTListSort, setWTListSort} from "@/ducks/work-ticket/workTicketListSlice";
 import {SortableTable, TablePagination} from "@chumsinc/sortable-tables";
-import {WorkTicketWorkStatusItem} from "../../types";
 import {setCurrentWorkTicket} from "@/ducks/work-ticket/actions";
 import {WorkTicketSortProps, WorkTicketTableRow} from "@/ducks/work-ticket/types";
 import {fields} from "@/components/work-ticket-list/WorkTicketListFields";
 import WorkTicketListActionBar from "@/components/work-ticket-list/WorkTicketListActionBar";
 import {selectWorkTicketNo} from "@/ducks/work-ticket/currentWorkTicketSlice";
+import {WorkTicketWorkStatusItem} from "chums-types";
 
 const WorkTicketTable = SortableTable<WorkTicketTableRow>
 
 export default function WorkTicketList() {
     const dispatch = useAppDispatch();
     const list = useAppSelector(selectSortedWTList);
-    const status = useAppSelector(selectWTListStatus);
     const sort = useAppSelector(selectWTListSort);
     const workTicketNo = useAppSelector(selectWorkTicketNo)
     const [page, setPage] = useState(0);

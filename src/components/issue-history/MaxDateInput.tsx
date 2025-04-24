@@ -1,11 +1,11 @@
-import React, {use, useEffect, useId} from 'react';
+import React, {useEffect, useId} from 'react';
 import FormControl, {FormControlProps} from "react-bootstrap/FormControl";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
-import {selectMaxDate, selectMinDate, setMaxDate, setMinDate} from "@/ducks/issue-history";
+import {selectMaxDate, selectMinDate, setMaxDate} from "@/ducks/issue-history";
 import InputGroup from "react-bootstrap/InputGroup";
 import dayjs from "dayjs";
 
-const getMinDate = (date:string) => {
+const getMinDate = (date: string) => {
     const max = dayjs(date);
     if (!date || !max.isValid()) {
         return null;
@@ -13,14 +13,14 @@ const getMinDate = (date:string) => {
     return max.format('YYYY-MM-DD');
 }
 
-export type MaxDateInputProps = Omit<FormControlProps, 'type'|'value'|'onChange'>
+export type MaxDateInputProps = Omit<FormControlProps, 'type' | 'value' | 'onChange'>
 
 export default function MaxDateInput({...props}: MaxDateInputProps) {
     const dispatch = useAppDispatch();
     const minDate = useAppSelector(selectMinDate);
     const maxDate = useAppSelector(selectMaxDate);
     const id = useId();
-    const [min, setMin] = React.useState<string|null>(getMinDate(minDate));
+    const [min, setMin] = React.useState<string | null>(getMinDate(minDate));
 
     useEffect(() => {
         setMin(getMinDate(minDate));

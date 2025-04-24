@@ -1,10 +1,9 @@
 import {createAction, createAsyncThunk} from "@reduxjs/toolkit";
-import {CLIssueDetail, CLIssueEntry, CLIssueResponse} from "../../types";
+import {CLIssue, CLIssueDetail, CLIssueEntry, CLIssueResponse} from "chums-types";
 import {RootState} from "@/app/configureStore";
 import {selectCurrentIssueDetail, selectCurrentIssueHeader, selectCurrentIssueStatus} from "./issueEntrySlice";
 import {deleteCLIssue, deleteCLReceipt, fetchCLIssue, postCLIssue, postReceiveCLIssue} from "./api";
 import dayjs from "dayjs";
-import {CLIssue} from "chums-types";
 import {isCLIssue} from "@/utils/issue";
 import Decimal from "decimal.js";
 import {calcCostReceived} from "@/ducks/issue-entry/utils";
@@ -95,7 +94,7 @@ export const receiveCLIssue = createAsyncThunk<CLIssueResponse, string, { state:
     }
 )
 
-export const removeCLReceipt = createAsyncThunk<CLIssueResponse, number|string, {state:RootState}>(
+export const removeCLReceipt = createAsyncThunk<CLIssueResponse, number | string, { state: RootState }>(
     'issueEntry/removeReceipt',
     async (arg) => {
         return await deleteCLReceipt(arg);

@@ -1,10 +1,10 @@
 import React from 'react';
-import {VendorWeekTotal} from "@/src/types";
+import {CLVendorWeekTotal} from "chums-types";
 import {Card} from "react-bootstrap";
 import VendorTotalTable from "@/components/vendor-totals/VendorTotalTable";
 
 export default function VendorTotalCard({totals}: {
-    totals: VendorWeekTotal;
+    totals: CLVendorWeekTotal;
 }) {
     return (
         <Card className="mb-1">

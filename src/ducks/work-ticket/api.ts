@@ -1,6 +1,6 @@
-import {PostWorkTicketStatusProps, WorkTicketResponse, WorkTicketWorkStatusItem} from "../../types";
+import {WorkTicketGroup, WorkTicketResponse, WorkTicketWorkStatusItem} from "chums-types";
 import {fetchJSON} from "@chumsinc/ui-utils";
-import {WorkTicketGroup} from "chums-types";
+import {PostWorkTicketStatusProps} from "@/src/types";
 
 export async function fetchWorkTicket(arg: string): Promise<WorkTicketResponse | null> {
     try {

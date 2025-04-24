@@ -1,7 +1,7 @@
 import {createEntityAdapter, createSelector, createSlice} from "@reduxjs/toolkit";
-import {CLIssue} from "@/src/types";
 import {setCurrentWorkTicket} from "@/ducks/work-ticket/actions";
 import {selectCurrentIssueId} from "@/ducks/issue-entry/issueEntrySlice";
+import {CLIssue} from "chums-types";
 
 const issuesAdapter = createEntityAdapter<CLIssue, number>({
     selectId: (arg) => arg.id,

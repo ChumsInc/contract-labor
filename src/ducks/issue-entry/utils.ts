@@ -1,5 +1,4 @@
-import {SortProps, WorkTemplateStep} from "chums-types";
-import {CLIssueDetail, CLIssueEntryDetail, WorkTicketStep} from "../../types";
+import {CLIssueDetail, CLIssueEntryDetail, SortProps, WorkTemplateStep, WorkTicketStep} from "chums-types";
 import Decimal from "decimal.js";
 import {stepRate} from "@/ducks/templates/utils";
 import {emptyCLEntryDetail} from "@/ducks/issue-entry/issueEntrySlice";
@@ -24,7 +23,7 @@ export const issueDetailSorter = ({
     }
 }
 
-export const newIssueDetailRow = (row: WorkTicketStep, quantity: number | string, index?: number): CLIssueEntryDetail => {
+export const newIssueDetailRow = (row: WorkTicketStep, quantity: number | string): CLIssueEntryDetail => {
     return ({
         id: 0,
         TemplateNo: row.SourceTemplateNo,

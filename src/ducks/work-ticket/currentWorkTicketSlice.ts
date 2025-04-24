@@ -1,6 +1,5 @@
 import {createEntityAdapter, createSlice} from "@reduxjs/toolkit";
-import {WorkTicketStep} from "chums-types";
-import {WorkTicketHeader} from "@/src/types";
+import {WorkTicketHeader, WorkTicketStep} from "chums-types";
 import {loadCLIssueEntry} from "@/ducks/issue-entry/actions";
 import {setCurrentWorkTicket} from "@/ducks/work-ticket/actions";
 

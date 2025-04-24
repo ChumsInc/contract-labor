@@ -1,14 +1,14 @@
-import {VendorWeekTotal} from "../../types";
 import {SortProps} from "@chumsinc/sortable-tables";
 import {createEntityAdapter, createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {loadVendorTotals} from "./actions";
 import {sortVendorTotals} from "./utils";
+import {CLVendorWeekTotal} from "chums-types";
 
 
 export interface VendorTotalsExtraState {
     status: 'idle' | 'loading';
     showInactive: boolean;
-    sort: SortProps<VendorWeekTotal>
+    sort: SortProps<CLVendorWeekTotal>
 }
 
 const extraState: VendorTotalsExtraState = {
@@ -17,7 +17,7 @@ const extraState: VendorTotalsExtraState = {
     sort: {field: 'VendorNo', ascending: true}
 }
 
-const vendorAdapter = createEntityAdapter<VendorWeekTotal, string>({
+const vendorAdapter = createEntityAdapter<CLVendorWeekTotal, string>({
     selectId: (arg) => arg.VendorNo,
     sortComparer: (a, b) => a.VendorNo.localeCompare(b.VendorNo),
 });
@@ -28,7 +28,7 @@ const vendorTotalsSlice = createSlice({
     name: 'vendorTotals',
     initialState: vendorAdapter.getInitialState(extraState),
     reducers: {
-        setVendorTotalsSort: (state, action: PayloadAction<SortProps<VendorWeekTotal>>) => {
+        setVendorTotalsSort: (state, action: PayloadAction<SortProps<CLVendorWeekTotal>>) => {
             state.sort = action.payload;
         },
         toggleShowInactive: (state, action: PayloadAction<boolean | undefined>) => {

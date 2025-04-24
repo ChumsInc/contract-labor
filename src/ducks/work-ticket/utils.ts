@@ -1,14 +1,14 @@
 import {SortProps} from "@chumsinc/sortable-tables";
-import {WorkTicketStatusEntry, WorkTicketStatusGroup, WorkTicketWorkStatusItem} from "../../types";
+import {WorkTicketStatusEntry, WorkTicketStatusGroup, WorkTicketWorkStatusItem} from "chums-types";
 import Decimal from "decimal.js";
 
-const wtStatusEntrySorter = (a:WorkTicketStatusEntry|undefined, b:WorkTicketStatusEntry|undefined) => {
+const wtStatusEntrySorter = (a: WorkTicketStatusEntry | undefined, b: WorkTicketStatusEntry | undefined) => {
     return (a?.style ?? 0) === (b?.style ?? 0)
         ? ((a?.date ?? '') === (b?.date ?? '') ? 0 : ((a?.date ?? '') > (b?.date ?? '') ? 1 : -1))
         : ((a?.style ?? 0) > (b?.style ?? 0) ? 1 : -1)
 }
 
-const defaultWTStatusSorter = (a:WorkTicketWorkStatusItem, b:WorkTicketWorkStatusItem) => {
+const defaultWTStatusSorter = (a: WorkTicketWorkStatusItem, b: WorkTicketWorkStatusItem) => {
     return a.WorkTicketNo > b.WorkTicketNo ? 1 : -1
 }
 export const wtStatusSorter = ({
@@ -33,7 +33,7 @@ export const wtStatusSorter = ({
             case 'QuantityCompleted':
             case 'QuantityOrdered':
                 return (
-                    new Decimal(a[field]).eq( b[field])
+                    new Decimal(a[field]).eq(b[field])
                         ? defaultWTStatusSorter(a, b)
                         : (new Decimal(a[field]).gt(b[field]) ? 1 : -1)
                 ) * sortMod;

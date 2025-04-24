@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
-import {CLIssue} from "../../types";
 import {SortableTable, SortProps, TablePagination} from "@chumsinc/sortable-tables";
 import {loadCurrentIssueList} from "@/ducks/issue-list/actions";
 import classNames from "classnames";
@@ -13,6 +12,7 @@ import {setCurrentWorkTicket} from "@/ducks/work-ticket/actions";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CLIssueListPrintButton from "@/components/issue-entry/CLIssueListPrintButton";
+import {CLIssue} from "chums-types";
 
 const rowClassName = (row: CLIssue): string => {
     const today = new Date();

@@ -1,4 +1,4 @@
-import React, {HTMLAttributes, useEffect, useId, useState} from 'react';
+import React, {HTMLAttributes, useEffect, useState} from 'react';
 import {WorkTemplate} from "chums-types";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectCurrentTemplate, selectTemplatesList, setCurrentTemplate} from "@/ducks/templates/templatesSlice";
@@ -23,7 +23,6 @@ export default function IssueTemplateLookup({
     const templates = useAppSelector(selectTemplatesList);
     const template = useAppSelector(selectCurrentTemplate);
     const [value, setValue] = useState<WorkTemplate | null>(null);
-    const _id = inputProps?.id ?? useId();
 
     const filterOptions = createFilterOptions<WorkTemplate>({
         matchFrom: 'any',

@@ -1,4 +1,4 @@
-import {CLIssueEntry, CLIssueResponse, SearchItem} from "../../types";
+import {CLIssueEntry, CLIssueResponse, SearchItem} from "chums-types";
 import {fetchJSON} from "@chumsinc/ui-utils";
 import {ReceiveCLIssueProps} from "@/ducks/issue-entry/actions";
 

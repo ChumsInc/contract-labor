@@ -91,7 +91,7 @@ export default function IssueHistoryList() {
                     <td colSpan={15}>...</td>
                 </tr>
                 <tr>
-                    <th colSpan={7} scope="row">Total</th>
+                    <th colSpan={7} scope="row">Total <span className="ms-3">({numeral(list.length).format('0,0')})</span> </th>
                     <td className="text-end">{numeral(totals.quantityIssued).format('0,0')}</td>
                     <td className="text-end">{numeral(totals.costIssued).format('0,0.00')}</td>
                     <td colSpan={2} className="text-end">

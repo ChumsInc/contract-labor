@@ -1,4 +1,4 @@
-import {CLIssue} from "../../types";
+import {CLIssue} from "chums-types";
 import {fetchJSON} from "@chumsinc/ui-utils";
 
 export async function fetchCurrentIssueList(): Promise<CLIssue[]> {

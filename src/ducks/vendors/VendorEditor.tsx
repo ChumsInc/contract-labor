@@ -1,17 +1,17 @@
 import React, {ChangeEvent, FormEvent} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectCurrentVendor} from "./selectors";
-import {Vendor} from "../../types";
 import {createNewVendor, saveVendor, updateVendor} from "./actions";
 import Alert from "react-bootstrap/Alert";
 import {Form} from "react-bootstrap";
 import FormCheck from "react-bootstrap/FormCheck";
+import {CLVendor} from "chums-types";
 
 const VendorEditor = () => {
     const dispatch = useAppDispatch();
     const current = useAppSelector(selectCurrentVendor);
 
-    const changeHandler = (field: keyof Vendor) => (ev: ChangeEvent<HTMLInputElement>) => {
+    const changeHandler = (field: keyof CLVendor) => (ev: ChangeEvent<HTMLInputElement>) => {
         switch (field) {
             case 'VendorNo':
                 dispatch(updateVendor({[field]: ev.target.value.toUpperCase()}));

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useAppSelector} from "@/app/configureStore";
 import {selectWorkTicketHeader} from "./currentWorkTicketSlice";
 import dayjs from "dayjs";
-import {WorkTicketHeader} from "../../types";
+import {WorkTicketHeader} from "chums-types";
 import Decimal from "decimal.js";
 import numeral from "numeral";
 import Alert from "react-bootstrap/Alert";

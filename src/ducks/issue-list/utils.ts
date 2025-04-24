@@ -1,10 +1,13 @@
 import {SortProps} from "@chumsinc/sortable-tables";
-import {CLIssue} from "../../types";
 import Decimal from "decimal.js";
+import {CLIssue} from "chums-types";
 
-export const itemWarehouseKey = (issue:CLIssue) => `${issue.WarehouseCode}/${issue.ItemCode}`;
+export const itemWarehouseKey = (issue: CLIssue) => `${issue.WarehouseCode}/${issue.ItemCode}`;
 
-export const issueListSorter = ({field, ascending}:SortProps<CLIssue>) => (a:CLIssue, b:CLIssue) => {
+export const quantityDue = (issue: CLIssue) => {
+    return issue.DateReceived ? 0 : issue.QuantityIssued;
+}
+export const issueListSorter = ({field, ascending}: SortProps<CLIssue>) => (a: CLIssue, b: CLIssue) => {
     const sortMod = ascending ? 1 : -1;
     switch (field) {
         case 'ItemCode':
@@ -52,14 +55,19 @@ export const issueListSorter = ({field, ascending}:SortProps<CLIssue>) => (a:CLI
                     )
                     : (new Decimal(a[field]).sub(b[field]).toNumber())
             ) * sortMod;
-
-        case 'VendorNo':
-            case 'VendorName':
-                return (
-                    a[field] === b[field]
+        case 'QuantityDue':
+            return (
+                new Decimal(quantityDue(a)).eq(quantityDue(b))
                     ? (a.id - b.id)
-                        : a[field].localeCompare(b[field])
-                ) * sortMod
+                    : (new Decimal(quantityDue(a)).sub(new Decimal(quantityDue(b))).toNumber())
+            ) * sortMod;
+        case 'VendorNo':
+        case 'VendorName':
+            return (
+                a[field] === b[field]
+                    ? (a.id - b.id)
+                    : a[field].localeCompare(b[field])
+            ) * sortMod
         case 'id':
         default:
             return (a.id - b.id) * sortMod;

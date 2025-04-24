@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {CLIssue} from "../../types";
+import {CLIssue} from "chums-types";
 import {fetchCurrentIssueList} from "./api";
 import {RootState} from "@/app/configureStore";
 import {selectStatus} from "@/ducks/issue-list/issueListSlice";

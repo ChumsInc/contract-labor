@@ -1,10 +1,11 @@
-import {VendorWeekTotal} from "../../types";
+import {CLVendorWeekTotal} from "chums-types";
 import {fetchJSON} from "@chumsinc/ui-utils";
 
-export async function fetchVendorTotals(arg:string,):Promise<VendorWeekTotal[]> {
+
+export async function fetchVendorTotals():Promise<CLVendorWeekTotal[]> {
     try {
         const url = '/api/operations/production/contract-labor/vendors/totals.json';
-        const res = await fetchJSON<{totals: VendorWeekTotal[]}>(url, {cache: 'no-cache'});
+        const res = await fetchJSON<{totals: CLVendorWeekTotal[]}>(url, {cache: 'no-cache'});
         return res?.totals ?? [];
     } catch(err:unknown) {
         if (err instanceof Error) {
@@ -15,4 +16,3 @@ export async function fetchVendorTotals(arg:string,):Promise<VendorWeekTotal[]> 
         return Promise.reject(new Error('Error in fetchVendorTotals()'));
     }
 }
-

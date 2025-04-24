@@ -6,13 +6,11 @@ import {
     setIssueDetailQuantityReceived,
     updateCurrentEntry
 } from "@/ducks/issue-entry/issueEntrySlice";
-import {isCLIssue, issueDetailKey} from "@/utils/issue";
+import {issueDetailKey} from "@/utils/issue";
 import numeral from "numeral";
-import dayjs from "dayjs";
-import {CLIssueDetail} from "../../types";
+import {CLIssue, CLIssueDetail} from "chums-types";
 import IssueQuantityInput from "@/components/issue-entry/IssueQuantityInput";
 import {activityReceiptCost, calcCostReceived} from "@/ducks/issue-entry/utils";
-import {CLIssue} from "chums-types";
 import Decimal from "decimal.js";
 
 function ReceiptDetailRow({row, id, onChange}: {
@@ -44,7 +42,6 @@ const ReceiptDetail = () => {
     const dispatch = useAppDispatch();
     const header = useAppSelector(selectCurrentIssueHeader) as CLIssue;
     const detail = useAppSelector(selectCurrentIssueDetail) as CLIssueDetail[];
-    const isReceived = isCLIssue(header) && dayjs(header.DateReceived).isValid();
     const id = useId();
     const [total, setTotal] = useState(calcCostReceived(detail, header.QuantityRepaired ?? 0));
 

@@ -2,17 +2,17 @@ import React, {ChangeEvent, FormEvent} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {
     selectCurrentIssueDetail,
-    selectCurrentIssueHeader, selectCurrentIssueStatus,
+    selectCurrentIssueHeader,
+    selectCurrentIssueStatus,
     updateCurrentEntry,
 } from "@/ducks/issue-entry/issueEntrySlice";
 import VendorSelect from "./VendorSelect";
 import IssueId from "./IssueId";
-import {CLIssueEntry, CLIssueEntryDetail} from "../../types";
+import {CLIssueEntry, CLIssueEntryDetail, CLIssueResponse} from "chums-types";
 import IssueWorkTicket from "./IssueWorkTicket";
 import WorkTicketAssignedAlert from "@/ducks/work-ticket/WorkTicketAssignedAlert";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import {isCLIssue} from "@/utils/issue";
 import IssueDateIssued from "./IssueDateIssued";
 import IssueDateDue from "./IssueDateDue";
 import IssueQuantityIssued from "./IssueQuantityIssued";
@@ -23,13 +23,12 @@ import IssueNotes from "./IssueNotes";
 import IssueTemplate from "./IssueTemplate";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import {removeCLIssueEntry, saveCLIssueEntry} from "@/ducks/issue-entry/actions";
+import {saveCLIssueEntry} from "@/ducks/issue-entry/actions";
 import CLIssuePrintButton from "@/components/issue-entry/CLIssuePrintButton";
 import {setWorkTicketStatus} from "@/ducks/work-ticket/actions";
-import {CLIssueResponse} from "chums-types";
 import {ProgressBar} from "react-bootstrap";
 import AdditionalCLSteps from "@/components/issue-entry/AdditionalCLSteps";
-import {selectWorkTicketStatus} from "@/ducks/work-ticket/currentWorkTicketSlice";
+import DeleteEntryButton from "@/components/issue-entry/DeleteEntryButton";
 
 dayjs.extend(utc);
 
@@ -45,21 +44,12 @@ const CLIssueForm = () => {
         ev.preventDefault();
         const detail = (lines as CLIssueEntryDetail[]).filter(line => line.selected);
         const res = await dispatch(saveCLIssueEntry({...current, detail}));
-        const payload:CLIssueResponse|null = res.payload as CLIssueResponse ?? null
+        const payload: CLIssueResponse | null = res.payload as CLIssueResponse ?? null
         if (!payload || !payload.issue?.WorkTicketKey) {
             return;
         }
         await dispatch(setWorkTicketStatus({WorkTicketKey: payload.issue.WorkTicketKey, action: 'cl', nextStatus: 1}));
         setPrint(true);
-    }
-
-    const deleteHandler = async () => {
-        if (window.confirm("Are you sure you want to delete this issue?")) {
-            await dispatch(removeCLIssueEntry(current))
-            if (isCLIssue(current) && current.WorkTicketKey) {
-                await dispatch(setWorkTicketStatus({WorkTicketKey: current.WorkTicketKey, action: 'cl', nextStatus: 0}))
-            }
-        }
     }
 
     const changeHandler = (field: keyof CLIssueEntry) => (ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
@@ -95,7 +85,7 @@ const CLIssueForm = () => {
                             <VendorSelect required value={current.VendorNo ?? ''} onChange={changeHandler('VendorNo')}/>
                         </Col>
                     </Row>
-                    <IssueWorkTicket containerClassName="mb-1" showDueDate showMakeFor inputProps={{required: true}}/>
+                    <IssueWorkTicket showDueDate showMakeFor inputProps={{required: true}}/>
                     <WorkTicketAssignedAlert/>
                     <IssueTemplate/>
                     <IssueItem/>
@@ -111,7 +101,7 @@ const CLIssueForm = () => {
                         <IssueDateDue required/>
                     </div>
                     <div className="mb-1">
-                        <AdditionalCLSteps />
+                        <AdditionalCLSteps/>
                     </div>
                 </Col>
                 <Col xs={12} md={6}>
@@ -131,14 +121,10 @@ const CLIssueForm = () => {
                     <NewEntryButton/>
                 </Col>
                 <Col xs="auto">
-                    <button type="button" className="btn btn-sm btn-outline-danger"
-                            onClick={deleteHandler}
-                            disabled={!isCLIssue(current) || (isCLIssue(current) && dayjs(current.DateReceived).isValid())}>
-                        Delete
-                    </button>
+                    <DeleteEntryButton/>
                 </Col>
                 <Col xs="auto">
-                    <CLIssuePrintButton show={print} onPrint={() => setPrint(false)} />
+                    <CLIssuePrintButton show={print} onPrint={() => setPrint(false)}/>
                 </Col>
                 <Col xs="auto">
                     <button type="submit" className="btn btn-sm btn-primary"

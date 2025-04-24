@@ -3,11 +3,11 @@ import {
     CLIssueDetail,
     CLIssueEntry,
     CLIssueEntryDetail,
-    IssueSearchId,
-    IssueSearchOptions,
-    IssueSearchParams,
-    IssueSearchWorkTicket
-} from "../types";
+    CLIssueSearchId,
+    CLIssueSearchOptions,
+    CLIssueSearchParams,
+    CLIssueSearchWorkTicket,
+} from "chums-types";
 
 export const isCLIssue = (arg: CLIssue | CLIssueEntry): arg is CLIssue => {
     return !!arg.id && arg.id > 0;
@@ -24,14 +24,14 @@ export const issueDetailKey = (row: CLIssueDetail | CLIssueEntryDetail): string 
     return isCLIssueDetail(row) ? row.id.toString() : `${row.StepNo}:${row.WorkCenter}:${row.ActivityCode}`;
 }
 
-export function isSearchByWorkTicket(options: IssueSearchParams): options is IssueSearchWorkTicket {
-    return (options as IssueSearchWorkTicket).workTicketNo !== undefined;
+export function isSearchByWorkTicket(options: CLIssueSearchParams): options is CLIssueSearchWorkTicket {
+    return (options as CLIssueSearchWorkTicket).workTicketNo !== undefined;
 }
 
-export function isSearchById(options: IssueSearchParams): options is IssueSearchId {
-    return (options as IssueSearchId).id !== undefined;
+export function isSearchById(options: CLIssueSearchParams): options is CLIssueSearchId {
+    return (options as CLIssueSearchId).id !== undefined;
 }
 
-export function isSearchByOptions(options: IssueSearchParams): options is IssueSearchOptions {
+export function isSearchByOptions(options: CLIssueSearchParams): options is CLIssueSearchOptions {
     return !isSearchById(options) && !isSearchByWorkTicket(options);
 }

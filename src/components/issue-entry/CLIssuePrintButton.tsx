@@ -4,7 +4,6 @@ import {selectCurrentIssueDetail, selectCurrentIssueHeader} from "@/ducks/issue-
 import Button from "react-bootstrap/Button";
 import styled from "@emotion/styled";
 import {CLIssue, CLIssueEntry} from "chums-types";
-import {CLIssueDetail, CLIssueEntryDetail} from "@/src/types";
 
 const HiddenFrame = styled.iframe`
     position: fixed;
@@ -16,7 +15,7 @@ const HiddenFrame = styled.iframe`
 `;
 
 
-function getUrl(current:CLIssue|CLIssueEntry, detail:(CLIssueDetail|CLIssueEntryDetail)[]):string|null {
+function getUrl(current: CLIssue | CLIssueEntry): string | null {
     if (!current || !current.id) {
         return null;
     }
@@ -26,15 +25,17 @@ function getUrl(current:CLIssue|CLIssueEntry, detail:(CLIssueDetail|CLIssueEntry
         .replace(':id', encodeURIComponent(current.id));
 
 }
+
 export interface IssuePrintButtonProps {
     show?: boolean;
     onPrint?: () => void;
 }
+
 export default function CLIssuePrintButton({show, onPrint}: IssuePrintButtonProps) {
     const current = useAppSelector(selectCurrentIssueHeader);
     const detail = useAppSelector(selectCurrentIssueDetail);
     const ref = useRef<HTMLIFrameElement>(null);
-    const [url, setUrl] = useState<string | null>(getUrl(current, detail));
+    const [url, setUrl] = useState<string | null>(getUrl(current));
 
     const handleClick = useCallback(() => {
         if (ref.current) {
@@ -45,7 +46,7 @@ export default function CLIssuePrintButton({show, onPrint}: IssuePrintButtonProp
     }, [url, ref, onPrint]);
 
     useEffect(() => {
-        setUrl(getUrl(current, detail));
+        setUrl(getUrl(current));
     }, [current, detail]);
 
     useEffect(() => {

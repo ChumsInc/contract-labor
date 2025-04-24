@@ -12,12 +12,12 @@ export default function VendorTotals() {
     const [show, setShow] = React.useState(false);
 
     useEffect(() => {
-        dispatch(loadVendorTotals(new Date().toISOString()));
+        dispatch(loadVendorTotals());
     }, []);
 
     const showHandler = () => {
         setShow(true);
-        dispatch(loadVendorTotals(new Date().toISOString()));
+        dispatch(loadVendorTotals());
     }
     return (
         <>
@@ -28,7 +28,7 @@ export default function VendorTotals() {
             <Offcanvas show={show} onHide={() => setShow(false)}>
                 <Offcanvas.Header closeButton>Active Contractors</Offcanvas.Header>
                 <Offcanvas.Body>
-                    {list.map((item, i) => (
+                    {list.map((item) => (
                         <VendorTotalCard totals={item} key={item.VendorNo}/>
                     ))}
                 </Offcanvas.Body>

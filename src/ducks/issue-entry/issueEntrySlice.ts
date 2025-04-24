@@ -1,4 +1,3 @@
-import {CLIssue, CLIssueDetail, CLIssueEntry, CLIssueEntryDetail} from "../../types";
 import {Editable} from "chums-types/src/generics";
 import {
     CaseReducer,
@@ -20,7 +19,7 @@ import {setCurrentWorkTicket} from "../work-ticket/actions";
 import Decimal from "decimal.js";
 import {calcCostIssued, detailRowsFromSteps, issueDetailKey, issueDetailSorter, newIssueDetailRow} from "./utils";
 import dayjs from "dayjs";
-import {SortProps, WorkTemplate} from "chums-types";
+import {CLIssue, CLIssueDetail, CLIssueEntry, CLIssueEntryDetail, SortProps, WorkTemplate} from "chums-types";
 import {dismissAlert} from "@chumsinc/alert-list";
 import {filterVendorNo} from "@/ducks/issue-list/issueListSlice";
 import {isCLIssue} from "@/utils/issue";
@@ -42,7 +41,7 @@ export interface IssueEntryState {
 
 export const defaultDetailSort: SortProps<CLIssueEntryDetail> = {field: 'StepNo', ascending: true};
 
-const emptyCLEntry:CLIssueEntry = {
+const emptyCLEntry: CLIssueEntry = {
     id: 0,
     VendorNo: '',
     WorkTicketNo: '',
@@ -101,7 +100,7 @@ const updateHeaderCosts: CaseReducer<IssueEntryState & EntityState<CLIssueEntryD
         : new Decimal(state.header.CostIssued).div(state.header.QuantityIssued).toString();
 }
 
-const removeEntryCaseReducer:CaseReducer<IssueEntryState & EntityState<CLIssueEntryDetail & Editable, string>> = (state, action) => {
+const removeEntryCaseReducer: CaseReducer<IssueEntryState & EntityState<CLIssueEntryDetail & Editable, string>> = (state) => {
     state.header = {...emptyCLEntry, DateIssued: state.header.DateIssued};
     issueDetailAdapter.removeAll(state);
     state.issueId = 0;
@@ -111,7 +110,7 @@ const issueEntrySlice = createSlice({
     name: "issueEntry",
     initialState: issueDetailAdapter.getInitialState(initialState()),
     reducers: {
-        addDLStep: (state, action:PayloadAction<CLIssueEntryDetail>) => {
+        addDLStep: (state, action: PayloadAction<CLIssueEntryDetail>) => {
             issueDetailAdapter.addOne(state, action.payload);
             updateHeaderCosts(state, action);
         },
@@ -124,7 +123,7 @@ const issueEntrySlice = createSlice({
             issueDetailAdapter.setAll(state, detailRowsFromSteps(action.payload?.Steps ?? [], state.header.QuantityIssued))
             updateHeaderCosts(state, action);
         },
-        setEntryVendorNo: (state, action:PayloadAction<string>) => {
+        setEntryVendorNo: (state, action: PayloadAction<string>) => {
             state.vendorNo = action.payload;
         },
         toggleIssueDetailSelected: (state, action: PayloadAction<Pick<CLIssueEntryDetail, 'id' | 'StepNo' | 'selected'>>) => {
@@ -151,10 +150,13 @@ const issueEntrySlice = createSlice({
             if (!existing) {
                 return;
             }
-            issueDetailAdapter.updateOne(state, {id: key, changes: {QuantityReceived: action.payload.QuantityReceived}});
+            issueDetailAdapter.updateOne(state, {
+                id: key,
+                changes: {QuantityReceived: action.payload.QuantityReceived}
+            });
             updateHeaderCosts(state, action);
         },
-        updateCurrentEntry: (state, action: PayloadAction<Partial<CLIssueEntry|CLIssue>>) => {
+        updateCurrentEntry: (state, action: PayloadAction<Partial<CLIssueEntry | CLIssue>>) => {
             state.header = {...state.header, ...action.payload, changed: true};
             updateHeaderCosts(state, action);
         },
@@ -173,7 +175,7 @@ const issueEntrySlice = createSlice({
             issueDetailAdapter.updateMany(state, updates);
             updateHeaderCosts(state, action);
         },
-        updateQuantityReceived: (state, action:PayloadAction<number|string>) => {
+        updateQuantityReceived: (state, action: PayloadAction<number | string>) => {
             const value = action.payload || 0;
             if (isCLIssue(state.header)) {
                 state.header.QuantityReceived = value;
@@ -218,7 +220,7 @@ const issueEntrySlice = createSlice({
                     state.header.QuantityIssued = Math.max(new Decimal(QuantityOrdered).sub(QuantityCompleted).times(ParentUnitOfMeasureConvFactor).sub(alreadyIssued).toNumber(), 0);
 
                     const detail = action.payload.steps.filter(row => row.WorkCenter === 'CON')
-                        .map((row, index) => newIssueDetailRow(row, state.header.QuantityIssued, index));
+                        .map((row) => newIssueDetailRow(row, state.header.QuantityIssued));
                     issueDetailAdapter.setAll(state, detail);
                     updateHeaderCosts(state, action);
                 }

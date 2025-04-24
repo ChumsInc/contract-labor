@@ -1,11 +1,10 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {CLIssue} from "chums-types";
-import {IssueSearchParams} from "@/src/types";
+import {CLIssue, CLIssueSearchParams} from "chums-types";
 import {RootState} from "@/app/configureStore";
 import {fetchIssueSearch} from "@/ducks/issue-history/api";
 import {selectHistoryLoading} from "@/ducks/issue-history/index";
 
-export const loadHistory = createAsyncThunk<CLIssue[], IssueSearchParams, {state:RootState}>(
+export const loadHistory = createAsyncThunk<CLIssue[], CLIssueSearchParams, { state: RootState }>(
     'issueHistory/load',
     async (arg) => {
         return await fetchIssueSearch(arg);

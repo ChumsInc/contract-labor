@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectShowInactive, selectSortedVendorList, selectVendorsLoading, selectVendorSort} from "./selectors";
 import {SortableTable, SortableTableField, SortProps, TablePagination} from "@chumsinc/sortable-tables";
-import {Vendor} from "../../types";
 import {loadVendors, setCurrentVendor, setVendorsSort} from "./actions";
 import ShowInactiveVendors from "./ShowInactiveVendors";
 import classNames from "classnames";
@@ -11,8 +10,9 @@ import {Spinner} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import {CLVendor} from "chums-types";
 
-const fields: SortableTableField<Vendor>[] = [
+const fields: SortableTableField<CLVendor>[] = [
     {field: 'VendorNo', title: 'Vendor No', sortable: true},
     {
         field: 'VendorNameOverride',
@@ -47,9 +47,9 @@ const VendorList = () => {
         setPage(0);
     }, [vendors, sort, showInactive]);
 
-    const sortChangeHandler = (sort: SortProps<Vendor>) => dispatch(setVendorsSort(sort));
+    const sortChangeHandler = (sort: SortProps<CLVendor>) => dispatch(setVendorsSort(sort));
     const reloadHandler = () => dispatch(loadVendors());
-    const selectHandler = (vendor: Vendor) => {
+    const selectHandler = (vendor: CLVendor) => {
         dispatch(setCurrentVendor(vendor));
     }
 
@@ -67,11 +67,11 @@ const VendorList = () => {
                 </Col>
             </Row>
 
-            <SortableTable<Vendor> currentSort={sort} onChangeSort={sortChangeHandler} fields={fields}
-                                   rowClassName={row => classNames({'table-warning': !row.active || row.VendorStatus === 'I'})}
-                                   onSelectRow={selectHandler}
-                                   data={vendors.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)}
-                                   keyField="id"/>
+            <SortableTable<CLVendor> currentSort={sort} onChangeSort={sortChangeHandler} fields={fields}
+                                     rowClassName={row => classNames({'table-warning': !row.active || row.VendorStatus === 'I'})}
+                                     onSelectRow={selectHandler}
+                                     data={vendors.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)}
+                                     keyField="id"/>
             <TablePagination page={page} onChangePage={setPage} rowsPerPage={rowsPerPage} count={vendors.length}
                              showFirst={vendors.length > rowsPerPage} showLast={vendors.length > rowsPerPage}/>
         </div>

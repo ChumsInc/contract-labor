@@ -1,8 +1,8 @@
-import {CLIssue, IssueSearchParams} from "../../types";
+import {CLIssue, CLIssueSearchParams} from "chums-types";
 import {isSearchById, isSearchByWorkTicket} from "@/utils/issue";
 import {fetchJSON} from "@chumsinc/ui-utils";
 
-function parseSearchParams(arg: IssueSearchParams): URLSearchParams {
+function parseSearchParams(arg: CLIssueSearchParams): URLSearchParams {
     const params = new URLSearchParams();
     if (isSearchById(arg)) {
         params.set('id', arg.id.toString());
@@ -33,7 +33,7 @@ function parseSearchParams(arg: IssueSearchParams): URLSearchParams {
     return params;
 }
 
-export async function fetchIssueSearch(arg: IssueSearchParams): Promise<CLIssue[]> {
+export async function fetchIssueSearch(arg: CLIssueSearchParams): Promise<CLIssue[]> {
     try {
         const params = parseSearchParams(arg);
         const url = `/api/operations/production/contract-labor/issue/search.json?${params.toString()}`

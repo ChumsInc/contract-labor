@@ -1,8 +1,7 @@
 import {SortableTableField} from "@chumsinc/sortable-tables";
-import {CLIssue} from "@/src/types";
 import {friendlyDate} from "@/utils/dates";
 import numeral from "numeral";
-import Decimal from "decimal.js";
+import {CLIssue} from "chums-types";
 
 export const fields: SortableTableField<CLIssue>[] = [
     {field: 'id', title: 'ID', sortable: true},
@@ -39,7 +38,7 @@ export const fields: SortableTableField<CLIssue>[] = [
     },
     {field: 'DateDue', title: 'Due', sortable: true, render: (row) => friendlyDate(row.DateDue), align: 'end'},
     {
-        field: 'QuantityIssued',
+        field: 'QuantityDue',
         title: 'Qty Due',
         sortable: true,
         render: (row) => {

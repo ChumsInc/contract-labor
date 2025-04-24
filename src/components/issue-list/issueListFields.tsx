@@ -1,5 +1,5 @@
 import {SortableTableField} from "@chumsinc/sortable-tables";
-import {CLIssue} from "@/src/types";
+import {CLIssue} from "chums-types";
 import {friendlyDate} from "@/utils/dates";
 import numeral from "numeral";
 

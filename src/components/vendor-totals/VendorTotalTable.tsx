@@ -1,10 +1,10 @@
 import React from 'react';
-import {VendorWeekTotal} from "@/src/types";
+import {CLVendorWeekTotal} from "chums-types";
 import classNames from "classnames";
 import numeral from "numeral";
 import {Table} from "react-bootstrap";
 
-export default function VendorTotalTable({totals}:{totals:VendorWeekTotal}) {
+export default function VendorTotalTable({totals}:{totals:CLVendorWeekTotal}) {
     return (
         <Table className="table-xs" style={{marginBottom: 0}}>
             <thead>

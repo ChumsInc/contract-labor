@@ -2,8 +2,7 @@ import React, {InputHTMLAttributes, useId} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectCurrentIssueHeader, setEntryTemplate, updateCurrentEntry} from "@/ducks/issue-entry/issueEntrySlice";
 import IssueTemplateLookup from "@/components/issue-entry/IssueTemplateLookup";
-import {CLIssueEntry} from "@/src/types";
-import {WorkTemplate} from "chums-types";
+import {CLIssueEntry, WorkTemplate} from "chums-types";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl, {FormControlProps} from "react-bootstrap/FormControl";
 
@@ -11,7 +10,7 @@ export interface IssueTemplateProps extends InputHTMLAttributes<HTMLInputElement
     inputProps?: Omit<FormControlProps, 'value' | 'onChange'>;
 }
 
-export default function IssueTemplate({inputProps}:IssueTemplateProps) {
+export default function IssueTemplate({inputProps}: IssueTemplateProps) {
     const dispatch = useAppDispatch();
     const _id = useId();
     const current = useAppSelector(selectCurrentIssueHeader);

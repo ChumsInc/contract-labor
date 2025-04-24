@@ -9,16 +9,16 @@ import {
 import {isCLIssue, issueDetailKey} from "@/utils/issue";
 import numeral from "numeral";
 import dayjs from "dayjs";
-import {CLIssueEntryDetail} from "../../types";
+import {CLIssueEntryDetail} from "chums-types";
 import IssueQuantityInput from "@/components/issue-entry/IssueQuantityInput";
 import {activityIssueCost, calcCostIssued} from "@/ducks/issue-entry/utils";
 
 
-function IssueDetailRow({row, id, onChangeSelected, onChange ,isReceived}:{
-    row:CLIssueEntryDetail;
-    id: string|number;
-    onChangeSelected: (ev:ChangeEvent<HTMLInputElement>) => void;
-    onChange: (ev:ChangeEvent<HTMLInputElement>) => void;
+function IssueDetailRow({row, id, onChangeSelected, onChange, isReceived}: {
+    row: CLIssueEntryDetail;
+    id: string | number;
+    onChangeSelected: (ev: ChangeEvent<HTMLInputElement>) => void;
+    onChange: (ev: ChangeEvent<HTMLInputElement>) => void;
     isReceived: boolean;
 }) {
     return (
@@ -92,9 +92,9 @@ const IssueDetail = () => {
             <tbody>
             {detail.map(row => (
                 <IssueDetailRow key={issueDetailKey(row)} row={row}
-                                onChangeSelected={changeHandler('selected', row.id, row.StepNo)}
-                                onChange={changeHandler('QuantityIssued', row.id, row.StepNo)}
-                                id={id} isReceived={isReceived} />
+                                onChangeSelected={changeHandler('selected', row.id ?? 0, row.StepNo)}
+                                onChange={changeHandler('QuantityIssued', row.id ?? 0, row.StepNo)}
+                                id={id} isReceived={isReceived}/>
             ))}
             </tbody>
             <tfoot>

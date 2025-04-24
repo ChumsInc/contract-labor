@@ -1,9 +1,8 @@
-import {SortProps} from "chums-types";
-import {Vendor} from "../../types";
+import {CLVendor, SortProps} from "chums-types";
 
-export const defaultVendorSort:SortProps<Vendor> = {field: 'VendorNo', ascending: true};
+export const defaultVendorSort: SortProps<CLVendor> = {field: 'VendorNo', ascending: true};
 
-export const sortVendors = ({field, ascending}:SortProps<Vendor>) => (a:Vendor, b:Vendor) => {
+export const sortVendors = ({field, ascending}: SortProps<CLVendor>) => (a: CLVendor, b: CLVendor) => {
     const sortMod = ascending ? 1 : -1;
     switch (field) {
         case 'VendorNo':
@@ -13,7 +12,7 @@ export const sortVendors = ({field, ascending}:SortProps<Vendor>) => (a:Vendor, 
         case 'EmailAddress':
         case 'VendorNameOverride':
         case 'VendorName':
-            return ((a[field] ?? '').toLowerCase() === (b[field]??'').toLowerCase()
+            return ((a[field] ?? '').toLowerCase() === (b[field] ?? '').toLowerCase()
                 ? (a.id - b.id)
                 : ((a[field] ?? '').toLowerCase() > (b[field] ?? '').toLowerCase() ? 1 : -1)) * sortMod
 
@@ -25,7 +24,7 @@ export const sortVendors = ({field, ascending}:SortProps<Vendor>) => (a:Vendor, 
 }
 
 
-export const emptyVendor:Vendor = {
+export const emptyVendor: CLVendor = {
     id: 0,
     Company: 'chums',
     VendorNo: '',

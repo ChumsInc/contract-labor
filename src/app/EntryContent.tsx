@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import WorkTicketList from "@/components/work-ticket-list/WorkTicketList";
 import CurrentIssueList from "@/components/issue-list/CurrentIssueList";
-import {Accordion, Nav} from "react-bootstrap";
+import {Nav} from "react-bootstrap";
 import CLIssueTabs from "@/components/CLIssueTabs";
 import CLIssueForm from "@/components/issue-entry/CLIssueForm";
 import CLReceiptForm from "@/components/receipt-entry/CLReceiptForm";
@@ -12,8 +12,8 @@ import ErrorBoundaryFallbackAlert from "@/components/ErrorBoundaryFallbackAlert"
 
 const EntryContent = () => {
     const current = useAppSelector(selectCurrentIssueHeader);
-    const [activeKey, setActiveKey] = React.useState<string|null>('issue-list');
-    const [tab, setTab] = useState<'issue'|'receive'|string>('issue');
+    const [activeKey, setActiveKey] = React.useState<string | null>('issue-list');
+    const [tab, setTab] = useState<'issue' | 'receive' | string>('issue');
 
     useEffect(() => {
         if (tab === 'receive' && !current.id) {

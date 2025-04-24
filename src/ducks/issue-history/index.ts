@@ -1,6 +1,5 @@
-import {CLIssue, IssueDateType} from "../../types";
+import {CLIssue, IssueDateType, SortProps} from "chums-types";
 import {createEntityAdapter, createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {SortProps} from "chums-types";
 import {LocalStore} from "@chumsinc/ui-utils";
 import {historySort} from "@/utils/storageKeys";
 import {loadHistory} from "@/ducks/issue-history/actions";
@@ -17,7 +16,7 @@ const selectors = adapter.getSelectors();
 
 
 export interface IssueHistoryExtraState {
-    loading: 'idle'|'loading'|'rejected';
+    loading: 'idle' | 'loading' | 'rejected';
     id: number;
     vendorNo: string;
     warehouseCode: string;
@@ -63,7 +62,7 @@ const issueHistorySlice = createSlice({
         setWorkTicketNo: (state, action) => {
             state.workTicketNo = action.payload;
         },
-        setDateType: (state, action:PayloadAction<IssueDateType>) => {
+        setDateType: (state, action: PayloadAction<IssueDateType>) => {
             state.dateType = action.payload;
         },
         setMinDate: (state, action) => {

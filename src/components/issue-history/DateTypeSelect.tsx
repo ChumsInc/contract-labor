@@ -2,7 +2,7 @@ import React, {ChangeEvent, useId} from 'react';
 import FormSelect, {FormSelectProps} from "react-bootstrap/FormSelect";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectDateType, setDateType} from "@/ducks/issue-history";
-import {IssueDateType} from "@/src/types";
+import {IssueDateType} from "chums-types";
 import InputGroup from "react-bootstrap/InputGroup";
 
 export type DateTypeSelectProps = Omit<FormSelectProps, 'value'|'onChange'>;

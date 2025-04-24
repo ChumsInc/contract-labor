@@ -7,6 +7,8 @@ import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import {removeCLIssueEntry} from "@/ducks/issue-entry/actions";
+import {setWorkTicketStatus} from "@/ducks/work-ticket/actions";
 
 const DeleteEntryButton = () => {
     const dispatch = useAppDispatch();
@@ -25,7 +27,10 @@ const DeleteEntryButton = () => {
             return;
         }
         setShow(false);
-        // await dispatch
+        await dispatch(removeCLIssueEntry(current))
+        if (isCLIssue(current) && current.WorkTicketKey) {
+            await dispatch(setWorkTicketStatus({WorkTicketKey: current.WorkTicketKey, action: 'cl', nextStatus: 0}))
+        }
         dispatch(setNewEntry(newCLEntry()));
     }
 
@@ -33,7 +38,9 @@ const DeleteEntryButton = () => {
 
     return (
         <>
-            <Button type="button" variant="outline-danger" size="sm" onClick={deleteIssueHandler}>
+            <Button type="button" variant="outline-danger" size="sm"
+                    onClick={deleteIssueHandler}
+                    disabled={!isCLIssue(current) || (isCLIssue(current) && dayjs(current.DateReceived).isValid())}>
                 Delete Issue
             </Button>
             <Modal show={show} onHide={handleClose} aria-described-by={dialogContentTextId}>

@@ -1,13 +1,12 @@
 import {SortProps} from "@chumsinc/sortable-tables";
-import {VendorWeekTotal} from "../../types";
 import Decimal from "decimal.js";
+import {CLVendorWeekTotal} from "chums-types";
 
-export const defaultVendorSort:SortProps<VendorWeekTotal> = {field: 'VendorNo', ascending: true};
 
 export const sortVendorTotals = ({
                                      field,
                                      ascending
-                                 }: SortProps<VendorWeekTotal>) => (a: VendorWeekTotal, b: VendorWeekTotal) => {
+                                 }: SortProps<CLVendorWeekTotal>) => (a: CLVendorWeekTotal, b: CLVendorWeekTotal) => {
     const sortMod = ascending ? 1 : -1;
     switch (field) {
         case 'VendorNo':

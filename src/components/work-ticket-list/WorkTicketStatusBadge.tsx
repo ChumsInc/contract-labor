@@ -1,5 +1,5 @@
 import React from 'react';
-import {WorkTicketStatusEntry} from "../../types";
+import {WorkTicketStatusEntry} from "chums-types";
 import Badge from "react-bootstrap/Badge";
 import {Color, Variant} from "react-bootstrap/types";
 

@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {PostWorkTicketStatusProps, WorkTicketResponse, WorkTicketWorkStatusItem} from "../../types";
+import {WorkTicketResponse, WorkTicketWorkStatusItem} from "chums-types";
 import {fetchWorkTicket, fetchWorkTicketGroups, fetchWorkTickets, postWorkTicketStatus} from "./api";
 
 import {RootState} from "@/app/configureStore";
@@ -7,6 +7,7 @@ import {selectWorkTicketStatus} from "@/ducks/work-ticket/currentWorkTicketSlice
 import {selectWTListStatus} from "@/ducks/work-ticket/workTicketListSlice";
 import {selectStatusGroupsLoading} from "@/ducks/work-ticket/statusGroupsSlice";
 import {WorkTicketGroup} from "chums-types";
+import {PostWorkTicketStatusProps} from "@/src/types";
 
 export const setCurrentWorkTicket = createAsyncThunk<WorkTicketResponse | null, string>(
     'work-ticket/load',

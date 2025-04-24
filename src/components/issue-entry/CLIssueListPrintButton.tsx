@@ -3,12 +3,9 @@ import {useAppSelector} from "@/app/configureStore";
 import Button from "react-bootstrap/Button";
 import styled from "@emotion/styled";
 import {selectFilteredIssueList, selectFilterVendorNo} from "@/ducks/issue-list/issueListSlice";
-import {fields as issueListFields} from '@/components/issue-list/issueListFields';
 import InputGroup from "react-bootstrap/InputGroup";
 import dayjs from "dayjs";
 import FormControl from "react-bootstrap/FormControl";
-
-const fields = issueListFields.filter(f => f.field !== 'CostIssued' && f.field !== 'CostReceived')
 
 const HiddenFrame = styled.iframe`
     position: fixed;
@@ -45,7 +42,6 @@ export default function CLIssueListPrintButton() {
     }, [vendorNo, issueDate, list]);
 
 
-
     const handleClick = () => {
         if (ref.current) {
             ref.current.contentWindow?.focus();
@@ -53,7 +49,7 @@ export default function CLIssueListPrintButton() {
         }
     }
 
-    const handleDateChange = (ev:ChangeEvent<HTMLInputElement>) => {
+    const handleDateChange = (ev: ChangeEvent<HTMLInputElement>) => {
         if (ev.target.valueAsDate && dayjs(ev.target.valueAsDate).isValid()) {
             setIssueDate(dayjs(ev.target.valueAsDate).add(new Date().getTimezoneOffset(), 'minutes').format('YYYY-MM-DD'));
         }
@@ -63,7 +59,7 @@ export default function CLIssueListPrintButton() {
         <div>
             <InputGroup size="sm">
                 <InputGroup.Text as="label" htmlFor={id}>Issue Date</InputGroup.Text>
-                <FormControl type="date" value={issueDate ?? undefined} onChange={handleDateChange} />
+                <FormControl type="date" value={issueDate ?? undefined} onChange={handleDateChange}/>
                 <Button variant="info" size="sm" onClick={handleClick} disabled={!vendorNo}>
                     <span className="bi-printer me-1" aria-hidden="true" aria-label="Print Issue"/>
                 </Button>

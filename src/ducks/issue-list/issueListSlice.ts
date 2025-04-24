@@ -1,4 +1,3 @@
-import {CLIssue} from "../../types";
 import {createEntityAdapter, createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {SortProps} from "@chumsinc/sortable-tables";
 import {loadCurrentIssueList} from "./actions";
@@ -7,6 +6,7 @@ import {localStorageKeys} from "@/app/settings";
 import {issueListSorter} from "@/ducks/issue-list/utils";
 import {receiveCLIssue, removeCLIssueEntry, removeCLReceipt, saveCLIssueEntry} from "@/ducks/issue-entry/actions";
 import {dismissAlert} from "@chumsinc/alert-list";
+import {CLIssue} from "chums-types";
 
 const issueAdapter = createEntityAdapter<CLIssue, number>({
     selectId: (arg) => arg.id,

@@ -70,7 +70,7 @@ export default function CLReceiptForm() {
                             <VendorSelect value={current.VendorNo ?? ''} disabled/>
                         </Col>
                     </Row>
-                    <IssueWorkTicket containerClassName="mb-1" inputProps={{disabled: true}}/>
+                    <IssueWorkTicket inputProps={{disabled: true}}/>
                     <IssueTemplate inputProps={{disabled: true}}/>
                     <IssueItem inputProps={{disabled: true}}/>
                     <Row className="g-3 mb-1">
