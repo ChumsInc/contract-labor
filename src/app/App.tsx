@@ -1,6 +1,6 @@
 import React from 'react';
 import EntryContent from "./EntryContent";
-import HistoryContent from "./HistoryContent";
+import HistoryContent from "@/components/issue-history/HistoryContent";
 import VendorsContent from "./VendorsContent";
 import {HashRouter, Route, Routes} from "react-router";
 import Layout from "./Layout";
@@ -21,6 +21,7 @@ function App() {
                     </Route>
                     <Route path="search" element={<HistoryContent/>}/>
                     <Route path="vendors" element={<VendorsContent/>}/>
+                    <Route path="*" element={<Home/>}/>
                 </Route>
             </Routes>
         </HashRouter>

@@ -5,18 +5,19 @@ import vendorsReducer from "../ducks/vendors";
 import issueListSlice from "@/ducks/issue-list/issueListSlice";
 import vendorTotalsSlice from "@/ducks/vendor-totals/vendorTotalsSlice";
 import issueEntrySlice from "@/ducks/issue-entry/issueEntrySlice";
-import templatesReducer from "../ducks/templates";
+import templatesSlice from "@/ducks/templates/templatesSlice";
 import {alertsSlice} from "@chumsinc/alert-list";
 import workTicketsListSlice from "@/ducks/work-ticket/workTicketListSlice";
 import currentWorkTicketSlice from "@/ducks/work-ticket/currentWorkTicketSlice";
 import workTicketIssuesSlice from "@/ducks/work-ticket/workTicketIssuesSlice";
 import workStatusGroupSlice from "@/ducks/work-ticket/statusGroupsSlice";
 import stepsSlice from "@/ducks/dl-steps/stepsSlice";
+import issueHistorySlice from "@/ducks/issue-history";
 
 const rootReducer = combineReducers({
     [alertsSlice.reducerPath]: alertsSlice.reducer,
     [issueEntrySlice.reducerPath]: issueEntrySlice.reducer,
-    templates: templatesReducer,
+    [templatesSlice.reducerPath]: templatesSlice.reducer,
     vendors: vendorsReducer,
     [issueListSlice.reducerPath]: issueListSlice.reducer,
     [stepsSlice.reducerPath]: stepsSlice.reducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     [workTicketIssuesSlice.reducerPath]: workTicketIssuesSlice.reducer,
     [workStatusGroupSlice.reducerPath]: workStatusGroupSlice.reducer,
     [vendorTotalsSlice.reducerPath]: vendorTotalsSlice.reducer,
+    [issueHistorySlice.reducerPath]: issueHistorySlice.reducer,
 });
 
 const store = configureStore({

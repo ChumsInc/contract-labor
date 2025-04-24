@@ -53,6 +53,13 @@ export const issueListSorter = ({field, ascending}:SortProps<CLIssue>) => (a:CLI
                     : (new Decimal(a[field]).sub(b[field]).toNumber())
             ) * sortMod;
 
+        case 'VendorNo':
+            case 'VendorName':
+                return (
+                    a[field] === b[field]
+                    ? (a.id - b.id)
+                        : a[field].localeCompare(b[field])
+                ) * sortMod
         case 'id':
         default:
             return (a.id - b.id) * sortMod;

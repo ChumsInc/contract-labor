@@ -5,7 +5,7 @@ import {RootState} from "@/app/configureStore";
 import {selectStatus} from "@/ducks/issue-list/issueListSlice";
 
 export const loadCurrentIssueList = createAsyncThunk<CLIssue[], void>(
-    'issue/list/load',
+    'issueList/load',
     async () => {
         return await fetchCurrentIssueList();
     },

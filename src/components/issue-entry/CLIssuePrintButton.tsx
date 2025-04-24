@@ -35,13 +35,14 @@ export default function CLIssuePrintButton({show, onPrint}: IssuePrintButtonProp
     const detail = useAppSelector(selectCurrentIssueDetail);
     const ref = useRef<HTMLIFrameElement>(null);
     const [url, setUrl] = useState<string | null>(getUrl(current, detail));
+
     const handleClick = useCallback(() => {
         if (ref.current) {
             ref.current.contentWindow?.focus();
             ref.current.contentWindow?.print();
         }
         onPrint?.();
-    }, [current.id, url, ref, onPrint]);
+    }, [url, ref, onPrint]);
 
     useEffect(() => {
         setUrl(getUrl(current, detail));
@@ -55,11 +56,11 @@ export default function CLIssuePrintButton({show, onPrint}: IssuePrintButtonProp
 
     return (
         <>
-            <Button variant="outline-secondary" size="sm" onClick={handleClick} disabled={!current.id}>
+            <Button variant="outline-secondary" size="sm" onClick={handleClick} disabled={!current.id || !url}>
                 <span className="bi-printer me-1" aria-hidden="true"/>
                 Print Issue
             </Button>
-            {!!current.id && !!url && <HiddenFrame src={url} ref={ref}/>}
+            {!!url && <HiddenFrame src={url} ref={ref}/>}
         </>
     )
 }

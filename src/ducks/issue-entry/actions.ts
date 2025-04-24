@@ -9,7 +9,7 @@ import {isCLIssue} from "@/utils/issue";
 import Decimal from "decimal.js";
 import {calcCostReceived} from "@/ducks/issue-entry/utils";
 
-export const setIssueDate = createAction('issue-entry/setIssueDate', (date: Date | string | undefined) => {
+export const setIssueDate = createAction('issueEntry/setIssueDate', (date: Date | string | undefined) => {
     const issueDate = date && dayjs(date).isValid()
         ? dayjs(date).add(new Date().getTimezoneOffset(), "minutes").format('YYYY-MM-DD')
         : dayjs(new Date()).add(new Date().getTimezoneOffset(), "minutes").format('YYYY-MM-DD')
@@ -19,7 +19,7 @@ export const setIssueDate = createAction('issue-entry/setIssueDate', (date: Date
 });
 
 export const loadCLIssueEntry = createAsyncThunk<CLIssueResponse | null, CLIssueEntry>(
-    'issue-entry/load',
+    'issueEntry/load',
     async (arg) => {
         return await fetchCLIssue(arg.id!)
     },
@@ -32,7 +32,7 @@ export const loadCLIssueEntry = createAsyncThunk<CLIssueResponse | null, CLIssue
 )
 
 export const saveCLIssueEntry = createAsyncThunk<CLIssueResponse | null, CLIssueEntry, { state: RootState }>(
-    'issue-entry/save',
+    'issueEntry/save',
     async (arg) => {
         return await postCLIssue(arg);
     },
@@ -46,7 +46,7 @@ export const saveCLIssueEntry = createAsyncThunk<CLIssueResponse | null, CLIssue
 
 
 export const removeCLIssueEntry = createAsyncThunk<void, CLIssueEntry, { state: RootState }>(
-    'issue-entry/remove',
+    'issueEntry/remove',
     async (arg) => {
         return await deleteCLIssue(arg.id!);
     },
@@ -65,7 +65,7 @@ export interface ReceiveCLIssueProps extends Pick<CLIssue, 'id' | 'DateReceived'
 
 
 export const receiveCLIssue = createAsyncThunk<CLIssueResponse, string, { state: RootState }>(
-    'issue-entry/receive',
+    'issueEntry/receive',
     async (arg, {getState}) => {
         const state = getState()
         const header = selectCurrentIssueHeader(state) as CLIssue;
@@ -96,7 +96,7 @@ export const receiveCLIssue = createAsyncThunk<CLIssueResponse, string, { state:
 )
 
 export const removeCLReceipt = createAsyncThunk<CLIssueResponse, number|string, {state:RootState}>(
-    'issue-entry/removeReceipt',
+    'issueEntry/removeReceipt',
     async (arg) => {
         return await deleteCLReceipt(arg);
     },

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useId} from 'react';
+import React, {ChangeEvent, useEffect, useId} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import classNames from "classnames";
 import {selectCurrentIssueHeader, updateCurrentEntry} from "@/ducks/issue-entry/issueEntrySlice";
@@ -43,7 +43,12 @@ export default function IssueWorkTicket({inputProps, ref, containerClassName, sh
     const id = useId();
     const dueId = useId();
     const makeForId = useId();
+    const [show, setShow] = React.useState(workTicket?.WorkTicketNo?.replace(/^0+/, '') === current.WorkTicketNo);
 
+
+    useEffect(() => {
+        setShow(workTicket?.WorkTicketNo?.replace(/^0+/, '') === current.WorkTicketNo);
+    }, [workTicket, current]);
 
     const changeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
         dispatch(updateCurrentEntry({WorkTicketNo: ev.target.value}));
@@ -52,8 +57,6 @@ export default function IssueWorkTicket({inputProps, ref, containerClassName, sh
     const loadWorkTicketHandler = async () => {
         dispatch(setCurrentWorkTicket(current.WorkTicketNo.trim().padStart(12, '0')));
     }
-
-    const show = workTicket?.WorkTicketNo === current.WorkTicketNo;
 
     return (
         <div>
@@ -73,12 +76,14 @@ export default function IssueWorkTicket({inputProps, ref, containerClassName, sh
                 <div>
                     {workTicket?.WorkTicketStatus === 'C' && (
                         <Alert variant="danger">
+                            <span className="bi-lock-fill me-3" aria-hidden />
                             Closed Work Ticket
                         </Alert>
                     )}
-                    {show && workTicket?.WorkTicketStatus === 'X' && (
+                    {workTicket?.WorkTicketStatus === 'X' && (
                         <Alert variant="danger">
-                            <span className="bi-exclamation-triangle-fill me-3"/> Cancelled Work Ticket
+                            <span className="bi-exclamation-triangle-fill me-3"/>
+                            Cancelled Work Ticket
                         </Alert>
                     )}
                 </div>

@@ -18,12 +18,12 @@ export default function IssueDateDue({containerClassName, className, ...props}: 
     const id = useId();
     const [value, setValue] = useState<string>(current.DateDue ? dayjs(current.DateDue).format('YYYY-MM-DD') : '');
     const [minDate, setMinDate] = useState<string>(dayjs(current.DateIssued ?? undefined).format('YYYY-MM-DD'));
-    const [maxDate, setMaxDate] = useState<string>(dayjs(current.DateIssued ?? undefined).add(5, 'days').format('YYYY-MM-DD'));
+    const [maxDate, setMaxDate] = useState<string>(dayjs(current.DateIssued ?? undefined).add(14, 'days').format('YYYY-MM-DD'));
     const [disabled, setDisabled] = useState<boolean>(false);
 
     useEffect(() => {
         setMinDate(dayjs(current.DateIssued ?? new Date()).format('YYYY-MM-DD'));
-        setMaxDate(dayjs(current.DateIssued ?? new Date()).add(10, 'days').format('YYYY-MM-DD'));
+        setMaxDate(dayjs(current.DateIssued ?? new Date()).add(14, 'days').format('YYYY-MM-DD'));
         setValue(current.DateDue ? dayjs(current.DateDue).format('YYYY-MM-DD') : '');
         setDisabled(props.disabled
             || (isCLIssue(current) && !!current.DateReceived)

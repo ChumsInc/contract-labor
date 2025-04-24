@@ -1,10 +1,10 @@
 import React, {HTMLAttributes, useEffect, useId, useState} from 'react';
 import {WorkTemplate} from "chums-types";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
-import {selectCurrentTemplate, selectTemplatesList} from "@/ducks/templates/selectors";
+import {selectCurrentTemplate, selectTemplatesList, setCurrentTemplate} from "@/ducks/templates/templatesSlice";
 import {Autocomplete, createFilterOptions} from "@mui/material";
 import {isStepsList} from "@/ducks/templates/utils";
-import {loadTemplate, setCurrentTemplate} from "@/ducks/templates/actions";
+import {loadTemplate} from "@/ducks/templates/actions";
 
 export interface IssueTemplateLookupProps {
     templateNo: string | null;
