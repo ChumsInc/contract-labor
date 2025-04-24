@@ -16,11 +16,15 @@ export async function fetchVendors(): Promise<CLVendor[]> {
     }
 }
 
-export async function postVendor(arg: CLVendor): Promise<CLVendor[]> {
+export async function postVendor(arg: CLVendor): Promise<CLVendor|null> {
     try {
-        const url = '/api/operations/production/contract-labor/vendors.json';
-        const res = await fetchJSON<{ vendors: CLVendor[] }>(url, {method: 'POST', body: JSON.stringify(arg)});
-        return res?.vendors ?? [];
+        const url = arg.id
+            ? '/api/operations/production/contract-labor/vendor/:id.json'
+                .replace(':id', encodeURIComponent(arg.id))
+            : '/api/operations/production/contract-labor/vendor.json';
+        const method = arg.id ? 'PUT' : 'POST';
+        const res = await fetchJSON<{ vendor: CLVendor }>(url, {method, body: JSON.stringify(arg)});
+        return res?.vendor ?? null;
     } catch (err: unknown) {
         if (err instanceof Error) {
             console.debug("postVendor()", err.message);

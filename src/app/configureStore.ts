@@ -13,12 +13,13 @@ import workTicketIssuesSlice from "@/ducks/work-ticket/workTicketIssuesSlice";
 import workStatusGroupSlice from "@/ducks/work-ticket/statusGroupsSlice";
 import stepsSlice from "@/ducks/dl-steps/stepsSlice";
 import issueHistorySlice from "@/ducks/issue-history";
+import vendorsSlice from "../ducks/vendors";
 
 const rootReducer = combineReducers({
     [alertsSlice.reducerPath]: alertsSlice.reducer,
     [issueEntrySlice.reducerPath]: issueEntrySlice.reducer,
     [templatesSlice.reducerPath]: templatesSlice.reducer,
-    vendors: vendorsReducer,
+    [vendorsSlice.reducerPath]: vendorsSlice.reducer,
     [issueListSlice.reducerPath]: issueListSlice.reducer,
     [stepsSlice.reducerPath]: stepsSlice.reducer,
     [currentWorkTicketSlice.reducerPath]: currentWorkTicketSlice.reducer,

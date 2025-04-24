@@ -1,6 +1,6 @@
 import React, {useId} from 'react';
 import {useAppSelector} from "@/app/configureStore";
-import {selectVendorList} from "@/ducks/vendors/selectors";
+import {selectVendorList} from "@/ducks/vendors";
 import {sortVendors} from "@/ducks/vendors/utils";
 import InputGroup, {InputGroupProps} from "react-bootstrap/InputGroup";
 import FormSelect, {FormSelectProps} from 'react-bootstrap/FormSelect'

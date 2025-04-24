@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
-import {selectShowInactive, selectSortedVendorList, selectVendorsLoading, selectVendorSort} from "./selectors";
+import {selectShowInactive, selectSortedVendorList, selectVendorSort, selectVendorsStatus} from "./index";
 import {SortableTable, SortableTableField, SortProps, TablePagination} from "@chumsinc/sortable-tables";
-import {loadVendors, setCurrentVendor, setVendorsSort} from "./actions";
 import ShowInactiveVendors from "./ShowInactiveVendors";
 import classNames from "classnames";
 import FormCheck from "react-bootstrap/FormCheck";
@@ -11,6 +10,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import {CLVendor} from "chums-types";
+import {setCurrentVendor, setVendorsSort} from "@/ducks/vendors/index";
+import {loadVendors} from "@/ducks/vendors/actions";
 
 const fields: SortableTableField<CLVendor>[] = [
     {field: 'VendorNo', title: 'Vendor No', sortable: true},
@@ -39,7 +40,7 @@ const VendorList = () => {
     const vendors = useAppSelector(selectSortedVendorList);
     const sort = useAppSelector(selectVendorSort);
     const showInactive = useAppSelector(selectShowInactive);
-    const loading = useAppSelector(selectVendorsLoading);
+    const status = useAppSelector(selectVendorsStatus);
     const rowsPerPage = 10;
     const [page, setPage] = useState(0);
 
@@ -59,15 +60,18 @@ const VendorList = () => {
                 <Col xs="auto">
                     <ShowInactiveVendors/>
                 </Col>
+                <Col/>
                 <Col xs="auto">
-                    <Button size="sm" variant="outline-primary" onClick={reloadHandler}>Reload</Button>
+                    {status === 'loading' && (<Spinner size="sm" variant="primary"/>)}
                 </Col>
                 <Col xs="auto">
-                    {loading && (<Spinner size="sm" variant="primary"/>)}
+                    <Button size="sm" variant="outline-primary" onClick={reloadHandler}
+                            disabled={status !== 'idle'}>Reload</Button>
                 </Col>
             </Row>
 
-            <SortableTable<CLVendor> currentSort={sort} onChangeSort={sortChangeHandler} fields={fields}
+            <SortableTable<CLVendor> size="sm" fields={fields}
+                                     currentSort={sort} onChangeSort={sortChangeHandler}
                                      rowClassName={row => classNames({'table-warning': !row.active || row.VendorStatus === 'I'})}
                                      onSelectRow={selectHandler}
                                      data={vendors.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)}
