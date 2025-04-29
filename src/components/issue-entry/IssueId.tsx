@@ -8,7 +8,7 @@ const IssueId = () => {
     return (
         <div className="input-group input-group-sm">
             <label className="input-group-text" htmlFor={id}>ID</label>
-            <input type="text" value={issue.id || 'New'} className="form-control form-control-sm" readOnly/>
+            <input type="text" id={id} value={issue.id || 'New'} className="form-control form-control-sm" readOnly/>
         </div>
     )
 }

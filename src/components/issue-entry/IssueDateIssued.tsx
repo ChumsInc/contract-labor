@@ -48,7 +48,7 @@ export default function IssueDateIssued({containerClassName, ref, ...props}: Iss
     return (
         <InputGroup size="sm">
             <InputGroup.Text as="label" htmlFor={id}>Issued</InputGroup.Text>
-            <FormControl type="date" value={value} onChange={changeHandler}
+            <FormControl type="date" id={id} value={value} onChange={changeHandler}
                          disabled={disabled} readOnly={readOnly} min={min} max={max}/>
         </InputGroup>
     )

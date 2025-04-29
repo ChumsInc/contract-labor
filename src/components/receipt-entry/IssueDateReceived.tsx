@@ -42,7 +42,7 @@ export default function IssueDateReceived({containerClassName, ref, ...props}: I
     return (
         <InputGroup size="sm">
             <InputGroup.Text as="label" htmlFor={id}>Received</InputGroup.Text>
-            <FormControl type="date" value={value} onChange={changeHandler}
+            <FormControl type="date" id={id} value={value} onChange={changeHandler}
                          disabled={disabled} readOnly={readOnly} min={min} max={max}/>
         </InputGroup>
     )

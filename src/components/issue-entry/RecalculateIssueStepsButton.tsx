@@ -14,10 +14,14 @@ export default function RecalculateIssueStepsButton() {
         dispatch(recalculateIssueDetail(steps));
     }
 
+    if (!isCLIssue(issue) || !steps.length) {
+        return null;
+    }
+
     return (
         <Button type="button" size="sm" variant="outline-warning"
                 onClick={clickHandler}
-                disabled={!issue?.id || (isCLIssue(issue) && !!issue.DateReceived) }>
+                disabled={!!issue.DateReceived}>
             Recalculate Issue Steps
         </Button>
     )

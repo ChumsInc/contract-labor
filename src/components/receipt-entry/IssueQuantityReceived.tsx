@@ -35,7 +35,7 @@ const IssueQuantityReceived = React.forwardRef(({
             <InputGroup.Text as="label" htmlFor={id}>
                 <span aria-label="Quantity Received">Qty</span>
             </InputGroup.Text>
-            <FormControl type="number" className={className} size="sm"
+            <FormControl type="number" className={className} size="sm" id={id}
                          ref={ref}
                          {...props}
                          value={current.QuantityReceived || ''} min={0}

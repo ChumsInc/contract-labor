@@ -81,7 +81,7 @@ const IssueDetail = () => {
         <table className="table table-xs">
             <thead>
             <tr>
-                <th>&nbsp;</th>
+                <th><span className="visually-hidden">Selected for issue.</span></th>
                 <th>Activity</th>
                 <th>Description</th>
                 <th>Quantity</th>

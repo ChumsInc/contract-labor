@@ -52,7 +52,7 @@ const DeleteEntryButton = () => {
                 <Modal.Body>
                     <Row  className="g-3">
                         <Col xs="auto">
-                            <Button onClick={handleClose} autoFocus variant="outline-secondary">No</Button>
+                            <Button onClick={handleClose} autoFocus variant="secondary">No</Button>
                         </Col>
                         <Col xs="auto">
                             <Button onClick={deleteIssueHandler} variant="danger">Yes</Button>

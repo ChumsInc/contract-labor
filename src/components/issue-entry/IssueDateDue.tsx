@@ -43,7 +43,7 @@ export default function IssueDateDue({containerClassName, className, ...props}: 
     return (
         <InputGroup size="sm">
             <InputGroup.Text as="label" htmlFor={id}>Date Due</InputGroup.Text>
-            <FormControl type="date" value={value} onChange={changeHandler} {...props}
+            <FormControl type="date" id={id} value={value} onChange={changeHandler} {...props}
                          disabled={disabled} readOnly={readOnly}
                          min={readOnly ? undefined : minDate} max={readOnly ? undefined : maxDate}/>
         </InputGroup>

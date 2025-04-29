@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 const ScrollArea = styled.div`
     display: flex;
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     box-sizing: border-box;
     margin-bottom: 0.375rem;
     
@@ -21,10 +21,10 @@ const ScrollArea = styled.div`
 `
 
 const ScrollContent = styled.div`
-    display: flex;
     box-sizing: border-box;
-    flex-grow: 1;
+    width: 100%;
     height: 100%;
+    //overflow-y: auto;
 `
 
 const StyledTextArea = styled.textarea`
@@ -35,13 +35,14 @@ const StyledTextArea = styled.textarea`
     padding: 0;
     outline: none;
     width: 100%;
+    background-color: transparent;
     &:focus {
         box-shadow: none;
         border-color: transparent;
     }
 `
 
-export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextAreaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'rows'|'cols'> {
     maxHeight?: string;
     minHeight?: string;
     minRows?: number;

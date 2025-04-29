@@ -32,7 +32,7 @@ const NewEntryButton = () => {
 
     return (
         <>
-            <Button type="button" size="sm" variant="outline-secondary" onClick={newIssueHandler}>
+            <Button type="button" size="sm" variant="secondary" onClick={newIssueHandler}>
                 New Issue
             </Button>
             <Modal show={show} onHide={handleClose} aria-described-by={dialogContentTextId}>
@@ -44,7 +44,7 @@ const NewEntryButton = () => {
                 <Modal.Footer>
                     <Row className="g-3 justify-content-end">
                         <Col xs="auto">
-                            <Button onClick={handleClose} variant="outline-secondary">No</Button>
+                            <Button onClick={handleClose} variant="secondary">No</Button>
                         </Col>
                         <Col xs="auto">
                             <Button onClick={newIssueHandler} variant="outline-primary">Yes</Button>

@@ -104,6 +104,9 @@ const CLIssueForm = () => {
                     <div className="mb-1">
                         <AdditionalCLSteps/>
                     </div>
+                    <div className="mb-1">
+                        <IssueNotes/>
+                    </div>
                 </Col>
                 <Col xs={12} md={6}>
                     <IssueDetail/>
@@ -111,9 +114,6 @@ const CLIssueForm = () => {
                 </Col>
 
             </Row>
-            <div className="mb-1">
-                <IssueNotes/>
-            </div>
 
             <Row className="row g-3 mb-1 justify-content-end align-items-center">
                 <Col xs={12} md>

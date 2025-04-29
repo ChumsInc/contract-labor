@@ -24,7 +24,6 @@ export default function IssueTemplate({inputProps}: IssueTemplateProps) {
     }
 
     const selectTemplateHandler = (template: WorkTemplate | null) => {
-        console.log(template);
         dispatch(setEntryTemplate(template));
     }
 

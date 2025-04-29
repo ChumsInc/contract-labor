@@ -18,7 +18,7 @@ export default function IssueSearchInput() {
     return (
         <InputGroup size="sm">
             <InputGroup.Text as="label" htmlFor={id}>Search</InputGroup.Text>
-            <FormControl type="search" defaultValue={search}
+            <FormControl type="search" id={id} defaultValue={search}
                          onChange={(ev) => setValue(ev.target.value)}/>
         </InputGroup>
     )

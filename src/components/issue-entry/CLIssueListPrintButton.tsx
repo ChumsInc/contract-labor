@@ -14,6 +14,7 @@ const HiddenFrame = styled.iframe`
     width: 0;
     height: 0;
     border-width: 0;
+    display: hidden;
 `
 
 
@@ -59,13 +60,13 @@ export default function CLIssueListPrintButton() {
         <div>
             <InputGroup size="sm">
                 <InputGroup.Text as="label" htmlFor={id}>Issue Date</InputGroup.Text>
-                <FormControl type="date" value={issueDate ?? undefined} onChange={handleDateChange}/>
-                <Button variant="info" size="sm" onClick={handleClick} disabled={!vendorNo}>
-                    <span className="bi-printer me-1" aria-hidden="true" aria-label="Print Issue"/>
+                <FormControl type="date" id={id} value={issueDate ?? undefined} onChange={handleDateChange}/>
+                <Button variant="info" size="sm" onClick={handleClick} disabled={!vendorNo} aria-label="Print Issue">
+                    <span className="bi-printer me-1" aria-hidden="true"/>
                 </Button>
             </InputGroup>
             {!!url && (
-                <HiddenFrame ref={ref} src={url}/>
+                <HiddenFrame ref={ref} src={url} aria-hidden="true"/>
             )}
         </div>
     )
