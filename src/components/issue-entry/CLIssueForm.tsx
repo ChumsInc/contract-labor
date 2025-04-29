@@ -29,6 +29,7 @@ import {setWorkTicketStatus} from "@/ducks/work-ticket/actions";
 import {ProgressBar} from "react-bootstrap";
 import AdditionalCLSteps from "@/components/issue-entry/AdditionalCLSteps";
 import DeleteEntryButton from "@/components/issue-entry/DeleteEntryButton";
+import RecalculateIssueStepsButton from "@/components/issue-entry/RecalculateIssueStepsButton";
 
 dayjs.extend(utc);
 
@@ -106,6 +107,7 @@ const CLIssueForm = () => {
                 </Col>
                 <Col xs={12} md={6}>
                     <IssueDetail/>
+                    <RecalculateIssueStepsButton />
                 </Col>
 
             </Row>

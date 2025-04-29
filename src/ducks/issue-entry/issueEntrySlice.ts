@@ -19,7 +19,15 @@ import {setCurrentWorkTicket} from "../work-ticket/actions";
 import Decimal from "decimal.js";
 import {calcCostIssued, detailRowsFromSteps, issueDetailKey, issueDetailSorter, newIssueDetailRow} from "./utils";
 import dayjs from "dayjs";
-import {CLIssue, CLIssueDetail, CLIssueEntry, CLIssueEntryDetail, SortProps, WorkTemplate} from "chums-types";
+import {
+    CLIssue,
+    CLIssueDetail,
+    CLIssueEntry,
+    CLIssueEntryDetail,
+    SortProps,
+    WorkTemplate,
+    WorkTicketStep
+} from "chums-types";
 import {dismissAlert} from "@chumsinc/alert-list";
 import {filterVendorNo} from "@/ducks/issue-list/issueListSlice";
 import {isCLIssue} from "@/utils/issue";
@@ -158,6 +166,12 @@ const issueEntrySlice = createSlice({
         },
         updateCurrentEntry: (state, action: PayloadAction<Partial<CLIssueEntry | CLIssue>>) => {
             state.header = {...state.header, ...action.payload, changed: true};
+            updateHeaderCosts(state, action);
+        },
+        recalculateIssueDetail: (state, action:PayloadAction<WorkTicketStep[]>) => {
+            const detail = action.payload.filter(row => row.WorkCenter === 'CON')
+                .map((row) => newIssueDetailRow(row, state.header.QuantityIssued));
+            issueDetailAdapter.setAll(state, detail);
             updateHeaderCosts(state, action);
         },
         updateQuantityIssued: (state, action: PayloadAction<number | string>) => {
@@ -329,6 +343,7 @@ const issueEntrySlice = createSlice({
 
 export const {
     addDLStep,
+    recalculateIssueDetail,
     setEntryTemplate,
     setNewEntry,
     setEntryVendorNo,
