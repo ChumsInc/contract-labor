@@ -2,10 +2,17 @@ import React, {HTMLAttributes, useEffect, useState} from 'react';
 import {WorkTemplate} from "chums-types";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectCurrentTemplate, selectTemplatesList, setCurrentTemplate} from "@/ducks/templates/templatesSlice";
-import {Autocomplete, createFilterOptions} from "@mui/material";
+import {Autocomplete, Box, createFilterOptions} from "@mui/material";
 import {isStepsList} from "@/ducks/templates/utils";
 import {loadTemplate} from "@/ducks/templates/actions";
+import styled from "@emotion/styled";
 
+const PaperSlot = styled.div`
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    margin-top: 0.25rem;
+`
 export interface IssueTemplateLookupProps {
     templateNo: string | null;
     onChange: (templateNo: string) => void;
@@ -66,15 +73,18 @@ export default function IssueTemplateLookup({
             filterOptions={filterOptions}
             renderOption={(props, option) => {
                 const {key, ...optionProps} = props;
-                return (<li key={key} {...optionProps}>
-                    <div className="d-flex justify-content-between" style={{width: '100%'}}>
-                        <div>{option.TemplateNo}</div>
-                        <div className="text-secondary">{option.TemplateDesc}</div>
-                    </div>
-                </li>)
+                return (
+                    <li key={key} {...optionProps}>
+                        <div className="d-flex justify-content-between" style={{width: '100%'}}>
+                            <div>{option.TemplateNo}</div>
+                            <div className="text-secondary">{option.TemplateDesc}</div>
+                        </div>
+                    </li>
+                )
             }}
             isOptionEqualToValue={(option, value) => option.TemplateNo === value?.TemplateNo}
             sx={{width: '100%'}}
+            slots={{paper: PaperSlot}}
             value={value}
             onChange={(_ev, nextValue) => setValue(nextValue)}
             getOptionLabel={option => option.TemplateNo}
