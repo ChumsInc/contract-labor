@@ -25,7 +25,7 @@ import {
     CLIssueEntry,
     CLIssueEntryDetail,
     SortProps,
-    WorkTemplate,
+    WorkTemplate, WorkTicketResponse,
     WorkTicketStep
 } from "chums-types";
 import {dismissAlert} from "@chumsinc/alert-list";
@@ -167,6 +167,32 @@ const issueEntrySlice = createSlice({
         updateCurrentEntry: (state, action: PayloadAction<Partial<CLIssueEntry | CLIssue>>) => {
             state.header = {...state.header, ...action.payload, changed: true};
             updateHeaderCosts(state, action);
+        },
+        replaceWorkTicket: (state, action:PayloadAction<WorkTicketResponse>) => {
+            if (action.payload?.header && ['O', 'R'].includes(action.payload.header.WorkTicketStatus)) {
+                const {
+                    WorkTicketNo,
+                    TemplateNo,
+                    ParentItemCode,
+                    ParentItemCodeDesc,
+                    ParentWarehouseCode,
+                    QuantityOrdered,
+                    QuantityCompleted,
+                    ParentUnitOfMeasureConvFactor
+                } = action.payload.header;
+                state.header.WorkTicketNo = WorkTicketNo;
+                state.header.TemplateNo = TemplateNo;
+                state.header.ItemCode = ParentItemCode;
+                state.header.ItemCodeDesc = ParentItemCodeDesc ?? null;
+                state.header.WarehouseCode = ParentWarehouseCode;
+                const alreadyIssued = action.payload.issues.reduce((pv, cv) => new Decimal(pv).add(cv.QuantityIssued).toNumber(), 0);
+                state.header.QuantityIssued = Math.max(new Decimal(QuantityOrdered).sub(QuantityCompleted).times(ParentUnitOfMeasureConvFactor).sub(alreadyIssued).toNumber(), 0);
+
+                const detail = action.payload.steps.filter(row => row.WorkCenter === 'CON')
+                    .map((row) => newIssueDetailRow(row, state.header.QuantityIssued));
+                issueDetailAdapter.setAll(state, detail);
+                updateHeaderCosts(state, action);
+            }
         },
         recalculateIssueDetail: (state, action:PayloadAction<WorkTicketStep[]>) => {
             const detail = action.payload.filter(row => row.WorkCenter === 'CON')
@@ -344,6 +370,7 @@ const issueEntrySlice = createSlice({
 export const {
     addDLStep,
     recalculateIssueDetail,
+    replaceWorkTicket,
     setEntryTemplate,
     setNewEntry,
     setEntryVendorNo,

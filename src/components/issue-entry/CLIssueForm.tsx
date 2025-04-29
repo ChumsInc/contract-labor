@@ -107,6 +107,7 @@ const CLIssueForm = () => {
                 </Col>
                 <Col xs={12} md={6}>
                     <IssueDetail/>
+                    <RecalculateIssueStepsButton />
                 </Col>
 
             </Row>
@@ -123,9 +124,6 @@ const CLIssueForm = () => {
                 </Col>
                 <Col xs="auto">
                     <DeleteEntryButton/>
-                </Col>
-                <Col xs="auto">
-                    <RecalculateIssueStepsButton />
                 </Col>
                 <Col xs="auto">
                     <CLIssuePrintButton show={print} onPrint={() => setPrint(false)}/>
