@@ -195,8 +195,17 @@ const issueEntrySlice = createSlice({
             }
         },
         recalculateIssueDetail: (state, action:PayloadAction<WorkTicketStep[]>) => {
+            const existing = issueDetailSelectors.selectAll(state);
             const detail = action.payload.filter(row => row.WorkCenter === 'CON')
-                .map((row) => newIssueDetailRow(row, state.header.QuantityIssued));
+                .map((row) => newIssueDetailRow(row, state.header.QuantityIssued))
+                .map(row => {
+                    const [old] = existing.filter(e => e.TemplateNo === row.TemplateNo && e.StepNo === row.StepNo);
+                    return {
+                        ...row,
+                        id: old?.id,
+                        selected: !!old,
+                    }
+                })
             issueDetailAdapter.setAll(state, detail);
             updateHeaderCosts(state, action);
         },

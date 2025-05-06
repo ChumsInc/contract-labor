@@ -30,8 +30,8 @@ export default function RecalculateIssueStepsButton() {
         <>
             <Button type="button" size="sm" variant="outline-warning"
                     onClick={clickHandler}
-                    disabled={!!issue.DateReceived || !steps.length}>
-                Recalculate Issue Steps ({steps.length})
+                    disabled={!!issue.DateReceived || !steps.filter(step => step.WorkCenter === 'CON').length}>
+                Recalculate Issue Steps
             </Button>
         </>
     )
