@@ -267,7 +267,11 @@ const issueEntrySlice = createSlice({
             })
             .addCase(loadCLIssueEntry.pending, (state, action) => {
                 state.status = 'loading';
-                state.header = action.meta.arg;
+                if (typeof action.meta.arg === 'number') {
+                    state.header = {...emptyCLEntry, DateIssued: state.header.DateIssued};
+                } else {
+                    state.header = action.meta.arg;
+                }
                 issueDetailAdapter.removeAll(state);
             })
             .addCase(loadCLIssueEntry.fulfilled, (state, action) => {

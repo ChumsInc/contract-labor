@@ -9,6 +9,7 @@ import {useAppSelector} from "@/app/configureStore";
 import {selectCurrentIssueHeader} from "@/ducks/issue-entry/issueEntrySlice";
 import {ErrorBoundary} from "react-error-boundary";
 import ErrorBoundaryFallbackAlert from "@/components/ErrorBoundaryFallbackAlert";
+import {Outlet} from "react-router";
 
 const EntryContent = () => {
     const current = useAppSelector(selectCurrentIssueHeader);
@@ -41,6 +42,7 @@ const EntryContent = () => {
                     <CLIssueTabs tab={tab} onChangeTab={setTab}/>
                     {tab === 'issue' && (<CLIssueForm/>)}
                     {tab === 'receive' && (<CLReceiptForm/>)}
+                    <Outlet />
                 </div>
             </div>
         </ErrorBoundary>

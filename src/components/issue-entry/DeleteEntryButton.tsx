@@ -9,6 +9,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import {removeCLIssueEntry} from "@/ducks/issue-entry/actions";
 import {setWorkTicketStatus} from "@/ducks/work-ticket/actions";
+import {useNavigate, useParams} from "react-router";
 
 const DeleteEntryButton = () => {
     const dispatch = useAppDispatch();
@@ -16,6 +17,8 @@ const DeleteEntryButton = () => {
     const [show, setShow] = useState(false);
     const [canDelete, setCanDelete] = useState(isCLIssue(current) || (isCLIssue(current) && !dayjs(current.DateReceived).isValid()))
     const dialogContentTextId = useId();
+    const params = useParams<'vendor'|'id'>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setCanDelete(isCLIssue(current) || (isCLIssue(current) && !dayjs(current.DateReceived).isValid()))
@@ -32,6 +35,9 @@ const DeleteEntryButton = () => {
             await dispatch(setWorkTicketStatus({WorkTicketKey: current.WorkTicketKey, action: 'cl', nextStatus: 0}))
         }
         dispatch(setNewEntry(newCLEntry()));
+        if (params.id) {
+            navigate(`/entry/${params.vendor}`);
+        }
     }
 
     const handleClose = () => setShow(false);

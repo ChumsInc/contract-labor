@@ -17,18 +17,23 @@ export const setIssueDate = createAction('issueEntry/setIssueDate', (date: Date 
     }
 });
 
-export const loadCLIssueEntry = createAsyncThunk<CLIssueResponse | null, CLIssueEntry>(
+export const loadCLIssueEntry = createAsyncThunk<CLIssueResponse | null, CLIssueEntry|number>(
     'issueEntry/load',
     async (arg) => {
+        if (typeof arg === 'number') {
+            return await fetchCLIssue(arg);
+        }
         return await fetchCLIssue(arg.id!)
     },
     {
         condition: (arg, {getState}) => {
             const state = getState() as RootState;
-            return !!arg.id && selectCurrentIssueStatus(state) === 'idle';
+            return selectCurrentIssueStatus(state) === 'idle';
         }
     }
 )
+
+
 
 export const saveCLIssueEntry = createAsyncThunk<CLIssueResponse | null, CLIssueEntry, { state: RootState }>(
     'issueEntry/save',

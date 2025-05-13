@@ -103,6 +103,7 @@ const issueListSlice = createSlice({
         selectFilterSearch: (state) => state.filters.search,
         selectFilterShowCompleted: (state) => state.filters.showCompleted,
         selectAll: (state) => issueSelectors.selectAll(state),
+        selectEntryById: (state, id: number) => issueSelectors.selectById(state, id)
     }
 })
 
@@ -113,7 +114,8 @@ export const {
     selectFilterShowCompleted,
     selectFilterVendorNo,
     selectFilterSearch,
-    selectStatus
+    selectStatus,
+    selectEntryById,
 } = issueListSlice.selectors;
 
 export const selectFilteredIssueList = createSelector(

@@ -30,6 +30,8 @@ import {ProgressBar} from "react-bootstrap";
 import AdditionalCLSteps from "@/components/issue-entry/AdditionalCLSteps";
 import DeleteEntryButton from "@/components/issue-entry/DeleteEntryButton";
 import RecalculateIssueStepsButton from "@/components/issue-entry/RecalculateIssueStepsButton";
+import Button from "react-bootstrap/Button";
+import {useNavigate, useParams} from "react-router";
 
 dayjs.extend(utc);
 
@@ -39,6 +41,8 @@ const CLIssueForm = () => {
     const lines = useAppSelector(selectCurrentIssueDetail);
     const status = useAppSelector(selectCurrentIssueStatus);
     const [print, setPrint] = React.useState(false);
+    const params = useParams<'vendor'|'id'>();
+    const navigate = useNavigate();
 
 
     const submitHandler = async (ev: FormEvent) => {
@@ -47,6 +51,10 @@ const CLIssueForm = () => {
         const res = await dispatch(saveCLIssueEntry({...current, detail}));
         const payload: CLIssueResponse | null = res.payload as CLIssueResponse ?? null
         if (!payload || !payload.issue?.WorkTicketKey) {
+            return;
+        }
+        if (params.id) {
+            navigate(`/entry/${params.vendor}`);
             return;
         }
         await dispatch(setWorkTicketStatus({WorkTicketKey: payload.issue.WorkTicketKey, action: 'cl', nextStatus: 1}));
@@ -129,10 +137,9 @@ const CLIssueForm = () => {
                     <CLIssuePrintButton show={print} onPrint={() => setPrint(false)}/>
                 </Col>
                 <Col xs="auto">
-                    <button type="submit" className="btn btn-sm btn-primary"
-                            disabled={status !== 'idle'}>
+                    <Button type="submit" variant="primary" size="sm" disabled={status !== 'idle'}>
                         Issue Work
-                    </button>
+                    </Button>
                 </Col>
             </Row>
         </form>

@@ -2,7 +2,7 @@ import React, {HTMLAttributes, useEffect, useState} from 'react';
 import {WorkTemplate} from "chums-types";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectCurrentTemplate, selectTemplatesList, setCurrentTemplate} from "@/ducks/templates/templatesSlice";
-import {Autocomplete, Box, createFilterOptions} from "@mui/material";
+import {Autocomplete, createFilterOptions} from "@mui/material";
 import {isStepsList} from "@/ducks/templates/utils";
 import {loadTemplate} from "@/ducks/templates/actions";
 import styled from "@emotion/styled";
@@ -13,6 +13,7 @@ const PaperSlot = styled.div`
     border-radius: var(--bs-border-radius);
     margin-top: 0.25rem;
 `
+
 export interface IssueTemplateLookupProps {
     templateNo: string | null;
     onChange: (templateNo: string) => void;

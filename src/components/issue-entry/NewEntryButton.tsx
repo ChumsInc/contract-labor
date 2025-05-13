@@ -10,6 +10,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import {useNavigate, useParams} from "react-router";
 
 
 const NewEntryButton = () => {
@@ -18,6 +19,8 @@ const NewEntryButton = () => {
     const entryVendorNo = useAppSelector(selectEntryVendorNo);
     const [show, setShow] = useState(false);
     const dialogContentTextId = useId();
+    const params = useParams<'vendor'|'id'>();
+    const navigate = useNavigate();
 
     const newIssueHandler = useCallback(() => {
         if (current.changed && !show) {
@@ -26,6 +29,9 @@ const NewEntryButton = () => {
         }
         setShow(false);
         dispatch(setNewEntry(newCLEntry(entryVendorNo)));
+        if (params.id) {
+            navigate(`/entry/${params.vendor}`);
+        }
     }, [current, entryVendorNo, show])
 
     const handleClose = () => setShow(false);
