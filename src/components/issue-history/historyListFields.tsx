@@ -2,10 +2,10 @@ import {SortableTableField} from "@chumsinc/sortable-tables";
 import {friendlyDate} from "@/utils/dates";
 import numeral from "numeral";
 import {CLIssue} from "chums-types";
-import IssueLink from "@/components/issue-history/IssueLink";
+import IssueLink from "@/components/IssueLink";
 
 export const fields: SortableTableField<CLIssue>[] = [
-    {field: 'id', title: 'ID', sortable: true, render: (row) => <IssueLink issue={row} />},
+    {field: 'id', title: 'ID', sortable: true, render: (row) => <IssueLink issueId={row.id} vendorNo={row.VendorNo} />},
     {field: 'VendorNo', title: 'Vendor', sortable: true},
     {field: 'WarehouseCode', title: 'Whs', sortable: true},
     {field: 'ItemCode', title: 'Item', sortable: true},

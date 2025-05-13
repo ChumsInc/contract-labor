@@ -38,7 +38,6 @@ export default function CLIssueListPrintButton() {
         params.set('now', new Date().valueOf().toString(36));
         const url = `/api/operations/production/contract-labor/issue/current/:vendorNo.html?${params.toString()}`
             .replace(':vendorNo', encodeURIComponent(vendorNo));
-        console.log(url);
         setUrl(url);
     }, [vendorNo, issueDate, list]);
 

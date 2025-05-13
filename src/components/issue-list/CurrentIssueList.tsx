@@ -4,7 +4,6 @@ import {SortableTable, SortProps, TablePagination} from "@chumsinc/sortable-tabl
 import {loadCurrentIssueList} from "@/ducks/issue-list/actions";
 import classNames from "classnames";
 import dayjs from "dayjs";
-import {loadCLIssueEntry} from "@/ducks/issue-entry/actions";
 import {fields} from "@/components/issue-list/issueListFields";
 import {selectFilteredIssueList, selectSort, setSort} from "@/ducks/issue-list/issueListSlice";
 import IssueListFilters from "@/components/issue-list/IssueListFilters";
@@ -13,6 +12,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CLIssueListPrintButton from "@/components/issue-entry/CLIssueListPrintButton";
 import {CLIssue} from "chums-types";
+import {generatePath, useNavigate} from "react-router";
 
 const rowClassName = (row: CLIssue): string => {
     const today = new Date();
@@ -28,6 +28,7 @@ export default function CurrentIssueList() {
     const sort = useAppSelector(selectSort);
     const [page, setPage] = useState<number>(0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(loadCurrentIssueList())
@@ -44,8 +45,9 @@ export default function CurrentIssueList() {
     }
 
     const rowSelectHandler = (row: CLIssue) => {
-        dispatch(loadCLIssueEntry(row));
         dispatch(setCurrentWorkTicket(row.WorkTicketNo));
+        navigate(generatePath('/entry/:vendorNo/:id', {vendorNo: row.VendorNo, id: row.id.toString()}))
+
     }
 
     const sortChangeHandler = (sort: SortProps<CLIssue>) => dispatch(setSort(sort));

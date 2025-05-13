@@ -41,8 +41,6 @@ const CLIssueForm = () => {
     const lines = useAppSelector(selectCurrentIssueDetail);
     const status = useAppSelector(selectCurrentIssueStatus);
     const [print, setPrint] = React.useState(false);
-    const params = useParams<'vendor'|'id'>();
-    const navigate = useNavigate();
 
 
     const submitHandler = async (ev: FormEvent) => {
@@ -51,10 +49,6 @@ const CLIssueForm = () => {
         const res = await dispatch(saveCLIssueEntry({...current, detail}));
         const payload: CLIssueResponse | null = res.payload as CLIssueResponse ?? null
         if (!payload || !payload.issue?.WorkTicketKey) {
-            return;
-        }
-        if (params.id) {
-            navigate(`/entry/${params.vendor}`);
             return;
         }
         await dispatch(setWorkTicketStatus({WorkTicketKey: payload.issue.WorkTicketKey, action: 'cl', nextStatus: 1}));
@@ -120,10 +114,9 @@ const CLIssueForm = () => {
                     <IssueDetail/>
                     <RecalculateIssueStepsButton />
                 </Col>
-
             </Row>
 
-            <Row className="row g-3 mb-1 justify-content-end align-items-center">
+            <Row className="g-3 mt-1 mb-1 justify-content-end align-items-center">
                 <Col xs={12} md>
                     {status !== 'idle' && <ProgressBar striped animated now={100}/>}
                 </Col>

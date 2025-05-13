@@ -39,9 +39,6 @@ const EntryContent = () => {
                     {activeKey === 'work-ticket-list' && (<WorkTicketList/>)}
                 </div>
                 <div className="col-6">
-                    <CLIssueTabs tab={tab} onChangeTab={setTab}/>
-                    {tab === 'issue' && (<CLIssueForm/>)}
-                    {tab === 'receive' && (<CLReceiptForm/>)}
                     <Outlet />
                 </div>
             </div>

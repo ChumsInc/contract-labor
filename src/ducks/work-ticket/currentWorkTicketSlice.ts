@@ -37,9 +37,9 @@ const currentWorkTicketSlice = createSlice({
                 }
             })
             .addCase(setCurrentWorkTicket.pending, (state, action) => {
+                state.status = 'loading';
                 if (state.workTicketNo !== action.meta.arg) {
                     state.workTicketNo = action.meta.arg;
-                    state.status = 'loading';
                 }
                 if (state.header?.WorkTicketNo !== action.meta.arg) {
                     state.header = null;

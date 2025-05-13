@@ -45,13 +45,12 @@ export default function IssueWorkTicket({inputProps, showDueDate, showMakeFor}: 
     const current = useAppSelector(selectCurrentIssueHeader);
     const workTicket = useAppSelector(selectWorkTicketHeader);
     const issueStatus = useAppSelector(selectCurrentIssueStatus);
-    const wtStatus = useAppSelector(selectWorkTicketStatus)
+    const wtStatus = useAppSelector(selectWorkTicketStatus);
     const id = useId();
     const dueId = useId();
     const makeForId = useId();
     const [show, setShow] = React.useState(workTicket?.WorkTicketNo?.replace(/^0+/, '') === current.WorkTicketNo);
     const [btnVariant, setBtnVariant] = React.useState<string>('secondary');
-
 
     useEffect(() => {
         if (issueStatus !== 'idle' || wtStatus !== 'idle') {
@@ -78,9 +77,17 @@ export default function IssueWorkTicket({inputProps, showDueDate, showMakeFor}: 
         if (isCLIssue(current)) {
             const payload = wtResponse.payload as WorkTicketResponse;
             if (payload.header?.WorkTicketKey && payload.header.WorkTicketKey !== current.WorkTicketKey) {
-                await dispatch(setWorkTicketStatus({WorkTicketKey: current.WorkTicketKey ?? '', action: 'cl', nextStatus: 0}));
+                await dispatch(setWorkTicketStatus({
+                    WorkTicketKey: current.WorkTicketKey ?? '',
+                    action: 'cl',
+                    nextStatus: 0
+                }));
                 dispatch(replaceWorkTicket(payload));
-                await dispatch(setWorkTicketStatus({WorkTicketKey: payload.header.WorkTicketKey, action: 'cl', nextStatus: 0}));
+                await dispatch(setWorkTicketStatus({
+                    WorkTicketKey: payload.header.WorkTicketKey,
+                    action: 'cl',
+                    nextStatus: 0
+                }));
             }
         }
     }
@@ -93,9 +100,11 @@ export default function IssueWorkTicket({inputProps, showDueDate, showMakeFor}: 
                     <FormControl size="sm" type="search" {...inputProps} id={id}
                                  value={current.WorkTicketNo ?? ''}
                                  onChange={changeHandler}/>
-                    <Button type="button" size="sm" variant={btnVariant}
+                    <Button type="button" size="sm" variant="secondary"
                             onClick={loadWorkTicketHandler}>
-                        <span className="bi-search" aria-label="Load work ticket"/>
+                        {wtStatus === 'loading' &&
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"/>}
+                        {wtStatus === 'idle' && <span className="bi-search" aria-label="Load work ticket"/>}
                     </Button>
                 </InputGroup>
             </div>
@@ -103,7 +112,7 @@ export default function IssueWorkTicket({inputProps, showDueDate, showMakeFor}: 
                 <div>
                     {workTicket?.WorkTicketStatus === 'C' && (
                         <Alert variant="danger">
-                            <span className="bi-lock-fill me-3" aria-hidden />
+                            <span className="bi-lock-fill me-3" aria-hidden/>
                             Closed Work Ticket
                         </Alert>
                     )}

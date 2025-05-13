@@ -1,11 +1,6 @@
 import React, {useCallback, useId, useState} from 'react';
-import {useAppDispatch, useAppSelector} from "@/app/configureStore";
-import {
-    newCLEntry,
-    selectCurrentIssueHeader,
-    selectEntryVendorNo,
-    setNewEntry
-} from "@/ducks/issue-entry/issueEntrySlice";
+import {useAppSelector} from "@/app/configureStore";
+import {selectCurrentIssueHeader, selectEntryVendorNo} from "@/ducks/issue-entry/issueEntrySlice";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
@@ -14,12 +9,11 @@ import {useNavigate, useParams} from "react-router";
 
 
 const NewEntryButton = () => {
-    const dispatch = useAppDispatch();
     const current = useAppSelector(selectCurrentIssueHeader);
     const entryVendorNo = useAppSelector(selectEntryVendorNo);
     const [show, setShow] = useState(false);
     const dialogContentTextId = useId();
-    const params = useParams<'vendor'|'id'>();
+    const params = useParams<'vendor' | 'id'>();
     const navigate = useNavigate();
 
     const newIssueHandler = useCallback(() => {
@@ -28,10 +22,7 @@ const NewEntryButton = () => {
             return;
         }
         setShow(false);
-        dispatch(setNewEntry(newCLEntry(entryVendorNo)));
-        if (params.id) {
-            navigate(`/entry/${params.vendor}`);
-        }
+        navigate(`/entry/${params.vendor}/new`);
     }, [current, entryVendorNo, show])
 
     const handleClose = () => setShow(false);

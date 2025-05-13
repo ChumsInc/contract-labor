@@ -34,10 +34,7 @@ const DeleteEntryButton = () => {
         if (isCLIssue(current) && current.WorkTicketKey) {
             await dispatch(setWorkTicketStatus({WorkTicketKey: current.WorkTicketKey, action: 'cl', nextStatus: 0}))
         }
-        dispatch(setNewEntry(newCLEntry()));
-        if (params.id) {
-            navigate(`/entry/${params.vendor}`);
-        }
+        navigate(`/entry/${params.vendor}/new`);
     }
 
     const handleClose = () => setShow(false);
