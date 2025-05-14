@@ -1,6 +1,11 @@
 import React, {useCallback, useId, useState} from 'react';
-import {useAppSelector} from "@/app/configureStore";
-import {selectCurrentIssueHeader, selectEntryVendorNo} from "@/ducks/issue-entry/issueEntrySlice";
+import {useAppDispatch, useAppSelector} from "@/app/configureStore";
+import {
+    newCLEntry,
+    selectCurrentIssueHeader,
+    selectEntryVendorNo,
+    setNewEntry
+} from "@/ducks/issue-entry/issueEntrySlice";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
@@ -9,6 +14,7 @@ import {useNavigate, useParams} from "react-router";
 
 
 const NewEntryButton = () => {
+    const dispatch = useAppDispatch();
     const current = useAppSelector(selectCurrentIssueHeader);
     const entryVendorNo = useAppSelector(selectEntryVendorNo);
     const [show, setShow] = useState(false);
@@ -22,6 +28,10 @@ const NewEntryButton = () => {
             return;
         }
         setShow(false);
+        if (params.id === 'new') {
+            dispatch(setNewEntry(newCLEntry(params.vendor)));
+            return;
+        }
         navigate(`/entry/${params.vendor}/new`);
     }, [current, entryVendorNo, show])
 
