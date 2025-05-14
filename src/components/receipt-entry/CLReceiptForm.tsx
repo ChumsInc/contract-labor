@@ -20,11 +20,14 @@ import {receiveCLIssue, removeCLReceipt} from "@/ducks/issue-entry/actions";
 import dayjs from "dayjs";
 import {setWorkTicketStatus} from "@/ducks/work-ticket/actions";
 import {CLIssueResponse} from "chums-types";
+import {generatePath, useNavigate, useParams} from "react-router";
 
 export default function CLReceiptForm() {
     const dispatch = useAppDispatch();
     const current = useAppSelector(selectCurrentIssueHeader);
     const status = useAppSelector(selectCurrentIssueStatus);
+    const params = useParams<'vendor'|'id'>();
+    const navigate = useNavigate();
 
     const submitHandler = async (ev:FormEvent) => {
         ev.preventDefault();
@@ -37,6 +40,7 @@ export default function CLReceiptForm() {
             return;
         }
         dispatch(setWorkTicketStatus({WorkTicketKey: payload.issue.WorkTicketKey, action: 'cl', nextStatus: 2}))
+        navigate(generatePath('/entry/:vendor/new', {vendor: params.vendor ?? ''}));
     }
 
     const onClickDelete = async () => {
@@ -50,7 +54,7 @@ export default function CLReceiptForm() {
                 return;
             }
             dispatch(setWorkTicketStatus({WorkTicketKey: payload.issue.WorkTicketKey, action: 'cl', nextStatus: 1}))
-
+            navigate(generatePath('/entry/:vendor/new', {vendor: params.vendor ?? ''}));
         }
     }
 
