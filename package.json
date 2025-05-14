@@ -1,6 +1,6 @@
 {
   "name": "contract-labor",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "type": "module",
   "dependencies": {
     "@chumsinc/alert-list": "^2.0.0",
