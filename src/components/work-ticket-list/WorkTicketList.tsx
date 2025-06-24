@@ -7,7 +7,7 @@ import {WorkTicketSortProps, WorkTicketTableRow} from "@/ducks/work-ticket/types
 import {fields} from "@/components/work-ticket-list/WorkTicketListFields";
 import WorkTicketListActionBar from "@/components/work-ticket-list/WorkTicketListActionBar";
 import {selectWorkTicketNo} from "@/ducks/work-ticket/currentWorkTicketSlice";
-import {WorkTicketWorkStatusItem} from "chums-types";
+import {SortProps, WorkTicketWorkStatusItem} from "chums-types";
 
 const WorkTicketTable = SortableTable<WorkTicketTableRow>
 
@@ -23,8 +23,8 @@ export default function WorkTicketList() {
         setPage(0);
     }, [list.length, rowsPerPage]);
 
-    const sortChangeHandler = (sort: WorkTicketSortProps) => {
-        dispatch(setWTListSort(sort))
+    const sortChangeHandler = (sort: SortProps<WorkTicketTableRow>) => {
+        dispatch(setWTListSort(sort as WorkTicketSortProps))
     }
 
     const selectRowHandler = (row: WorkTicketWorkStatusItem) => {

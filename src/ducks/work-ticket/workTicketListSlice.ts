@@ -91,11 +91,11 @@ export const selectSortedWTList = createSelector(
         return (list as WorkTicketTableRow[])
             .filter(wt => {
                 return !search.trim()
-                    || wt.WorkTicketNo.includes(_search)
-                    || wt.MakeForWorkTicketNo?.includes(_search)
-                    || wt.MakeForSalesOrderNo?.includes(_search)
-                    || wt.ParentItemCode?.includes(_search)
-                    || wt.ParentItemCodeDesc?.includes(_search)
+                    || wt.WorkTicketNo.toUpperCase().includes(_search.toUpperCase())
+                    || wt.MakeForWorkTicketNo?.toUpperCase()?.includes(_search.toUpperCase())
+                    || wt.MakeForSalesOrderNo?.toUpperCase()?.includes(_search.toUpperCase())
+                    || wt.ParentItemCode?.toUpperCase()?.includes(_search.toUpperCase())
+                    || wt.ParentItemCodeDesc?.toUpperCase()?.includes(_search.toUpperCase())
             })
             .sort(wtStatusSorter(sort))
     }
