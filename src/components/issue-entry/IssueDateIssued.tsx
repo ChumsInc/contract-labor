@@ -23,11 +23,12 @@ export default function IssueDateIssued({containerClassName, ref, ...props}: Iss
     }, [current]);
 
     const changeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
-        const dateIssued = dayjs(ev.target.valueAsDate);
-        if (!dateIssued.isValid()) {
-            return;
-        }
-        dispatch(updateCurrentEntry({DateIssued: toLocalizedDate(dateIssued)?.format('YYYY-MM-DD') ?? null,}))
+        dispatch(updateCurrentEntry({DateIssued: ev.target.value ?? null,}))
+        // const dateIssued = dayjs(ev.target.valueAsDate);
+        // if (!dateIssued.isValid()) {
+        //     return;
+        // }
+        // dispatch(updateCurrentEntry({DateIssued: toLocalizedDate(dateIssued)?.format('YYYY-MM-DD') ?? null,}))
     }
 
     const disabled = props.disabled

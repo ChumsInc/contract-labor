@@ -50,8 +50,8 @@ export default function CLIssueListPrintButton() {
     }
 
     const handleDateChange = (ev: ChangeEvent<HTMLInputElement>) => {
-        if (ev.target.valueAsDate && dayjs(ev.target.valueAsDate).isValid()) {
-            setIssueDate(dayjs(ev.target.valueAsDate).add(new Date().getTimezoneOffset(), 'minutes').format('YYYY-MM-DD'));
+        if (dayjs(ev.target.value).isValid()) {
+            setIssueDate(ev.target.value);
         }
     }
 

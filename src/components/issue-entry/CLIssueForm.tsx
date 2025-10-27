@@ -57,14 +57,6 @@ const CLIssueForm = () => {
 
     const changeHandler = (field: keyof CLIssueEntry) => (ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
         switch (field) {
-            case 'DateDue':
-            case 'DateIssued':
-                const dateValue = dayjs((ev as ChangeEvent<HTMLInputElement>).target.valueAsDate);
-                if (dateValue.isValid()) {
-                    dispatch(updateCurrentEntry({[field]: dateValue.utcOffset((new Date()).getTimezoneOffset())}));
-                }
-                return;
-
             case 'QuantityIssued':
                 dispatch(updateCurrentEntry({[field]: (ev as ChangeEvent<HTMLInputElement>).target.valueAsNumber}));
                 return;

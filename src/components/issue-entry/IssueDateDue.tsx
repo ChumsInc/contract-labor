@@ -31,11 +31,7 @@ export default function IssueDateDue({containerClassName, className, ...props}: 
     }, [current, props.disabled]);
 
     const changeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
-        const dateDue = dayjs(ev.target.valueAsDate);
-        if (!dateDue.isValid()) {
-            return;
-        }
-        dispatch(updateCurrentEntry({DateDue: toLocalizedDate(dateDue)?.format('YYYY-MM-DD') ?? null}))
+        dispatch(updateCurrentEntry({DateDue: ev.target.value}))
     }
 
     const readOnly = props.readOnly || disabled;
